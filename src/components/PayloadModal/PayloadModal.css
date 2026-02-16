@@ -5,103 +5,145 @@
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(5px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 2000;
+  animation: fadeIn 0.2s ease-out;
 }
 
 .modal-content {
-  background: #0f0f19;
-  width: 500px;
-  padding: 2.5rem;
-  border: 2px solid #00d4ff;
-  box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+  background: #0f0f15;
+  width: 90%;
+  max-width: 500px;
+  padding: 2rem;
+  border: 1px solid #333;
+  border-top: 3px solid #ff003c;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
   position: relative;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 .modal-header {
-  margin-bottom: 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #222;
+  padding-bottom: 1rem;
 }
 
 .modal-title {
-  font-size: 1.2rem;
-  letter-spacing: 3px;
-  font-weight: 900;
-  text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.3rem;
   color: #fff;
+  margin: 0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
-.modal-title span { color: #ff003c; }
+.modal-title span {
+  color: #ff003c;
+}
 
 .close-btn {
   background: transparent;
   border: none;
-  color: #444;
+  color: #666;
   cursor: pointer;
-  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
 }
 
-.close-btn:hover { color: #ff003c; }
+.close-btn:hover {
+  color: #fff;
+  transform: rotate(90deg);
+}
 
 .modal-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.2rem;
 }
 
-.input-group { display: flex; flex-direction: column; gap: 0.5rem; }
+.modal-form .input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
 
-.input-group label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
+.modal-form .input-group label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
   color: #00d4ff;
+  text-transform: uppercase;
   letter-spacing: 1px;
 }
 
-.modal-input, .modal-textarea, .modal-select {
-  background: #000;
+.modal-input, 
+.modal-textarea, 
+.modal-select {
+  background: #111;
   border: 1px solid #333;
-  padding: 0.75rem;
-  color: white;
+  color: #fff;
+  padding: 12px;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  width: 100%;
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+
+.modal-input:focus, 
+.modal-textarea:focus, 
+.modal-select:focus {
   outline: none;
-  font-family: monospace;
+  border-color: #ff003c;
+  box-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
 }
 
-.modal-input:focus, .modal-textarea:focus { border-color: #ff003c; }
-
-.submit-btn {
-  margin-top: 1rem;
-  padding: 1rem;
-  background: transparent;
-  border: 1px solid #ff003c;
-  color: #ff003c;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.submit-btn:hover {
-  background: #ff003c;
-  color: #000;
-  box-shadow: 0 0 20px rgba(255, 0, 60, 0.4);
-}
-
-.modal-select optgroup {
-  background: #1a1a2e;
-  color: #ff003c; /* Rose pour les titres de catégories */
-  font-size: 0.7rem;
-  font-style: normal;
-  font-weight: bold;
+.modal-textarea {
+  resize: vertical;
+  min-height: 100px;
 }
 
 .modal-select option {
-  background: #000;
+  background: #111;
   color: #fff;
+}
+
+.submit-btn {
+  margin-top: 1rem;
+  background: #ff003c;
+  color: #000;
+  border: none;
+  padding: 12px;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: bold;
+  font-size: 1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 4px;
+}
+
+.submit-btn:hover {
+  background: #ff3360;
+  box-shadow: 0 0 20px rgba(255, 0, 60, 0.4);
+  transform: translateY(-2px);
 }

@@ -38,7 +38,7 @@
   margin-bottom: 15px;
 }
 
-input, textarea {
+input, textarea, select {
   background: #111;
   border: 1px solid #222;
   color: #fff;
@@ -48,10 +48,15 @@ input, textarea {
   width: 100%;
 }
 
-input:focus, textarea:focus {
+input:focus, textarea:focus, select:focus {
   border-color: #00d4ff;
   outline: none;
   box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+}
+
+select option {
+  background: #111;
+  color: #fff;
 }
 
 .command-input-row {

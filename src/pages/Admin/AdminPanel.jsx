@@ -78,7 +78,7 @@ const AdminPanel = () => {
   const handleCreateUser = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/users/signup', newUser);
+      await api.post('/users', newUser);
       setShowAddUser(false);
       setNewUser({ username: '', email: '', password: '', role: 'guest' });
       fetchUsers();

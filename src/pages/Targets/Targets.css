@@ -1,0 +1,48 @@
+.targets-container { color: white; }
+
+.targets-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px; /* Espace entre les lignes */
+  margin-top: 2rem;
+}
+
+.targets-table th {
+  text-align: left;
+  padding: 1rem;
+  color: #4df3ff;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  border-bottom: 1px solid #333;
+}
+
+.target-row {
+  background: rgba(20, 20, 30, 0.6);
+  transition: all 0.3s;
+}
+
+.target-row:hover {
+  background: rgba(0, 212, 255, 0.05);
+  transform: scale(1.01);
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+}
+
+.target-row td {
+  padding: 1.2rem 1rem;
+  border-top: 1px solid #333;
+  border-bottom: 1px solid #333;
+  font-family: monospace;
+}
+
+/* On arrondit les bords des lignes */
+.target-row td:first-child { border-left: 2px solid #00d4ff; border-top-left-radius: 4px; border-bottom-left-radius: 4px; }
+.target-row td:last-child { border-right: 1px solid #333; border-top-right-radius: 4px; border-bottom-right-radius: 4px; }
+
+.status-badge {
+  padding: 4px 10px;
+  font-size: 0.7rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  border-radius: 2px;
+}

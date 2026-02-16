@@ -1,0 +1,50 @@
+.boxes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.box-card {
+  background: linear-gradient(145deg, #0f0f19 0%, #050505 100%);
+  border: 1px solid #333;
+  padding: 1.5rem;
+  position: relative;
+  transition: 0.3s;
+  border-bottom: 4px solid #333;
+}
+
+.box-card:hover {
+  border-color: #00d4ff;
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 212, 255, 0.2);
+}
+
+.box-difficulty {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.difficulty-bar {
+  height: 4px;
+  background: #222;
+  margin-top: 10px;
+  border-radius: 2px;
+}
+
+.difficulty-fill {
+  height: 100%;
+  border-radius: 2px;
+}
+
+.box-info {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #4df3ff;
+}

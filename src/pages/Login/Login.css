@@ -1,0 +1,131 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #050505; /* Noir plus profond */
+  background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #050505 100%);
+  padding: 1rem;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+.login-card {
+  max-width: 400px;
+  width: 100%;
+  padding: 2.5rem;
+  background-color: rgba(15, 15, 25, 0.9);
+  border: 2px solid #00d4ff;
+  border-radius: 4px; /* Coins plus tranchants pour le style cyber */
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2), 
+              inset 0 0 10px rgba(0, 212, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Petit effet décoratif en haut de la carte */
+.login-card::before {
+  content: "ACCESS_DENIED";
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 0.6rem;
+  color: #ff003c;
+  letter-spacing: 2px;
+  opacity: 0.5;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.login-logo {
+  color: #00d4ff;
+  margin: 0 auto;
+  filter: drop-shadow(0 0 8px #00d4ff);
+}
+
+.login-title {
+  margin-top: 1rem;
+  font-size: 2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: white;
+}
+
+.login-title span {
+  color: #ff003c; /* Rose Néon */
+  text-shadow: 0 0 10px #ff003c;
+}
+
+.login-subtitle {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: #4df3ff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.form-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 0.75rem;
+  color: #00d4ff;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 0.75rem 0.75rem 2.8rem;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 1px solid #333;
+  border-left: 3px solid #00d4ff;
+  color: #fff;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.form-input:focus {
+  border-color: #ff003c;
+  box-shadow: 0 0 10px rgba(255, 0, 60, 0.3);
+  background-color: #000;
+}
+
+.error-message {
+  color: #ff003c;
+  background: rgba(255, 0, 60, 0.1);
+  padding: 0.5rem;
+  border: 1px solid #ff003c;
+  font-size: 0.8rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.login-button {
+  width: 100%;
+  padding: 1rem;
+  background-color: transparent;
+  border: 2px solid #00d4ff;
+  color: #00d4ff;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: all 0.4s;
+  position: relative;
+}
+
+.login-button:hover {
+  background-color: #00d4ff;
+  color: #000;
+  box-shadow: 0 0 20px #00d4ff;
+}
+
+.login-button:active {
+  transform: scale(0.98);
+}

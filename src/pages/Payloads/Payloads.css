@@ -1,0 +1,122 @@
+.payloads-container { color: white; }
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+  padding-bottom: 1rem;
+}
+
+.page-title { letter-spacing: 4px; font-weight: 900; }
+.page-title span { color: #ff003c; text-shadow: 0 0 10px #ff003c; }
+
+.add-btn {
+  background: transparent;
+  border: 1px solid #00d4ff;
+  color: #00d4ff;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: 700;
+  transition: 0.3s;
+}
+
+.add-btn:hover { background: #00d4ff; color: #000; box-shadow: 0 0 15px #00d4ff; }
+
+/* Container de la barre de recherche */
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid #333;
+  border-left: 3px solid #00d4ff; /* Rappel du style des inputs login */
+  padding: 0.5rem 1rem;
+  margin-bottom: 2.5rem;
+  transition: all 0.3s ease;
+}
+
+.search-bar-container:focus-within {
+  border-color: #ff003c; /* Devient rose au focus */
+  box-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
+}
+
+.search-icon {
+  color: #00d4ff;
+  margin-right: 1rem;
+}
+
+.search-input {
+  background: transparent;
+  border: none;
+  color: white;
+  width: 100%;
+  font-family: 'monospace';
+  outline: none;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+.search-input::placeholder {
+  color: #444;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+/* Grille de Payloads */
+.payload-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.payload-card {
+  background: rgba(15, 15, 25, 0.8);
+  border: 1px solid #333;
+  padding: 1.5rem;
+  position: relative;
+  transition: 0.3s;
+}
+
+.payload-card:hover { border-color: #ff003c; box-shadow: 0 0 10px rgba(255, 0, 60, 0.1); }
+
+.payload-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #00d4ff;
+  color: #000;
+  font-size: 0.6rem;
+  padding: 2px 8px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.payload-name { margin: 1rem 0; font-size: 1.1rem; color: #4df3ff; }
+
+.code-box {
+  background: #000;
+  padding: 1rem;
+  border-radius: 4px;
+  position: relative;
+  font-family: monospace;
+  font-size: 0.9rem;
+  border: 1px solid #222;
+  overflow-x: auto;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: transparent;
+  border: none;
+  color: #555;
+  cursor: pointer;
+}
+
+.copy-btn:hover { color: #00d4ff; }

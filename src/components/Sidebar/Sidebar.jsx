@@ -7,15 +7,21 @@ import {
   Box as BoxIcon, 
   Search, 
   LogOut,
-  Radio
+  Radio,
+  Layers,
+  ShieldCheck // Ajout de l'icône Admin
 } from 'lucide-react';
 import './Sidebar.css';
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  
+  // Récupération du rôle pour l'affichage conditionnel
+  const userRole = localStorage.getItem('role');
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('role'); // Nettoyage du rôle au logout
     navigate('/login');
   };
 
@@ -51,6 +57,19 @@ const Sidebar = () => {
           <Radio size={20} />
           <span>Veille Cyber</span>
         </NavLink>
+
+        <NavLink to="/killchain" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+          <Layers size={20} />
+          <span>Kill Chain</span>
+        </NavLink>
+
+        {/* --- SECTION ADMIN --- */}
+        {userRole === 'admin' && (
+          <NavLink to="/admin" className={({ isActive }) => isActive ? "nav-item admin-item active" : "nav-item admin-item"}>
+            <ShieldCheck size={20} color="#ff003c" />
+            <span style={{ color: '#ff003c', fontWeight: 'bold' }}>PANEL ADMIN</span>
+          </NavLink>
+        )}
       </nav>
 
       <div className="logout-btn" onClick={handleLogout}>

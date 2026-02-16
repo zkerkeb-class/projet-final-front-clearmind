@@ -6,6 +6,10 @@ import Payloads from './pages/Payloads';
 import Targets from './pages/Targets';
 import Boxes from './pages/Boxes';
 import News from './pages/News';
+import KillChain from './pages/Methodology/KillChain';
+import ToolDetail from './pages/Tools/ToolDetail';
+import AddTool from './pages/Tools/AddTool';
+import AdminPanel from './pages/Admin/AdminPanel';
 import ProtectedRoute from './components/ProtectedRoute'; // Import du garde
 
 function App() {
@@ -46,6 +50,15 @@ function App() {
           </ProtectedRoute>
         } />
 
+        <Route path="/killchain" element={<Layout><KillChain /></Layout>} />
+        <Route path="/tools/:name" element={<ProtectedRoute><Layout><ToolDetail /></Layout></ProtectedRoute>} />
+        <Route path="/tools/add/:name?" element={<Layout><AddTool /></Layout>} />
+        <Route path="/admin" element={
+          <ProtectedRoute>
+            <Layout><AdminPanel /></Layout>
+          </ProtectedRoute>
+        } />
+        
         {/* Redirection par défaut */}
         <Route path="/" element={<Navigate to="/login" />} />
       </Routes>

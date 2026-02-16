@@ -8,15 +8,17 @@ const Login = () => {
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await api.post('/users/login', formData);
-      localStorage.setItem('token', res.data.token);
-      window.location.href = '/dashboard';
-    } catch (err) {
-      setError(err.response?.data?.message || 'Erreur de connexion');
-    }
-  };
+  e.preventDefault();
+  try {
+    const res = await api.post('/users/login', formData);
+    localStorage.setItem('token', res.data.token);
+    localStorage.setItem('role', res.data.role); 
+    
+    window.location.href = '/dashboard';
+  } catch (err) {
+    setError(err.response?.data?.message || 'Erreur de connexion');
+  }
+};
 
   return (
     <div className="login-container">

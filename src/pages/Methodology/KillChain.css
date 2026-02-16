@@ -1,0 +1,118 @@
+.killchain-container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.subtitle {
+  color: #555;
+  font-family: monospace;
+  font-size: 0.8rem;
+  margin-top: -10px;
+  margin-bottom: 30px;
+}
+
+.steps-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.kill-step {
+  display: flex;
+  gap: 30px;
+}
+
+/* Ligne de connection verticale */
+.step-aside {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40px;
+}
+
+.step-id {
+  font-family: 'Orbitron', sans-serif;
+  color: #00d4ff;
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+.connector-line {
+  flex: 1;
+  width: 2px;
+  background: linear-gradient(to bottom, #00d4ff, #ff003c);
+  opacity: 0.3;
+  margin: 10px 0;
+}
+
+.kill-step:last-child .connector-line {
+  display: none;
+}
+
+/* Cartes des étapes */
+.step-card {
+  flex: 1;
+  background: rgba(10, 10, 15, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  transition: 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.step-card:hover {
+  background: rgba(0, 212, 255, 0.03);
+  border-color: rgba(0, 212, 255, 0.3);
+  transform: translateX(10px);
+}
+
+.step-icon-wrapper {
+  background: rgba(0, 212, 255, 0.1);
+  color: #00d4ff;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.step-info h3 {
+  margin: 0 0 5px 0;
+  letter-spacing: 2px;
+  color: #fff;
+}
+
+.step-info p {
+  color: #888;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+/* Badges Outils */
+.tools-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.kill-tool-tag {
+  background: rgba(255, 0, 60, 0.05);
+  border: 1px solid rgba(255, 0, 60, 0.3);
+  color: #ff003c;
+  font-size: 0.7rem;
+  padding: 3px 10px;
+  font-family: monospace;
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+.kill-tool-tag:hover {
+  background: #ff003c;
+  color: #fff;
+  cursor: default;
+}

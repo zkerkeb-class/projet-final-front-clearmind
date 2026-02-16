@@ -62,24 +62,28 @@ const News = () => {
   return (
     <div className="news-container">
       <header className="page-header">
-        <h2 className="page-title">THREAT_<span>INTELLIGENCE</span></h2>
+        <div className="header-left">
+            <h2 className="page-title">THREAT_<span>INTELLIGENCE</span></h2>
+        </div>
         
         <div className="search-bar-container">
-          <Search size={18} className="search-icon" />
-          <input 
+            <Search size={18} className="search-icon" />
+            <input 
             type="text" 
             placeholder="Filtrer par mot-clé (CVE, OS, Source)..." 
             className="news-search-input"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-          />
+            />
         </div>
 
-        <div className="live-indicator">
-          <Radio size={16} className="pulse-icon" /> 
-          <span>{filteredArticles.length} ALERTES_TROUVÉES</span>
+        <div className="header-right">
+            <div className="live-indicator">
+            <Radio size={16} className="pulse-icon" /> 
+            <span>{filteredArticles.length} ALERTES_TROUVÉES</span>
+            </div>
         </div>
-      </header>
+       </header>
 
       <div className="news-feed">
         {filteredArticles.length > 0 ? (

@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { getUserRole } from '../../utils/auth';
-import { Monitor, Search, Plus, Trash2, X, Save, Trophy } from 'lucide-react';
+import { Monitor, Search, Plus, Trash2, X, Save, Trophy, AlertTriangle } from 'lucide-react';
 import './Boxes.css';
 
 const Boxes = () => {
   const navigate = useNavigate();
   const [boxes, setBoxes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const userRole = getUserRole(); // Récupération du rôle
   
   // État pour la modale d'ajout
@@ -51,7 +52,7 @@ const Boxes = () => {
       setShowModal(false);
       setNewBox({ name: '', ipAddress: '', platform: 'HackTheBox', difficulty: 'Easy', status: 'Todo' });
     } catch (err) {
-      alert("Erreur lors de l'ajout de la machine : " + (err.response?.data?.message || err.message));
+      setError("ERREUR D'AJOUT : " + (err.response?.data?.message || err.message));
     }
   };
 
@@ -61,7 +62,7 @@ const Boxes = () => {
       await api.delete(`/boxes/${id}`);
       setBoxes(boxes.filter(b => b._id !== id));
     } catch (err) {
-      alert("Impossible de supprimer la machine.");
+      setError("IMPOSSIBLE DE SUPPRIMER LA MACHINE.");
     }
   };
 
@@ -71,7 +72,7 @@ const Boxes = () => {
       setBoxes(boxes.map(b => b._id === id ? { ...b, status: newStatus } : b));
       await api.patch(`/boxes/${id}`, { status: newStatus });
     } catch (err) {
-      alert("Erreur de synchronisation du statut.");
+      setError("ERREUR DE SYNCHRONISATION DU STATUT.");
     }
   };
 
@@ -243,6 +244,25 @@ const Boxes = () => {
 
               <button type="submit" style={{ marginTop: '1rem', padding: '12px', background: '#00d4ff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>LANCER L'INSTANCE</button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODALE D'ERREUR */}
+      {error && (
+        <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.9)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1100 }}>
+          <div className="modal-content" style={{ background: '#0a0a0a', border: '1px solid #ff003c', padding: '2rem', width: '400px', position: 'relative', boxShadow: '0 0 30px rgba(255, 0, 60, 0.2)' }}>
+            <button onClick={() => setError(null)} style={{ position: 'absolute', top: '10px', right: '10px', background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>
+              <X size={24} />
+            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1.5rem', borderBottom: '1px solid #333', paddingBottom: '10px' }}>
+              <AlertTriangle size={28} color="#ff003c" />
+              <h3 style={{ color: '#ff003c', margin: 0, fontFamily: 'Orbitron, sans-serif', letterSpacing: '1px' }}>ERREUR_SYSTÈME</h3>
+            </div>
+            
+            <p style={{ color: '#e0e0e0', fontFamily: 'monospace', marginBottom: '2rem', lineHeight: '1.5' }}>{error}</p>
+            
+            <button onClick={() => setError(null)} style={{ width: '100%', padding: '12px', background: 'transparent', border: '1px solid #ff003c', color: '#ff003c', fontWeight: 'bold', cursor: 'pointer', fontFamily: 'Orbitron, sans-serif', transition: 'all 0.3s' }} onMouseOver={(e) => {e.target.style.background = '#ff003c'; e.target.style.color = '#000'}} onMouseOut={(e) => {e.target.style.background = 'transparent'; e.target.style.color = '#ff003c'}}>ACQUITTER_ERREUR</button>
           </div>
         </div>
       )}

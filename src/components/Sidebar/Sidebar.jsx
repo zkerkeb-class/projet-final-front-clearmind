@@ -9,6 +9,7 @@ import {
   LogOut,
   Radio,
   Layers,
+  BookOpen,
   ShieldCheck // Ajout de l'icône Admin
 } from 'lucide-react';
 import './Sidebar.css';
@@ -40,6 +41,7 @@ const Sidebar = ({ isOpen, onClose }) => {
           position: fixed !important;
           z-index: 1500;
           height: 100vh;
+          overflow-y: auto;
         }
         .sidebar.open { transform: translateX(0); }
       }
@@ -79,6 +81,11 @@ const Sidebar = ({ isOpen, onClose }) => {
         <NavLink to="/killchain" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
           <Layers size={20} />
           <span>Kill Chain</span>
+        </NavLink>
+
+        <NavLink to="/wiki" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+          <BookOpen size={20} />
+          <span>Wiki / KB</span>
         </NavLink>
 
         {/* --- SECTION ADMIN --- */}

@@ -6,6 +6,7 @@ import Payloads from './pages/Payloads';
 import Targets from './pages/Targets';
 import Boxes from './pages/Boxes';
 import News from './pages/News';
+import Wiki from './pages/Wiki/Wiki';
 import KillChain from './pages/Methodology/KillChain';
 import ToolDetail from './pages/Tools/ToolDetail';
 import AddTool from './pages/Tools/AddTool';
@@ -55,6 +56,12 @@ function App() {
         <Route path="/news" element={
           <ProtectedRoute>
             <Layout><News /></Layout>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/wiki" element={
+          <ProtectedRoute>
+            <Layout><Wiki /></Layout>
           </ProtectedRoute>
         } />
 

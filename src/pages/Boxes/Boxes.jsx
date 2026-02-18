@@ -27,6 +27,16 @@ const Boxes = () => {
   const [difficultyFilter, setDifficultyFilter] = useState("All");
   const [platformFilter, setPlatformFilter] = useState("All");
 
+  const getDifficultyColor = (difficulty) => {
+    switch (difficulty) {
+      case 'Easy': return '#00ff41';   // Vert
+      case 'Medium': return '#ff8000'; // Orange
+      case 'Hard': return '#ff003c';   // Rouge
+      case 'Insane': return '#b026ff'; // Violet
+      default: return '#00d4ff';       // Bleu par défaut
+    }
+  };
+
   useEffect(() => {
     const fetchBoxes = async () => {
       try {
@@ -164,7 +174,7 @@ const Boxes = () => {
             style={{ cursor: 'pointer' }}
           >
             {/* Mapping de tes difficultés réelles */}
-            <div className="box-difficulty" style={{ color: box.difficulty === 'Insane' ? '#ff003c' : '#00ff41' }}>
+            <div className="box-difficulty" style={{ color: getDifficultyColor(box.difficulty) }}>
               {box.difficulty?.toUpperCase()}
             </div>
             

@@ -1,19 +1,36 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
-import { Copy, Terminal, Search, Plus, AlertTriangle, X } from 'lucide-react';
-import PayloadModal from '../../components/PayloadModal';
+import { Copy, Terminal, Search, Plus, AlertTriangle, X, Pencil, Trash2 } from 'lucide-react';
 import './Payloads.css';
 import { PAYLOAD_SEVERITIES, ROLES } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import { getUserRole } from '../../utils/auth';
+import { useToast } from '../../components/Toast/ToastContext';
+import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 
 const Payloads = () => {
+  const navigate = useNavigate();
   const [payloads, setPayloads] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // État pour la recherche
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState(null);
+  const [payloadToDelete, setPayloadToDelete] = useState(null);
   const userRole = getUserRole();
+  const { success, info } = useToast();
+
+  // Récupération de l'ID utilisateur depuis le token pour vérifier la propriété
+  const getUserId = () => {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.id;
+    } catch (e) {
+      return null;
+    }
+  };
+  const userId = getUserId();
 
   useEffect(() => {
     const fetchPayloads = async () => {
@@ -44,12 +61,36 @@ const Payloads = () => {
     // Tu pourrais ajouter un petit toast "Copied!" ici
   };
 
+  const handleEdit = (payload) => {
+    navigate(`/payloads/edit/${payload._id}`);
+  };
+
+  const confirmDelete = (id) => {
+    setPayloadToDelete(id);
+  };
+
+  const executeDeletePayload = async () => {
+    try {
+      await api.delete(`/payloads/${payloadToDelete}`);
+      setPayloads(payloads.filter(p => p._id !== payloadToDelete));
+      info("PAYLOAD SUPPRIMÉ");
+    } catch (err) {
+      setError("IMPOSSIBLE DE SUPPRIMER LE PAYLOAD.");
+    }
+    setPayloadToDelete(null);
+  };
+
+  const isOwner = (payload) => {
+    if (userRole === ROLES.ADMIN) return true;
+    return payload.author === userId || (payload.author && payload.author._id === userId);
+  };
+
   return (
     <div className="payloads-container">
       <header className="page-header">
         <h2 className="page-title">DB_<span>PAYLOADS</span></h2>
         {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
-          <button className="add-btn" onClick={() => setIsModalOpen(true)}>
+          <button className="add-btn" onClick={() => navigate('/payloads/add')}>
             <Plus size={18} /> Nouveau Payload
           </button>
         )}
@@ -80,6 +121,16 @@ const Payloads = () => {
         ) : filteredPayloads.length > 0 ? (
           filteredPayloads.map((p) => (
             <div key={p._id} className="payload-card">
+              {isOwner(p) && (
+                <div className="payload-actions" style={{ position: 'absolute', top: '10px', right: '10px', display: 'flex', gap: '8px' }}>
+                  <button onClick={() => handleEdit(p)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#ffa500' }}>
+                    <Pencil size={14} />
+                  </button>
+                  <button onClick={() => confirmDelete(p._id)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#555' }} className="hover-red">
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              )}
               <div className="payload-badge">{p.category}</div>
               <h3 className="payload-name">{p.title}</h3>
               <div className="code-box">
@@ -114,10 +165,12 @@ const Payloads = () => {
         )}
       </div>
 
-      <PayloadModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        onPayloadAdded={(newPayload) => setPayloads([newPayload, ...payloads])}
+      <ConfirmationModal 
+        isOpen={!!payloadToDelete}
+        onClose={() => setPayloadToDelete(null)}
+        onConfirm={executeDeletePayload}
+        title="SUPPRESSION_PAYLOAD"
+        message="Voulez-vous vraiment supprimer ce vecteur d'attaque de la base ?"
       />
 
       {/* MODALE D'ERREUR */}

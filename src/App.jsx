@@ -7,6 +7,7 @@ import Targets from './pages/Targets';
 import Boxes from './pages/Boxes';
 import News from './pages/News';
 import Wiki from './pages/Wiki/Wiki';
+import EditPayloads from './pages/Payloads/EditPayloads';
 import KillChain from './pages/Methodology/KillChain';
 import ToolDetail from './pages/Tools/ToolDetail';
 import AddTool from './pages/Tools/AddTool';
@@ -36,6 +37,15 @@ function App() {
         }>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/payloads" element={<Payloads />} />
+          
+          {/* Routes Payloads Protégées (Pentester & Admin) */}
+          <Route path="/payloads/add" element={
+            <ProtectedRoute allowedRoles={[ROLES.PENTESTER, ROLES.ADMIN]}><EditPayloads /></ProtectedRoute>
+          } />
+          <Route path="/payloads/edit/:id" element={
+            <ProtectedRoute allowedRoles={[ROLES.PENTESTER, ROLES.ADMIN]}><EditPayloads /></ProtectedRoute>
+          } />
+
           <Route path="/targets" element={<Targets />} />
           <Route path="/boxes" element={<Boxes />} />
           <Route path="/boxes/:id" element={<BoxDetail />} />

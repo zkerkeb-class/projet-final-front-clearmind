@@ -87,7 +87,7 @@
 .payload-badge {
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0; /* Déplacé à gauche pour ne pas gêner les boutons d'action */
   background: #00d4ff;
   color: #000;
   font-size: 0.6rem;
@@ -120,6 +120,13 @@
 }
 
 .copy-btn:hover { color: #00d4ff; }
+
+.payload-footer {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.8rem;
+}
 
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {

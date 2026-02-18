@@ -22,7 +22,7 @@ const Targets = () => {
     domain: '',
     os: 'Unknown',
     status: 'Discovery',
-    ports: '',
+    ports: [], // Tableau d'objets { port, service }
     linkedBox: '' // ID de la box liée
   });
 
@@ -50,7 +50,7 @@ const Targets = () => {
     // Préparation des données (conversion string ports -> array)
     const payload = {
       ...newTarget,
-      ports: newTarget.ports.split(',').map(p => p.trim()).filter(p => p !== ''),
+      ports: newTarget.ports.filter(p => p.port), // On garde ceux qui ont au moins un port défini
       linkedBox: newTarget.linkedBox || null
     };
 
@@ -93,7 +93,7 @@ const Targets = () => {
       domain: target.domain || '',
       os: target.os,
       status: target.status,
-      ports: target.ports ? target.ports.join(', ') : '',
+      ports: target.ports || [],
       linkedBox: target.linkedBox?._id || target.linkedBox || ''
     });
     setIsEditMode(true);
@@ -102,9 +102,23 @@ const Targets = () => {
   };
 
   const resetForm = () => {
-    setNewTarget({ name: '', ip: '', domain: '', os: 'Unknown', status: 'Discovery', ports: '', linkedBox: '' });
+    setNewTarget({ name: '', ip: '', domain: '', os: 'Unknown', status: 'Discovery', ports: [], linkedBox: '' });
     setIsEditMode(false);
     setEditingId(null);
+  };
+
+  // Gestion des lignes de ports
+  const addPortRow = () => {
+    setNewTarget({ ...newTarget, ports: [...newTarget.ports, { port: '', service: '' }] });
+  };
+  const removePortRow = (index) => {
+    const newPorts = newTarget.ports.filter((_, i) => i !== index);
+    setNewTarget({ ...newTarget, ports: newPorts });
+  };
+  const handlePortChange = (index, field, value) => {
+    const newPorts = [...newTarget.ports];
+    newPorts[index][field] = value;
+    setNewTarget({ ...newTarget, ports: newPorts });
   };
 
   if (loading) return <div className="loading-text">SCAN DES RÉSEAUX EN COURS...</div>;
@@ -153,7 +167,11 @@ const Targets = () => {
                   </div>
                 )}
               </td>
-              <td style={{color: '#4df3ff'}}>{t.ports?.join(', ') || "N/A"}</td>
+              <td style={{color: '#4df3ff', fontSize: '0.85rem'}}>
+                {t.ports && t.ports.length > 0 
+                  ? t.ports.map(p => `${p.port} (${p.service || '?'})`).join(', ') 
+                  : "N/A"}
+              </td>
               <td>
                 <span className="status-badge" style={{
                   backgroundColor: t.status === 'Compromised' ? 'rgba(255, 0, 60, 0.2)' : 'rgba(0, 212, 255, 0.1)',
@@ -194,7 +212,33 @@ const Targets = () => {
               <input type="text" placeholder="Nom de la cible (ex: SRV-AD-01)" required value={newTarget.name} onChange={e => setNewTarget({...newTarget, name: e.target.value})} style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff' }} />
               <input type="text" placeholder="Adresse IP (ex: 192.168.1.10)" required value={newTarget.ip} onChange={e => setNewTarget({...newTarget, ip: e.target.value})} style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff' }} />
               <input type="text" placeholder="Domaine (ex: corp.local)" value={newTarget.domain} onChange={e => setNewTarget({...newTarget, domain: e.target.value})} style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff' }} />
-              <input type="text" placeholder="Ports / Services (ex: 80, 443, 3389)" value={newTarget.ports} onChange={e => setNewTarget({...newTarget, ports: e.target.value})} style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff' }} />
+              
+              {/* Gestion des Ports en Tableau */}
+              <div style={{ background: '#111', padding: '10px', border: '1px solid #333', borderRadius: '4px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                  <label style={{ color: '#00d4ff', fontSize: '0.8rem', fontFamily: 'Orbitron' }}>PORTS & SERVICES</label>
+                  <button type="button" onClick={addPortRow} style={{ background: 'transparent', border: '1px solid #00ff41', color: '#00ff41', fontSize: '0.7rem', padding: '2px 6px', cursor: 'pointer' }}>+ AJOUTER</button>
+                </div>
+                {newTarget.ports.map((p, index) => (
+                  <div key={index} style={{ display: 'flex', gap: '5px', marginBottom: '5px' }}>
+                    <input 
+                      type="text" 
+                      placeholder="Port (80)" 
+                      value={p.port} 
+                      onChange={(e) => handlePortChange(index, 'port', e.target.value)}
+                      style={{ flex: 1, padding: '8px', background: '#0a0a0a', border: '1px solid #333', color: '#fff' }} 
+                    />
+                    <input 
+                      type="text" 
+                      placeholder="Service (HTTP)" 
+                      value={p.service} 
+                      onChange={(e) => handlePortChange(index, 'service', e.target.value)}
+                      style={{ flex: 2, padding: '8px', background: '#0a0a0a', border: '1px solid #333', color: '#fff' }} 
+                    />
+                    <button type="button" onClick={() => removePortRow(index)} style={{ background: 'transparent', border: 'none', color: '#ff003c', cursor: 'pointer' }}><Trash2 size={14}/></button>
+                  </div>
+                ))}
+              </div>
               
               <select value={newTarget.linkedBox} onChange={e => setNewTarget({...newTarget, linkedBox: e.target.value})} style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff' }}>
                 <option value="">-- Lier à une Box (Optionnel) --</option>

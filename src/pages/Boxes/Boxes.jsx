@@ -104,7 +104,7 @@ const Boxes = () => {
       {/* Barre de contrôle : Recherche et Filtres */}
       <div className="controls-bar" style={{ display: 'flex', gap: '1rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
         <div className="search-wrapper" style={{ flex: 1, minWidth: '250px', position: 'relative' }}>
-          <Search size={18} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#00d4ff' }} />
+          <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#00d4ff', pointerEvents: 'none', zIndex: 2 }} />
           <input 
             type="text" 
             placeholder="Rechercher une machine (Nom, IP)..." 
@@ -112,12 +112,13 @@ const Boxes = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{
               width: '100%',
-              padding: '10px 10px 10px 35px',
+              padding: '10px 10px 10px 40px',
               background: 'rgba(0,0,0,0.3)',
               border: '1px solid #333',
               color: '#fff',
               fontFamily: 'monospace',
-              outline: 'none'
+              outline: 'none',
+              boxSizing: 'border-box'
             }}
           />
         </div>

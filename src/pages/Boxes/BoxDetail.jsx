@@ -149,10 +149,21 @@ const BoxDetail = () => {
           <div className="targets-list">
             {box.linkedTargets.map(t => (
               <div key={t._id} className="target-chip">
-                <span className="target-name">{t.name}</span>
-                <span className="target-ip">{t.ip}</span>
+                <div className="target-chip-header">
+                  <span className="target-name">{t.name}</span>
+                  <span className="target-ip">{t.ip}</span>
+                </div>
                 {t.ports && t.ports.length > 0 && (
-                  <span className="target-ports">[{t.ports.join(', ')}]</span>
+                  <table className="mini-ports-table">
+                    <tbody>
+                      {t.ports.map((p, i) => (
+                        <tr key={i}>
+                          <td className="port-num">{p.port}</td>
+                          <td className="port-svc">{p.service}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 )}
               </div>
             ))}

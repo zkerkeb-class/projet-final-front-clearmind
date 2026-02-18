@@ -266,7 +266,7 @@
 .targets-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 15px;
 }
 
 .target-chip {
@@ -278,17 +278,34 @@
   font-size: 0.8rem;
   color: #e0e0e0;
   display: flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 180px;
+}
+
+.target-chip-header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #333;
+  padding-bottom: 5px;
 }
 
 .target-ip {
   color: #00ff41;
 }
 
-.target-ports {
-  color: #ffa500;
-  font-size: 0.75rem;
+.mini-ports-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.7rem;
+}
+
+.mini-ports-table td {
+  padding: 2px 0;
+}
+
+.port-num { color: #ffa500; font-weight: bold; }
+.port-svc { color: #888; text-align: right; }
 }
 
 .preview-toggle-btn {

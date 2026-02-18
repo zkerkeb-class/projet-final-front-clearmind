@@ -4,6 +4,7 @@ import api from '../../api/axios';
 import { Server, ShieldCheck, Activity, Loader, Plus, Trash2, X, AlertTriangle, Pencil, Box } from 'lucide-react';
 import { getUserRole } from '../../utils/auth';
 import './Targets.css';
+import { ROLES, TARGET_STATUSES, TARGET_OS } from '../../utils/constants';
 
 const Targets = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const Targets = () => {
     ip: '',
     domain: '',
     os: 'Unknown',
-    status: 'Discovery',
+    status: TARGET_STATUSES.DISCOVERY,
     ports: [], // Tableau d'objets { port, service }
     linkedBox: '' // ID de la box liée
   });
@@ -102,7 +103,7 @@ const Targets = () => {
   };
 
   const resetForm = () => {
-    setNewTarget({ name: '', ip: '', domain: '', os: 'Unknown', status: 'Discovery', ports: [], linkedBox: '' });
+    setNewTarget({ name: '', ip: '', domain: '', os: 'Unknown', status: TARGET_STATUSES.DISCOVERY, ports: [], linkedBox: '' });
     setIsEditMode(false);
     setEditingId(null);
   };
@@ -134,7 +135,7 @@ const Targets = () => {
       <header className="page-header">
         <h2 className="page-title">SYSTEM_<span>TARGETS</span></h2>
         
-        {(userRole === 'pentester' || userRole === 'admin') && (
+        {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
           <button className="add-btn" onClick={openAddModal} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#00d4ff', color: '#000', border: 'none', padding: '8px 16px', fontWeight: 'bold', cursor: 'pointer' }}>
             <Plus size={18} /> AJOUTER SCOPE
           </button>
@@ -149,7 +150,7 @@ const Targets = () => {
             <th>OS</th>
             <th>Ports Ouverts</th>
             <th>Statut</th>
-            {(userRole === 'pentester' || userRole === 'admin') && <th>Actions</th>}
+            {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && <th>Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -180,9 +181,9 @@ const Targets = () => {
               </td>
               <td>
                 <span className="status-badge" style={{
-                  backgroundColor: t.status === 'Compromised' ? 'rgba(255, 0, 60, 0.2)' : 'rgba(0, 212, 255, 0.1)',
-                  color: t.status === 'Compromised' ? '#ff003c' : '#00d4ff',
-                  border: `1px solid ${t.status === 'Compromised' ? '#ff003c' : '#00d4ff'}`,
+                  backgroundColor: t.status === TARGET_STATUSES.COMPROMISED ? 'rgba(255, 0, 60, 0.2)' : 'rgba(0, 212, 255, 0.1)',
+                  color: t.status === TARGET_STATUSES.COMPROMISED ? '#ff003c' : '#00d4ff',
+                  border: `1px solid ${t.status === TARGET_STATUSES.COMPROMISED ? '#ff003c' : '#00d4ff'}`,
                   padding: '2px 8px',
                   borderRadius: '4px',
                   fontSize: '0.8rem'
@@ -190,7 +191,7 @@ const Targets = () => {
                   {t.status.toUpperCase()}
                 </span>
               </td>
-              {(userRole === 'pentester' || userRole === 'admin') && (
+              {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
                 <td>
                   <button onClick={() => openEditModal(t)} style={{background: 'transparent', border: 'none', cursor: 'pointer', marginRight: '10px'}}>
                     <Pencil size={16} color="#ffa500" />
@@ -254,17 +255,17 @@ const Targets = () => {
               </select>
 
               <select value={newTarget.os} onChange={e => setNewTarget({...newTarget, os: e.target.value})} style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff' }}>
-                <option value="Unknown">OS Inconnu</option>
-                <option value="Windows">Windows</option>
-                <option value="Linux">Linux</option>
-                <option value="MacOS">MacOS</option>
+                <option value={TARGET_OS.UNKNOWN}>OS Inconnu</option>
+                <option value={TARGET_OS.WINDOWS}>Windows</option>
+                <option value={TARGET_OS.LINUX}>Linux</option>
+                <option value={TARGET_OS.MACOS}>MacOS</option>
               </select>
 
               <select value={newTarget.status} onChange={e => setNewTarget({...newTarget, status: e.target.value})} style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff' }}>
-                <option value="Discovery">Discovery (Découverte)</option>
-                <option value="Scanning">Scanning (En cours)</option>
-                <option value="Vulnerable">Vulnerable (Faille trouvée)</option>
-                <option value="Compromised">Compromised (Pwned)</option>
+                <option value={TARGET_STATUSES.DISCOVERY}>Discovery (Découverte)</option>
+                <option value={TARGET_STATUSES.SCANNING}>Scanning (En cours)</option>
+                <option value={TARGET_STATUSES.VULNERABLE}>Vulnerable (Faille trouvée)</option>
+                <option value={TARGET_STATUSES.COMPROMISED}>Compromised (Pwned)</option>
               </select>
 
               <button type="submit" style={{ marginTop: '1rem', padding: '12px', background: '#00d4ff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>{isEditMode ? 'SAUVEGARDER MODIFICATIONS' : 'AJOUTER AU SCOPE'}</button>

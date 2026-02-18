@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import api from '../../api/axios';
 import { X, AlertTriangle } from 'lucide-react';
 import './PayloadModal.css';
+import { PAYLOAD_CATEGORIES, PAYLOAD_SEVERITIES } from '../../utils/constants';
 
 const PayloadModal = ({ isOpen, onClose, onPayloadAdded }) => {
   const [error, setError] = useState(null);
@@ -57,34 +58,14 @@ const PayloadModal = ({ isOpen, onClose, onPayloadAdded }) => {
               >
                 {/* Web Classique */}
                 <optgroup label="Vunérabilités Web">
-                  <option value="XSS">XSS</option>
-                  <option value="SQLi">SQLi</option>
-                  <option value="NoSQLi">NoSQLi</option>
-                  <option value="LFI">LFI/RFI</option>
-                  <option value="RCE">RCE</option>
-                  <option value="SSTI">SSTI</option>
-                  <option value="SSRF">SSRF</option>
-                  <option value="XXE">XXE</option>
+                  {PAYLOAD_CATEGORIES.WEB.map(cat => <option key={cat} value={cat}>{cat}</option>)}
                 </optgroup>
-
-                {/* Accès & Système */}
                 <optgroup label="Accès & Système">
-                  <option value="Auth-Bypass">Auth-Bypass</option>
-                  <option value="Priv-Esc">Priv-Esc</option>
-                  <option value="Command-Inj">Command-Inj</option>
-                  <option value="Directory-Trav">Directory-Trav</option>
-                  <option value="IDOR">IDOR</option>
+                  {PAYLOAD_CATEGORIES.SYSTEM.map(cat => <option key={cat} value={cat}>{cat}</option>)}
                 </optgroup>
-
-                {/* API & Moderne */}
                 <optgroup label="API & Sécurité Moderne">
-                  <option value="BOLA">BOLA (API)</option>
-                  <option value="Mass-Assignment">Mass-Assignment</option>
-                  <option value="JWT-Attack">JWT-Attack</option>
-                  <option value="GraphQL-Inj">GraphQL-Inj</option>
-                  <option value="Rate-Limit-Bypass">Rate-Limit-Bypass</option>
+                  {PAYLOAD_CATEGORIES.API.map(cat => <option key={cat} value={cat}>{cat}</option>)}
                 </optgroup>
-                
                 <option value="Other">Other</option>
               </select>
             </div>
@@ -95,10 +76,10 @@ const PayloadModal = ({ isOpen, onClose, onPayloadAdded }) => {
                 value={formData.severity}
                 onChange={(e) => setFormData({...formData, severity: e.target.value})}
               >
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
-                <option value="Critical">Critical</option>
+                <option value={PAYLOAD_SEVERITIES.LOW}>Low</option>
+                <option value={PAYLOAD_SEVERITIES.MEDIUM}>Medium</option>
+                <option value={PAYLOAD_SEVERITIES.HIGH}>High</option>
+                <option value={PAYLOAD_SEVERITIES.CRITICAL}>Critical</option>
               </select>
             </div>
           </div>

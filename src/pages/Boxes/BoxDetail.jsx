@@ -7,6 +7,7 @@ import api from '../../api/axios';
 import { ChevronLeft, Save, Monitor, Hash, Activity, Eye, Edit, Copy, Check, Settings, X, Target, AlertTriangle, Code, Trash2 } from 'lucide-react';
 import { getUserRole } from '../../utils/auth';
 import './BoxDetail.css';
+import { ROLES, BOX_DIFFICULTIES, BOX_PLATFORMS } from '../../utils/constants';
 
 const CodeBlock = ({ inline, className, children, ...props }) => {
   const [isCopied, setIsCopied] = useState(false);
@@ -98,11 +99,11 @@ const BoxDetail = () => {
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
-      case 'Easy': return '#00ff41';   // Vert
-      case 'Medium': return '#ff8000'; // Orange
-      case 'Hard': return '#ff003c';   // Rouge
-      case 'Insane': return '#b026ff'; // Violet
-      default: return '#00d4ff';       // Bleu par défaut
+      case BOX_DIFFICULTIES.EASY: return '#00ff41';
+      case BOX_DIFFICULTIES.MEDIUM: return '#ff8000';
+      case BOX_DIFFICULTIES.HARD: return '#ff003c';
+      case BOX_DIFFICULTIES.INSANE: return '#b026ff';
+      default: return '#00d4ff';
     }
   };
 
@@ -203,7 +204,7 @@ const BoxDetail = () => {
             </span>
             
             {/* Bouton d'édition pour l'auteur/admin */}
-            {(userRole === 'pentester' || userRole === 'admin') && (
+            {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
               <button onClick={handleEditClick} className="preview-toggle-btn" title="Modifier les infos">
                 <Settings size={14} /> CONFIG
               </button>
@@ -293,18 +294,18 @@ const BoxDetail = () => {
               <input className="edit-input" type="text" placeholder="Adresse IP" value={editData.ipAddress} onChange={e => setEditData({...editData, ipAddress: e.target.value})} />
               
               <select className="edit-select" value={editData.platform} onChange={e => setEditData({...editData, platform: e.target.value})}>
-                <option value="HackTheBox">HackTheBox</option>
-                <option value="TryHackMe">TryHackMe</option>
-                <option value="Root-Me">Root-Me</option>
-                <option value="VulnHub">VulnHub</option>
-                <option value="Other">Autre</option>
+                <option value={BOX_PLATFORMS.HTB}>HackTheBox</option>
+                <option value={BOX_PLATFORMS.THM}>TryHackMe</option>
+                <option value={BOX_PLATFORMS.ROOT_ME}>Root-Me</option>
+                <option value={BOX_PLATFORMS.VULNHUB}>VulnHub</option>
+                <option value={BOX_PLATFORMS.OTHER}>Autre</option>
               </select>
 
               <select className="edit-select" value={editData.difficulty} onChange={e => setEditData({...editData, difficulty: e.target.value})}>
-                <option value="Easy">Easy</option>
-                <option value="Medium">Medium</option>
-                <option value="Hard">Hard</option>
-                <option value="Insane">Insane</option>
+                <option value={BOX_DIFFICULTIES.EASY}>Easy</option>
+                <option value={BOX_DIFFICULTIES.MEDIUM}>Medium</option>
+                <option value={BOX_DIFFICULTIES.HARD}>Hard</option>
+                <option value={BOX_DIFFICULTIES.INSANE}>Insane</option>
               </select>
 
               <button type="submit" className="save-btn" style={{ marginTop: '1rem' }}>

@@ -3,6 +3,7 @@ import api from '../../api/axios';
 import { Copy, Terminal, Search, Plus, AlertTriangle, X } from 'lucide-react';
 import PayloadModal from '../../components/PayloadModal';
 import './Payloads.css';
+import { PAYLOAD_SEVERITIES } from '../../utils/constants';
 
 const Payloads = () => {
   const [payloads, setPayloads] = useState([]);
@@ -81,12 +82,12 @@ const Payloads = () => {
                     marginLeft: '5px',
                     fontWeight: '900',
                     color: 
-                      p.severity === 'Critical' ? '#ff003c' : // Rose Néon
-                      p.severity === 'High'     ? '#ff8000' : // Orange Électrique
-                      p.severity === 'Medium'   ? '#00d4ff' : // Bleu Cyan
+                      p.severity === PAYLOAD_SEVERITIES.CRITICAL ? '#ff003c' : // Rose Néon
+                      p.severity === PAYLOAD_SEVERITIES.HIGH     ? '#ff8000' : // Orange Électrique
+                      p.severity === PAYLOAD_SEVERITIES.MEDIUM   ? '#00d4ff' : // Bleu Cyan
                                                   '#00ff41',  // Vert Matrix pour 'Low'
-                    textShadow: (p.severity === 'Critical' || p.severity === 'High') 
-                      ? `0 0 8px ${p.severity === 'Critical' ? '#ff003c' : '#ff8000'}` 
+                    textShadow: (p.severity === PAYLOAD_SEVERITIES.CRITICAL || p.severity === PAYLOAD_SEVERITIES.HIGH) 
+                      ? `0 0 8px ${p.severity === PAYLOAD_SEVERITIES.CRITICAL ? '#ff003c' : '#ff8000'}` 
                       : 'none'
                   }}>
                     {p.severity?.toUpperCase() || 'MEDIUM'}

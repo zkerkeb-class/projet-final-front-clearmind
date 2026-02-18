@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { Plus, Trash2, Save, ChevronLeft, AlertTriangle, X } from 'lucide-react';
 import './EditTool.css';
+import { TOOL_CATEGORIES } from '../../utils/constants';
 
 const EditTool = () => {
   const { name } = useParams();
@@ -88,13 +89,9 @@ const EditTool = () => {
             <input name="name" placeholder="Nom de l'outil (ex: nmap)" value={formData.name} onChange={handleChange} required />
             <select name="category" value={formData.category} onChange={handleChange} required>
               <option value="" disabled>-- Sélectionner une étape --</option>
-              <option value="Reconnaissance">Reconnaissance</option>
-              <option value="Weaponization">Weaponization</option>
-              <option value="Delivery">Delivery</option>
-              <option value="Exploitation">Exploitation</option>
-              <option value="Installation">Installation</option>
-              <option value="Command & Control">Command & Control</option>
-              <option value="Actions on Objectives">Actions on Objectives</option>
+              {TOOL_CATEGORIES.map(cat => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
             </select>
           </div>
           <input name="link" placeholder="Lien vers documentation officielle" value={formData.link} onChange={handleChange} />

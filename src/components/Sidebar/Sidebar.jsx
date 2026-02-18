@@ -13,6 +13,7 @@ import {
   ShieldCheck // Ajout de l'icône Admin
 } from 'lucide-react';
 import './Sidebar.css';
+import { ROLES } from '../../utils/constants';
 
 const Sidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
@@ -89,7 +90,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         </NavLink>
 
         {/* --- SECTION ADMIN --- */}
-        {userRole === 'admin' && (
+        {userRole === ROLES.ADMIN && (
           <NavLink to="/admin" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item admin-item active" : "nav-item admin-item"}>
             <ShieldCheck size={20} color="#ff003c" />
             <span style={{ color: '#ff003c', fontWeight: 'bold' }}>PANEL ADMIN</span>

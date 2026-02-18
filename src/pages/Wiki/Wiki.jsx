@@ -6,6 +6,7 @@ import api from '../../api/axios';
 import { Search, BookOpen, Plus, Save, X, Trash2, AlertTriangle, Edit, Eye, Copy, Check, Code } from 'lucide-react';
 import { getUserRole } from '../../utils/auth';
 import './Wiki.css';
+import { ROLES } from '../../utils/constants';
 
 // Composant pour les blocs de code avec bouton copier
 const CodeBlock = ({ inline, className, children, ...props }) => {
@@ -96,7 +97,7 @@ const Wiki = () => {
   const [formData, setFormData] = useState({ port: '', service: '', content: '' });
   
   const userRole = getUserRole();
-  const canEdit = userRole === 'admin' || userRole === 'pentester';
+  const canEdit = userRole === ROLES.ADMIN || userRole === ROLES.PENTESTER;
 
   // Charger la liste des méthodes (sidebar)
   useEffect(() => {

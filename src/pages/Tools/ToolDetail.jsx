@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { Terminal, ChevronLeft, ExternalLink, Copy, AlertTriangle, Search } from 'lucide-react';
 import './ToolDetail.css';
+import { ROLES } from '../../utils/constants';
 
 const ToolDetail = () => {
   const { name } = useParams();
@@ -72,7 +73,7 @@ const ToolDetail = () => {
         <p>L'outil "{name}" n'est pas encore documenté dans l'arsenal.</p>
         
         {/* On vérifie si l'utilisateur est admin pour afficher le bouton d'ajout */}
-        {userRole === 'admin' ? (
+        {userRole === ROLES.ADMIN ? (
           <button 
             onClick={() => navigate(`/tools/add/${name}`)} 
             className="btn-deploy"

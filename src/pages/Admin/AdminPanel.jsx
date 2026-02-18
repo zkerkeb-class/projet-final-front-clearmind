@@ -15,6 +15,7 @@ import {
   AlertTriangle
 } from 'lucide-react';
 import './AdminPanel.css';
+import { ROLES } from '../../utils/constants';
 
 const AdminPanel = () => {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const AdminPanel = () => {
     username: '', 
     email: '', 
     password: '', 
-    role: 'guest' 
+    role: ROLES.GUEST 
   });
 
   useEffect(() => {
@@ -216,9 +217,9 @@ const AdminPanel = () => {
                       value={newUser.role} 
                       onChange={e => setNewUser({...newUser, role: e.target.value})}
                     >
-                      <option value="guest">GUEST</option>
-                      <option value="pentester">PENTESTER</option>
-                      <option value="admin">ADMIN</option>
+                      <option value={ROLES.GUEST}>GUEST</option>
+                      <option value={ROLES.PENTESTER}>PENTESTER</option>
+                      <option value={ROLES.ADMIN}>ADMIN</option>
                     </select>
                     <button type="submit" className="save-btn">INITIALISER_COMPTE</button>
                   </form>
@@ -246,9 +247,9 @@ const AdminPanel = () => {
                         value={user.role} 
                         onChange={(e) => handleRoleChange(user._id, e.target.value)}
                       >
-                        <option value="guest">GUEST</option>
-                        <option value="pentester">PENTESTER</option>
-                        <option value="admin">ADMIN</option>
+                        <option value={ROLES.GUEST}>GUEST</option>
+                        <option value={ROLES.PENTESTER}>PENTESTER</option>
+                        <option value={ROLES.ADMIN}>ADMIN</option>
                       </select>
                     </td>
                     <td className="actions-cell">

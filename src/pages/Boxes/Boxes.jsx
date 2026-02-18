@@ -4,6 +4,7 @@ import api from '../../api/axios';
 import { getUserRole } from '../../utils/auth';
 import { Monitor, Search, Plus, Trash2, X, Save, Trophy, AlertTriangle } from 'lucide-react';
 import './Boxes.css';
+import { ROLES, BOX_STATUSES, BOX_DIFFICULTIES, BOX_PLATFORMS, TARGET_OS } from '../../utils/constants';
 
 const Boxes = () => {
   const navigate = useNavigate();
@@ -17,9 +18,9 @@ const Boxes = () => {
   const [newBox, setNewBox] = useState({
     name: '',
     ipAddress: '',
-    platform: 'HackTheBox',
-    difficulty: 'Easy',
-    status: 'Todo'
+    platform: BOX_PLATFORMS.HTB,
+    difficulty: BOX_DIFFICULTIES.EASY,
+    status: BOX_STATUSES.TODO
   });
 
   // États pour la recherche et les filtres
@@ -29,11 +30,11 @@ const Boxes = () => {
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
-      case 'Easy': return '#00ff41';   // Vert
-      case 'Medium': return '#ff8000'; // Orange
-      case 'Hard': return '#ff003c';   // Rouge
-      case 'Insane': return '#b026ff'; // Violet
-      default: return '#00d4ff';       // Bleu par défaut
+      case BOX_DIFFICULTIES.EASY: return '#00ff41';
+      case BOX_DIFFICULTIES.MEDIUM: return '#ff8000';
+      case BOX_DIFFICULTIES.HARD: return '#ff003c';
+      case BOX_DIFFICULTIES.INSANE: return '#b026ff';
+      default: return '#00d4ff';
     }
   };
 
@@ -60,7 +61,7 @@ const Boxes = () => {
       const res = await api.post('/boxes', newBox);
       setBoxes([...boxes, res.data.data]); // Ajoute la nouvelle box à la liste locale
       setShowModal(false);
-      setNewBox({ name: '', ipAddress: '', platform: 'HackTheBox', difficulty: 'Easy', status: 'Todo' });
+      setNewBox({ name: '', ipAddress: '', platform: BOX_PLATFORMS.HTB, difficulty: BOX_DIFFICULTIES.EASY, status: BOX_STATUSES.TODO });
     } catch (err) {
       setError("ERREUR D'AJOUT : " + (err.response?.data?.message || err.message));
     }
@@ -111,7 +112,7 @@ const Boxes = () => {
         <h2 className="page-title">ACTIVE_<span>BOXES</span></h2>
         
         {/* Affichage conditionnel du bouton selon le rôle */}
-        {(userRole === 'pentester' || userRole === 'admin') && (
+        {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
           <button className="add-btn" onClick={() => setShowModal(true)} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#00d4ff', color: '#000', border: 'none', padding: '8px 16px', fontWeight: 'bold', cursor: 'pointer' }}>
             <Plus size={18} /> NOUVELLE CIBLE
           </button>
@@ -147,10 +148,10 @@ const Boxes = () => {
             style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff', fontFamily: 'monospace', cursor: 'pointer' }}
           >
             <option value="All">DIFFICULTÉ (TOUTES)</option>
-            <option value="Easy">EASY</option>
-            <option value="Medium">MEDIUM</option>
-            <option value="Hard">HARD</option>
-            <option value="Insane">INSANE</option>
+            <option value={BOX_DIFFICULTIES.EASY}>EASY</option>
+            <option value={BOX_DIFFICULTIES.MEDIUM}>MEDIUM</option>
+            <option value={BOX_DIFFICULTIES.HARD}>HARD</option>
+            <option value={BOX_DIFFICULTIES.INSANE}>INSANE</option>
           </select>
 
           <select 
@@ -159,8 +160,8 @@ const Boxes = () => {
             style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff', fontFamily: 'monospace', cursor: 'pointer' }}
           >
             <option value="All">OS (TOUS)</option>
-            <option value="Linux">LINUX</option>
-            <option value="Windows">WINDOWS</option>
+            <option value={TARGET_OS.LINUX}>LINUX</option>
+            <option value={TARGET_OS.WINDOWS}>WINDOWS</option>
           </select>
         </div>
       </div>
@@ -187,8 +188,8 @@ const Boxes = () => {
                 className="difficulty-fill" 
                 style={{ 
                   // Logique de progression basée sur ton enum status
-                  width: box.status === 'Root-Flag' ? '100%' : box.status === 'User-Flag' ? '50%' : '10%', 
-                  backgroundColor: box.status === 'Root-Flag' ? '#ff003c' : '#00d4ff' 
+                  width: box.status === BOX_STATUSES.ROOT_FLAG ? '100%' : box.status === BOX_STATUSES.USER_FLAG ? '50%' : '10%', 
+                  backgroundColor: box.status === BOX_STATUSES.ROOT_FLAG ? '#ff003c' : '#00d4ff' 
                 }} 
               />
             </div>
@@ -203,20 +204,20 @@ const Boxes = () => {
                   style={{
                     background: 'transparent',
                     border: '1px solid #333',
-                    color: box.status === 'Root-Flag' ? '#ff003c' : '#00d4ff',
+                    color: box.status === BOX_STATUSES.ROOT_FLAG ? '#ff003c' : '#00d4ff',
                     padding: '5px',
                     fontSize: '0.8rem',
                     cursor: 'pointer'
                   }}
                 >
-                  <option value="Todo">TODO</option>
-                  <option value="In-Progress">IN PROGRESS</option>
-                  <option value="User-Flag">USER OWNED</option>
-                  <option value="Root-Flag">ROOT OWNED</option>
+                  <option value={BOX_STATUSES.TODO}>TODO</option>
+                  <option value={BOX_STATUSES.IN_PROGRESS}>IN PROGRESS</option>
+                  <option value={BOX_STATUSES.USER_FLAG}>USER OWNED</option>
+                  <option value={BOX_STATUSES.ROOT_FLAG}>ROOT OWNED</option>
                 </select>
               </div>
               
-              {(userRole === 'pentester' || userRole === 'admin') && (
+              {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
                 <button 
                   onClick={(e) => { e.stopPropagation(); handleDeleteBox(box._id); }} 
                   className="delete-icon-btn" 
@@ -246,18 +247,18 @@ const Boxes = () => {
               <input type="text" placeholder="Adresse IP" value={newBox.ipAddress} onChange={e => setNewBox({...newBox, ipAddress: e.target.value})} style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff' }} />
               
               <select value={newBox.platform} onChange={e => setNewBox({...newBox, platform: e.target.value})} style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff' }}>
-                <option value="HackTheBox">HackTheBox</option>
-                <option value="TryHackMe">TryHackMe</option>
-                <option value="Root-Me">Root-Me</option>
-                <option value="VulnHub">VulnHub</option>
-                <option value="Other">Autre</option>
+                <option value={BOX_PLATFORMS.HTB}>HackTheBox</option>
+                <option value={BOX_PLATFORMS.THM}>TryHackMe</option>
+                <option value={BOX_PLATFORMS.ROOT_ME}>Root-Me</option>
+                <option value={BOX_PLATFORMS.VULNHUB}>VulnHub</option>
+                <option value={BOX_PLATFORMS.OTHER}>Autre</option>
               </select>
 
               <select value={newBox.difficulty} onChange={e => setNewBox({...newBox, difficulty: e.target.value})} style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff' }}>
-                <option value="Easy">Easy</option>
-                <option value="Medium">Medium</option>
-                <option value="Hard">Hard</option>
-                <option value="Insane">Insane</option>
+                <option value={BOX_DIFFICULTIES.EASY}>Easy</option>
+                <option value={BOX_DIFFICULTIES.MEDIUM}>Medium</option>
+                <option value={BOX_DIFFICULTIES.HARD}>Hard</option>
+                <option value={BOX_DIFFICULTIES.INSANE}>Insane</option>
               </select>
 
               <button type="submit" style={{ marginTop: '1rem', padding: '12px', background: '#00d4ff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>LANCER L'INSTANCE</button>

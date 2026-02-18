@@ -3,8 +3,9 @@ import api from '../../api/axios';
 import { Copy, Terminal, Search, Plus, AlertTriangle, X } from 'lucide-react';
 import PayloadModal from '../../components/PayloadModal';
 import './Payloads.css';
-import { PAYLOAD_SEVERITIES } from '../../utils/constants';
+import { PAYLOAD_SEVERITIES, ROLES } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
+import { getUserRole } from '../../utils/auth';
 
 const Payloads = () => {
   const [payloads, setPayloads] = useState([]);
@@ -12,6 +13,7 @@ const Payloads = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState(null);
+  const userRole = getUserRole();
 
   useEffect(() => {
     const fetchPayloads = async () => {
@@ -46,9 +48,11 @@ const Payloads = () => {
     <div className="payloads-container">
       <header className="page-header">
         <h2 className="page-title">DB_<span>PAYLOADS</span></h2>
-        <button className="add-btn" onClick={() => setIsModalOpen(true)}>
-          <Plus size={18} /> Nouveau Payload
-        </button>
+        {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
+          <button className="add-btn" onClick={() => setIsModalOpen(true)}>
+            <Plus size={18} /> Nouveau Payload
+          </button>
+        )}
       </header>
 
       <div className="search-bar-container">

@@ -15,6 +15,7 @@ import EditTool from './pages/Tools/EditTool';
 import AdminPanel from './pages/Admin/AdminPanel';
 import ProtectedRoute from './components/ProtectedRoute'; // Import du garde
 import { ToastProvider } from './components/Toast/ToastContext';
+import { ROLES } from './utils/constants';
 
 function App() {
   return (
@@ -43,9 +44,17 @@ function App() {
           <Route path="/cyberchef" element={<div />} />
           <Route path="/killchain" element={<KillChain />} />
           <Route path="/tools/:name" element={<ToolDetail />} />
-          <Route path="/tools/add/:name?" element={<AddTool />} />
-          <Route path="/tools/edit/:name" element={<EditTool />} />
-          <Route path="/admin" element={<AdminPanel />} />
+          
+          {/* Routes Administrateur Uniquement */}
+          <Route path="/tools/add/:name?" element={
+            <ProtectedRoute allowedRoles={[ROLES.ADMIN]}><AddTool /></ProtectedRoute>
+          } />
+          <Route path="/tools/edit/:name" element={
+            <ProtectedRoute allowedRoles={[ROLES.ADMIN]}><EditTool /></ProtectedRoute>
+          } />
+          <Route path="/admin" element={
+            <ProtectedRoute allowedRoles={[ROLES.ADMIN]}><AdminPanel /></ProtectedRoute>
+          } />
         </Route>
         
         {/* Redirection par défaut */}

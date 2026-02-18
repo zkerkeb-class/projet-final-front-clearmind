@@ -9,6 +9,8 @@ import News from './pages/News';
 import KillChain from './pages/Methodology/KillChain';
 import ToolDetail from './pages/Tools/ToolDetail';
 import AddTool from './pages/Tools/AddTool';
+import BoxDetail from './pages/Boxes/BoxDetail';
+import EditTool from './pages/Tools/EditTool';
 import AdminPanel from './pages/Admin/AdminPanel';
 import ProtectedRoute from './components/ProtectedRoute'; // Import du garde
 
@@ -44,6 +46,12 @@ function App() {
           </ProtectedRoute>
         } />
 
+        <Route path="/boxes/:id" element={
+          <ProtectedRoute>
+            <Layout><BoxDetail /></Layout>
+          </ProtectedRoute>
+        } />
+
         <Route path="/news" element={
           <ProtectedRoute>
             <Layout><News /></Layout>
@@ -57,9 +65,16 @@ function App() {
         } />
 
         <Route path="/tools/:name" element={<ProtectedRoute><Layout><ToolDetail /></Layout></ProtectedRoute>} />
+        
         <Route path="/tools/add/:name?" element={
           <ProtectedRoute>
             <Layout><AddTool /></Layout>
+          </ProtectedRoute>
+        } />
+
+        <Route path="/tools/edit/:name" element={
+          <ProtectedRoute>
+            <Layout><EditTool /></Layout>
           </ProtectedRoute>
         } />
 

@@ -10,7 +10,8 @@ import {
   ExternalLink, 
   AlertCircle, 
   UserPlus, 
-  X 
+  X,
+  Pencil
 } from 'lucide-react';
 import './AdminPanel.css';
 
@@ -159,6 +160,9 @@ const AdminPanel = () => {
                     <td className="actions-cell">
                       <button onClick={() => navigate(`/tools/${tool.name.toLowerCase()}`)} title="Voir">
                         <ExternalLink size={16} color="#00d4ff" />
+                      </button>
+                      <button onClick={() => navigate(`/tools/edit/${tool.name}`)} title="Modifier">
+                        <Pencil size={16} color="#ffa500" />
                       </button>
                       <button onClick={() => handleDeleteTool(tool.name)} title="Supprimer">
                         <Trash2 size={16} color="#ff003c" />

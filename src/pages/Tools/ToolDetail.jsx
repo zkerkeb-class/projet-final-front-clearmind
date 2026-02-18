@@ -41,6 +41,33 @@ const ToolDetail = () => {
   if (error) {
     return (
       <div className="tool-error-container">
+        <style>{`
+          .btn-deploy {
+            margin-top: 1.5rem;
+            background: transparent;
+            border: 1px solid #00d4ff;
+            color: #00d4ff;
+            padding: 1rem 2rem;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+          }
+          .btn-deploy:hover {
+            background: rgba(0, 212, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+            text-shadow: 0 0 5px #00d4ff;
+          }
+        `}</style>
+        <button 
+          onClick={() => navigate(-1)} 
+          className="back-btn"
+          style={{ position: 'absolute', top: '30px', left: '30px' }}
+        >
+          <ChevronLeft size={16} /> RETOUR
+        </button>
         <h2 className="neon-text-red">ALERTE: OUTIL_INTROUVABLE</h2>
         <p>L'outil "{name}" n'est pas encore documenté dans l'arsenal.</p>
         

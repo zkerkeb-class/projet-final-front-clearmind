@@ -1,27 +1,46 @@
-import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { Plus, Trash2, Save, ChevronLeft } from 'lucide-react';
-import './AddTool.css';
+import './EditTool.css';
 
-const AddTool = () => {
-  const navigate = useNavigate();
+const EditTool = () => {
   const { name } = useParams();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    name: name || '',
+    name: '',
     category: '',
     description: '',
     link: '',
     cheatsheet: [{ command: '', explanation: '' }]
   });
 
-  // Gérer les changements des champs simples
+  useEffect(() => {
+    const fetchTool = async () => {
+      try {
+        const res = await api.get(`/tools/${name}`);
+        const tool = res.data.data;
+        
+        setFormData({
+          name: tool.name,
+          category: tool.category,
+          description: tool.description || '',
+          link: tool.link || '',
+          cheatsheet: (tool.cheatsheet && tool.cheatsheet.length > 0) ? tool.cheatsheet : [{ command: '', explanation: '' }]
+        });
+      } catch (err) {
+        alert("Impossible de charger l'outil à modifier.");
+        navigate('/admin');
+      }
+    };
+    fetchTool();
+  }, [name, navigate]);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Gérer les changements dans le tableau cheatsheet
   const handleCommandChange = (index, e) => {
     const newCheatsheet = [...formData.cheatsheet];
     newCheatsheet[index][e.target.name] = e.target.value;
@@ -43,22 +62,22 @@ const AddTool = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post('/tools', formData);
+      await api.patch(`/tools/${name}`, formData);
       navigate(`/tools/${formData.name.toLowerCase()}`);
     } catch (err) {
-      alert("Erreur lors de l'enregistrement : " + (err.response?.data?.message || err.message));
+      alert("Erreur lors de la modification : " + (err.response?.data?.message || err.message));
     }
   };
 
   return (
-    <div className="add-tool-container">
+    <div className="edit-tool-container">
       <button onClick={() => navigate(-1)} className="back-btn">
         <ChevronLeft size={16} /> ANNULER
       </button>
 
       <header className="form-header">
-        <h1>DÉPLOYER_NOUVEL_<span>OUTIL</span></h1>
-        <p>Enregistrement dans l'arsenal RedSheet</p>
+        <h1>MODIFIER_<span>OUTIL</span></h1>
+        <p>Mise à jour de la fiche technique : {name}</p>
       </header>
 
       <form onSubmit={handleSubmit} className="tool-form">
@@ -113,11 +132,11 @@ const AddTool = () => {
         </div>
 
         <button type="submit" className="save-btn">
-          <Save size={18} /> ENREGISTRER_DANS_L_ARSENAL
+          <Save size={18} /> SAUVEGARDER_LES_MODIFICATIONS
         </button>
       </form>
     </div>
   );
 };
 
-export default AddTool;
+export default EditTool;

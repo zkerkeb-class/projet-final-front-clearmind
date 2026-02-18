@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import Login from './pages/Login';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
@@ -24,74 +24,29 @@ function App() {
         {/* Route Publique */}
         <Route path="/login" element={<Login />} />
 
-        {/* Routes Protégées */}
-        <Route path="/dashboard" element={
+        {/* Layout Persistant pour les routes protégées */}
+        <Route element={
           <ProtectedRoute>
-            <Layout><Dashboard /></Layout>
+            <Layout>
+              <Outlet />
+            </Layout>
           </ProtectedRoute>
-        } />
-
-        <Route path="/payloads" element={
-          <ProtectedRoute>
-            <Layout><Payloads /></Layout>
-          </ProtectedRoute>
-        } />
-
-        <Route path="/targets" element={
-          <ProtectedRoute>
-            <Layout><Targets /></Layout>
-          </ProtectedRoute>
-        } />
-
-        <Route path="/boxes" element={
-          <ProtectedRoute>
-            <Layout><Boxes /></Layout>
-          </ProtectedRoute>
-        } />
-
-        <Route path="/boxes/:id" element={
-          <ProtectedRoute>
-            <Layout><BoxDetail /></Layout>
-          </ProtectedRoute>
-        } />
-
-        <Route path="/news" element={
-          <ProtectedRoute>
-            <Layout><News /></Layout>
-          </ProtectedRoute>
-        } />
-
-        <Route path="/wiki" element={
-          <ProtectedRoute>
-            <Layout><Wiki /></Layout>
-          </ProtectedRoute>
-        } />
-
-        <Route path="/killchain" element={
-          <ProtectedRoute>
-            <Layout><KillChain /></Layout>
-          </ProtectedRoute>
-        } />
-
-        <Route path="/tools/:name" element={<ProtectedRoute><Layout><ToolDetail /></Layout></ProtectedRoute>} />
-        
-        <Route path="/tools/add/:name?" element={
-          <ProtectedRoute>
-            <Layout><AddTool /></Layout>
-          </ProtectedRoute>
-        } />
-
-        <Route path="/tools/edit/:name" element={
-          <ProtectedRoute>
-            <Layout><EditTool /></Layout>
-          </ProtectedRoute>
-        } />
-
-        <Route path="/admin" element={
-          <ProtectedRoute>
-            <Layout><AdminPanel /></Layout>
-          </ProtectedRoute>
-        } />
+        }>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/payloads" element={<Payloads />} />
+          <Route path="/targets" element={<Targets />} />
+          <Route path="/boxes" element={<Boxes />} />
+          <Route path="/boxes/:id" element={<BoxDetail />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/wiki" element={<Wiki />} />
+          {/* Route vide pour CyberChef car il est géré dans le Layout */}
+          <Route path="/cyberchef" element={<div />} />
+          <Route path="/killchain" element={<KillChain />} />
+          <Route path="/tools/:name" element={<ToolDetail />} />
+          <Route path="/tools/add/:name?" element={<AddTool />} />
+          <Route path="/tools/edit/:name" element={<EditTool />} />
+          <Route path="/admin" element={<AdminPanel />} />
+        </Route>
         
         {/* Redirection par défaut */}
         <Route path="/" element={<Navigate to="/login" />} />

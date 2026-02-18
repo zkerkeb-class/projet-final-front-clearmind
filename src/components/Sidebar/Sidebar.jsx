@@ -10,7 +10,8 @@ import {
   Radio,
   Layers,
   BookOpen,
-  ShieldCheck // Ajout de l'icône Admin
+  ShieldCheck, // Ajout de l'icône Admin
+  Binary // Pour CyberChef
 } from 'lucide-react';
 import './Sidebar.css';
 import { ROLES } from '../../utils/constants';
@@ -87,6 +88,11 @@ const Sidebar = ({ isOpen, onClose }) => {
         <NavLink to="/wiki" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
           <BookOpen size={20} />
           <span>Wiki / KB</span>
+        </NavLink>
+
+        <NavLink to="/cyberchef" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+          <Binary size={20} />
+          <span>CyberChef</span>
         </NavLink>
 
         {/* --- SECTION ADMIN --- */}

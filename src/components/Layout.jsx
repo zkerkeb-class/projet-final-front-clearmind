@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { Menu, X } from 'lucide-react';
 import './Layout.css';
+import CyberChef from '../pages/CyberChef/CyberChef';
 
 const Layout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const location = useLocation();
+  const isCyberChef = location.pathname === '/cyberchef';
 
   return (
     <div className="app-layout">
@@ -19,7 +23,15 @@ const Layout = ({ children }) => {
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       
       <main className="main-content">
-        {children}
+        {/* CyberChef est toujours monté mais caché si on n'est pas sur la route */}
+        <div style={{ display: isCyberChef ? 'block' : 'none', height: '100%' }}>
+          <CyberChef />
+        </div>
+
+        {/* Le contenu des autres pages est caché quand on est sur CyberChef */}
+        <div style={{ display: !isCyberChef ? 'block' : 'none', height: '100%' }}>
+          {children}
+        </div>
       </main>
     </div>
   );

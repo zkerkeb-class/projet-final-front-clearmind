@@ -3,8 +3,10 @@ import api from '../../api/axios';
 import { X, AlertTriangle } from 'lucide-react';
 import './PayloadModal.css';
 import { PAYLOAD_CATEGORIES, PAYLOAD_SEVERITIES } from '../../utils/constants';
+import { useToast } from '../Toast/ToastContext';
 
 const PayloadModal = ({ isOpen, onClose, onPayloadAdded }) => {
+  const { success } = useToast();
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
@@ -22,6 +24,7 @@ const PayloadModal = ({ isOpen, onClose, onPayloadAdded }) => {
       onPayloadAdded(res.data.data.payload); // Mise à jour de la liste
       onClose(); // Ferme la modale
       setFormData({ title: '', category: 'XSS', code: '', severity: 'Medium' });
+      success("VECTEUR D'ATTAQUE ENREGISTRÉ");
     } catch (err) {
       setError("ERREUR D'INJECTION : " + err.response?.data?.message);
     }

@@ -1,0 +1,55 @@
+.confirm-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  backdrop-filter: blur(2px);
+}
+
+.confirm-modal-content {
+  background: #0a0a0a;
+  border: 1px solid #ff003c; /* Rouge pour le danger */
+  padding: 2rem;
+  width: 400px;
+  max-width: 90%;
+  position: relative;
+  box-shadow: 0 0 30px rgba(255, 0, 60, 0.2);
+  text-align: center;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.confirm-modal-icon {
+  margin-bottom: 1rem;
+  color: #ff003c;
+  display: flex;
+  justify-content: center;
+}
+
+.confirm-modal-title {
+  color: #fff;
+  font-family: 'Orbitron', sans-serif;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.confirm-modal-message {
+  color: #e0e0e0;
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.confirm-modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}

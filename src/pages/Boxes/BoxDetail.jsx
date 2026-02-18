@@ -7,7 +7,9 @@ import api from '../../api/axios';
 import { ChevronLeft, Save, Monitor, Hash, Activity, Eye, Edit, Copy, Check, Settings, X, Target, AlertTriangle, Code, Trash2 } from 'lucide-react';
 import { getUserRole } from '../../utils/auth';
 import './BoxDetail.css';
-import { ROLES, BOX_DIFFICULTIES, BOX_PLATFORMS } from '../../utils/constants';
+import { ROLES, BOX_DIFFICULTIES, BOX_PLATFORMS, CODE_LANGUAGES } from '../../utils/constants';
+import { useToast } from '../../components/Toast/ToastContext';
+import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 
 const CodeBlock = ({ inline, className, children, ...props }) => {
   const [isCopied, setIsCopied] = useState(false);
@@ -43,25 +45,9 @@ const CodeBlock = ({ inline, className, children, ...props }) => {
           className="code-lang-select"
           style={{ width: `${language.length + 3}ch` }}
         >
-          <option value="text">TEXT</option>
-          <option value="bash">BASH</option>
-          <option value="powershell">POWERSHELL</option>
-          <option value="javascript">JAVASCRIPT</option>
-          <option value="python">PYTHON</option>
-          <option value="cpp">C++</option>
-          <option value="csharp">C#</option>
-          <option value="go">GO</option>
-          <option value="java">JAVA</option>
-          <option value="php">PHP</option>
-          <option value="ruby">RUBY</option>
-          <option value="rust">RUST</option>
-          <option value="sql">SQL</option>
-          <option value="html">HTML</option>
-          <option value="css">CSS</option>
-          <option value="json">JSON</option>
-          <option value="yaml">YAML</option>
-          <option value="xml">XML</option>
-          <option value="markdown">MARKDOWN</option>
+          {CODE_LANGUAGES.map(lang => (
+            <option key={lang.value} value={lang.value}>{lang.label}</option>
+          ))}
         </select>
         <button onClick={handleCopy} className="copy-code-btn" title="Copier">
           {isCopied ? <Check size={14} color="#00ff41" /> : <Copy size={14} />}
@@ -96,6 +82,8 @@ const BoxDetail = () => {
   const [lastSaved, setLastSaved] = useState(null);
   const [error, setError] = useState(null);
   const userRole = getUserRole();
+  const { success, info } = useToast();
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
@@ -131,21 +119,23 @@ const BoxDetail = () => {
       setBox(prev => ({ ...prev, notes: notesFormData }));
       setLastSaved(new Date());
       setShowNotesModal(false);
+      success("NOTES SAUVEGARDÉES");
     } catch (err) {
       setError("ERREUR DE SAUVEGARDE DES NOTES.");
     }
   };
 
-  const handleClearNotes = async () => {
-    if (!window.confirm("Effacer toutes les notes de cette box ?")) return;
+  const executeClearNotes = async () => {
     try {
       await api.patch(`/boxes/${id}`, { notes: '' });
       setNotes('');
       setBox(prev => ({ ...prev, notes: '' }));
       setLastSaved(new Date());
+      info("NOTES EFFACÉES");
     } catch (err) {
       setError("ERREUR LORS DE LA SUPPRESSION DES NOTES.");
     }
+    setShowClearConfirm(false);
   };
 
   // Ouvrir la modale avec les données actuelles
@@ -180,6 +170,7 @@ const BoxDetail = () => {
       const res = await api.patch(`/boxes/${id}`, editData);
       setBox(res.data.data);
       setShowEditModal(false);
+      success("CONFIGURATION MISE À JOUR");
     } catch (err) {
       setError("ERREUR DE MODIFICATION : " + (err.response?.data?.message || err.message));
     }
@@ -259,7 +250,7 @@ const BoxDetail = () => {
             <button onClick={openNotesModal} className="preview-toggle-btn edit-btn">
               <Edit size={14}/> ÉDITER
             </button>
-            <button onClick={handleClearNotes} className="preview-toggle-btn delete-btn">
+            <button onClick={() => setShowClearConfirm(true)} className="preview-toggle-btn delete-btn">
               <Trash2 size={14}/>
             </button>
           </div>
@@ -352,6 +343,15 @@ const BoxDetail = () => {
           </div>
         </div>
       )}
+
+      {/* MODALE DE CONFIRMATION */}
+      <ConfirmationModal 
+        isOpen={showClearConfirm}
+        onClose={() => setShowClearConfirm(false)}
+        onConfirm={executeClearNotes}
+        title="EFFACER_NOTES"
+        message="Voulez-vous vraiment effacer l'intégralité de vos notes pour cette machine ?"
+      />
 
       {/* MODALE D'ERREUR */}
       {error && (

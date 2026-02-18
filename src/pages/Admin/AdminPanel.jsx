@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 import './AdminPanel.css';
 import { ROLES } from '../../utils/constants';
+import { useToast } from '../../components/Toast/ToastContext';
+import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 
 const AdminPanel = () => {
   const navigate = useNavigate();
@@ -24,6 +26,13 @@ const AdminPanel = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { success, info } = useToast();
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    onConfirm: null
+  });
   
   // États pour le modal de création d'utilisateur
   const [showAddUser, setShowAddUser] = useState(false);
@@ -53,14 +62,22 @@ const AdminPanel = () => {
     }
   };
 
-  const handleDeleteTool = async (toolName) => {
-    if (window.confirm(`⚠️ SUPPRIMER L'OUTIL : ${toolName.toUpperCase()} ?`)) {
-      try {
-        await api.delete(`/tools/${toolName}`);
-        setTools(tools.filter(t => t.name !== toolName));
-      } catch (err) {
-        setError("ERREUR LORS DE LA SUPPRESSION DE L'OUTIL.");
-      }
+  const confirmDeleteTool = (toolName) => {
+    setConfirmModal({
+      isOpen: true,
+      title: "SUPPRESSION_OUTIL",
+      message: `Voulez-vous vraiment supprimer l'outil ${toolName.toUpperCase()} de l'arsenal ?`,
+      onConfirm: () => executeDeleteTool(toolName)
+    });
+  };
+
+  const executeDeleteTool = async (toolName) => {
+    try {
+      await api.delete(`/tools/${toolName}`);
+      setTools(tools.filter(t => t.name !== toolName));
+      info("OUTIL SUPPRIMÉ DE L'ARSENAL");
+    } catch (err) {
+      setError("ERREUR LORS DE LA SUPPRESSION DE L'OUTIL.");
     }
   };
 
@@ -85,6 +102,7 @@ const AdminPanel = () => {
       setShowAddUser(false);
       setNewUser({ username: '', email: '', password: '', role: 'guest' });
       fetchUsers();
+      success("NOUVEL OPÉRATEUR ENREGISTRÉ");
     } catch (err) {
       setError("ERREUR_CRÉATION : " + (err.response?.data?.message || "Données invalides"));
     }
@@ -94,19 +112,28 @@ const AdminPanel = () => {
     try {
       await api.patch(`/users/${userId}`, { role: newRole });
       setUsers(users.map(u => u._id === userId ? { ...u, role: newRole } : u));
+      success("ACCRÉDITATION MISE À JOUR");
     } catch (err) {
       setError("MODIFICATION DU RÔLE REFUSÉE PAR LE SYSTÈME.");
     }
   };
 
-  const handleDeleteUser = async (userId, username) => {
-    if (window.confirm(`❌ RÉVOQUER L'ACCÈS DE : ${username} ?`)) {
-      try {
-        await api.delete(`/users/${userId}`);
-        setUsers(users.filter(u => u._id !== userId));
-      } catch (err) {
-        setError("ERREUR LORS DE LA RÉVOCATION DE L'UTILISATEUR.");
-      }
+  const confirmDeleteUser = (userId, username) => {
+    setConfirmModal({
+      isOpen: true,
+      title: "RÉVOCATION_ACCÈS",
+      message: `Confirmez-vous la suppression du compte opérateur : ${username} ?`,
+      onConfirm: () => executeDeleteUser(userId)
+    });
+  };
+
+  const executeDeleteUser = async (userId) => {
+    try {
+      await api.delete(`/users/${userId}`);
+      setUsers(users.filter(u => u._id !== userId));
+      info("ACCÈS RÉVOQUÉ");
+    } catch (err) {
+      setError("ERREUR LORS DE LA RÉVOCATION DE L'UTILISATEUR.");
     }
   };
 
@@ -171,7 +198,7 @@ const AdminPanel = () => {
                       <button onClick={() => navigate(`/tools/edit/${tool.name}`)} title="Modifier">
                         <Pencil size={16} color="#ffa500" />
                       </button>
-                      <button onClick={() => handleDeleteTool(tool.name)} title="Supprimer">
+                      <button onClick={() => confirmDeleteTool(tool.name)} title="Supprimer">
                         <Trash2 size={16} color="#ff003c" />
                       </button>
                     </td>
@@ -253,7 +280,7 @@ const AdminPanel = () => {
                       </select>
                     </td>
                     <td className="actions-cell">
-                      <button onClick={() => handleDeleteUser(user._id, user.username)} title="Supprimer">
+                      <button onClick={() => confirmDeleteUser(user._id, user.username)} title="Supprimer">
                         <Trash2 size={16} color="#ff003c" />
                       </button>
                     </td>
@@ -264,6 +291,15 @@ const AdminPanel = () => {
           </div>
         )}
       </main>
+
+      {/* MODALE DE CONFIRMATION GÉNÉRIQUE */}
+      <ConfirmationModal 
+        isOpen={confirmModal.isOpen}
+        onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
+        onConfirm={confirmModal.onConfirm}
+        title={confirmModal.title}
+        message={confirmModal.message}
+      />
 
       {/* MODALE D'ERREUR */}
       {error && (

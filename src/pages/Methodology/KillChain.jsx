@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import api from '../../api/axios';
 import * as LucideIcons from 'lucide-react'; // Importe TOUTES les icônes
 import './KillChain.css';
+import Skeleton from '../../components/Skeleton/Skeleton';
 
 const KillChain = () => {
   const [stages, setStages] = useState([]);
@@ -22,8 +23,6 @@ const KillChain = () => {
     fetchKillChain();
   }, []);
 
-  if (loading) return <div className="loading-status">CHARGEMENT_METHODOLOGIE...</div>;
-
   return (
     <div className="killchain-container">
       <style>{`
@@ -37,7 +36,28 @@ const KillChain = () => {
       </header>
 
       <div className="steps-timeline">
-        {stages.map((stage) => {
+        {loading ? (
+          Array.from({ length: 7 }).map((_, i) => (
+            <div key={i} className="kill-step">
+              <div className="step-aside">
+                <Skeleton width={40} height={40} style={{ borderRadius: '50%' }} />
+                <div className="connector-line"></div>
+              </div>
+              <div className="step-card" style={{ width: '100%' }}>
+                <div className="step-icon-wrapper" style={{ background: '#1a1a1a', border: 'none' }}>
+                  <Skeleton width={24} height={24} />
+                </div>
+                <div className="step-info" style={{ width: '100%' }}>
+                  <Skeleton width={150} height={24} style={{ marginBottom: '10px' }} />
+                  <Skeleton width="90%" height={40} style={{ marginBottom: '15px' }} />
+                  <div className="tools-list" style={{ display: 'flex', gap: '10px' }}>
+                    <Skeleton width={60} height={20} /><Skeleton width={60} height={20} /><Skeleton width={60} height={20} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : stages.map((stage) => {
           // Astuce : Récupère l'icône dynamiquement par son nom
           const IconComponent = LucideIcons[stage.iconName] || LucideIcons.Shield;
 

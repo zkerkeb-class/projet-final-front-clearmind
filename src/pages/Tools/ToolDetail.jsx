@@ -4,6 +4,7 @@ import api from '../../api/axios';
 import { Terminal, ChevronLeft, ExternalLink, Copy, AlertTriangle, Search } from 'lucide-react';
 import './ToolDetail.css';
 import { ROLES } from '../../utils/constants';
+import Skeleton from '../../components/Skeleton/Skeleton';
 
 const ToolDetail = () => {
   const { name } = useParams();
@@ -31,12 +32,32 @@ const ToolDetail = () => {
     fetchTool();
   }, [name]);
 
-  if (loading) return (
-    <div className="loading-status">
-      <div className="scanner-line"></div>
-      RECHERCHE_DANS_L_ARSENAL...
-    </div>
-  );
+  if (loading) {
+    return (
+      <div className="tool-detail-container">
+        <button className="back-btn" style={{ pointerEvents: 'none' }}><ChevronLeft size={16} /> RETOUR</button>
+        <header className="tool-header">
+          <div className="tool-title-section">
+            <Skeleton width={250} height={40} />
+            <Skeleton width={100} height={20} style={{ marginTop: '10px' }} />
+          </div>
+        </header>
+        <section className="tool-description">
+          <Skeleton width="100%" height={80} />
+        </section>
+        <section className="cheatsheet-section">
+          <Skeleton width={200} height={24} style={{ marginBottom: '20px' }} />
+          <div className="commands-grid">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="command-card" style={{ height: '100px' }}>
+                <Skeleton width="100%" height="100%" />
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   // --- PAGE D'ERREUR SI L'OUTIL N'EXISTE PAS ---
   if (error) {

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
-import { Server, ShieldCheck, Activity, Loader, Plus, Trash2, X, AlertTriangle, Pencil, Box } from 'lucide-react';
+import { Server, ShieldCheck, Activity, Loader, Plus, Trash2, X, AlertTriangle, Pencil, Box, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { getUserRole } from '../../utils/auth';
 import './Targets.css';
 import { ROLES, TARGET_STATUSES, TARGET_OS } from '../../utils/constants';
+import Skeleton from '../../components/Skeleton/Skeleton';
+import { useToast } from '../../components/Toast/ToastContext';
+import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 
 const Targets = () => {
   const navigate = useNavigate();
@@ -16,6 +19,11 @@ const Targets = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const userRole = getUserRole();
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const { success, info } = useToast();
+  const [targetToDelete, setTargetToDelete] = useState(null);
 
   const [newTarget, setNewTarget] = useState({
     name: '',
@@ -28,13 +36,19 @@ const Targets = () => {
   });
 
   useEffect(() => {
+    const timer = setTimeout(() => fetchData(), 300);
+    return () => clearTimeout(timer);
+  }, [page, searchTerm]);
+
     const fetchData = async () => {
+      setLoading(true);
       try {
         const [targetsRes, boxesRes] = await Promise.all([
-          api.get('/targets'),
+          api.get('/targets', { params: { page, limit: 10, search: searchTerm } }),
           api.get('/boxes')
         ]);
         setTargets(targetsRes.data.data.targets);
+        setTotalPages(targetsRes.data.totalPages);
         setAvailableBoxes(boxesRes.data.data.boxes);
         setLoading(false);
       } catch (err) {
@@ -42,8 +56,6 @@ const Targets = () => {
         setLoading(false);
       }
     };
-    fetchData();
-  }, []);
 
   const handleSaveTarget = async (e) => {
     e.preventDefault();
@@ -60,10 +72,12 @@ const Targets = () => {
         // Mode Édition
         const res = await api.patch(`/targets/${editingId}`, payload);
         setTargets(targets.map(t => t._id === editingId ? res.data.data.target : t));
+        success("CIBLE MISE À JOUR");
       } else {
         // Mode Création
         const res = await api.post('/targets', payload);
         setTargets([res.data.data.target, ...targets]);
+        success("AJOUTÉE AU SCOPE");
       }
       setShowModal(false);
       resetForm();
@@ -72,14 +86,19 @@ const Targets = () => {
     }
   };
 
-  const handleDeleteTarget = async (id) => {
-    if(!window.confirm("Supprimer cette cible du scope ?")) return;
+  const confirmDeleteTarget = (id) => {
+    setTargetToDelete(id);
+  };
+
+  const executeDeleteTarget = async () => {
     try {
-      await api.delete(`/targets/${id}`);
-      setTargets(targets.filter(t => t._id !== id));
+      await api.delete(`/targets/${targetToDelete}`);
+      setTargets(targets.filter(t => t._id !== targetToDelete));
+      info("CIBLE RETIRÉE DU SCOPE");
     } catch (err) {
       setError("IMPOSSIBLE DE SUPPRIMER LA CIBLE.");
     }
+    setTargetToDelete(null);
   };
 
   const openAddModal = () => {
@@ -122,8 +141,6 @@ const Targets = () => {
     setNewTarget({ ...newTarget, ports: newPorts });
   };
 
-  if (loading) return <div className="loading-text">SCAN DES RÉSEAUX EN COURS...</div>;
-
   return (
     <div className="targets-container">
       <style>{`
@@ -135,11 +152,24 @@ const Targets = () => {
       <header className="page-header">
         <h2 className="page-title">SYSTEM_<span>TARGETS</span></h2>
         
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <div className="search-wrapper" style={{ position: 'relative' }}>
+            <Search size={16} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#555' }} />
+            <input 
+              type="text" 
+              placeholder="Filtrer..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ padding: '8px 8px 8px 35px', background: '#111', border: '1px solid #333', color: '#fff', borderRadius: '4px' }}
+            />
+          </div>
+
         {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
           <button className="add-btn" onClick={openAddModal} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#00d4ff', color: '#000', border: 'none', padding: '8px 16px', fontWeight: 'bold', cursor: 'pointer' }}>
             <Plus size={18} /> AJOUTER SCOPE
           </button>
         )}
+        </div>
       </header>
 
       <table className="targets-table">
@@ -154,7 +184,17 @@ const Targets = () => {
           </tr>
         </thead>
         <tbody>
-          {targets.map((t) => (
+          {loading ? (
+            Array.from({ length: 5 }).map((_, i) => (
+              <tr key={i}>
+                <td><Skeleton width={120} height={20} /></td>
+                <td><Skeleton width={100} height={20} /></td>
+                <td><Skeleton width={60} height={20} /></td>
+                <td><Skeleton width={150} height={20} /></td>
+                <td><Skeleton width={80} height={20} /></td>
+              </tr>
+            ))
+          ) : targets.map((t) => (
             <tr key={t._id} className="target-row">
               <td><Server size={14} style={{marginRight: '10px', color: '#00d4ff'}} /> {t.name}</td>
               <td>{t.domain || "N/A"}</td>
@@ -196,7 +236,7 @@ const Targets = () => {
                   <button onClick={() => openEditModal(t)} style={{background: 'transparent', border: 'none', cursor: 'pointer', marginRight: '10px'}}>
                     <Pencil size={16} color="#ffa500" />
                   </button>
-                  <button onClick={() => handleDeleteTarget(t._id)} style={{background: 'transparent', border: 'none', cursor: 'pointer'}}>
+                  <button onClick={() => confirmDeleteTarget(t._id)} style={{background: 'transparent', border: 'none', cursor: 'pointer'}}>
                     <Trash2 size={16} color="#555" className="hover-red" />
                   </button>
                 </td>
@@ -205,6 +245,15 @@ const Targets = () => {
           ))}
         </tbody>
       </table>
+
+      {/* PAGINATION */}
+      {!loading && totalPages > 1 && (
+        <div className="pagination-controls" style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '2rem' }}>
+          <button disabled={page === 1} onClick={() => setPage(p => p - 1)} style={{ background: 'transparent', border: '1px solid #333', color: page === 1 ? '#555' : '#fff', padding: '5px 10px', cursor: page === 1 ? 'not-allowed' : 'pointer' }}><ChevronLeft /></button>
+          <span style={{ color: '#fff', alignSelf: 'center' }}>PAGE {page} / {totalPages}</span>
+          <button disabled={page === totalPages} onClick={() => setPage(p => p + 1)} style={{ background: 'transparent', border: '1px solid #333', color: page === totalPages ? '#555' : '#fff', padding: '5px 10px', cursor: page === totalPages ? 'not-allowed' : 'pointer' }}><ChevronRight /></button>
+        </div>
+      )}
 
       {/* MODALE D'AJOUT */}
       {showModal && (
@@ -273,6 +322,15 @@ const Targets = () => {
           </div>
         </div>
       )}
+
+      {/* MODALE DE CONFIRMATION */}
+      <ConfirmationModal 
+        isOpen={!!targetToDelete}
+        onClose={() => setTargetToDelete(null)}
+        onConfirm={executeDeleteTarget}
+        title="SUPPRESSION_CIBLE"
+        message="Voulez-vous vraiment retirer cette cible du scope ? Toutes les données associées seront perdues."
+      />
 
       {/* MODALE D'ERREUR */}
       {error && (

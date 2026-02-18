@@ -4,11 +4,13 @@ import api from '../../api/axios';
 import { Plus, Trash2, Save, ChevronLeft, AlertTriangle, X } from 'lucide-react';
 import './EditTool.css';
 import { TOOL_CATEGORIES } from '../../utils/constants';
+import { useToast } from '../../components/Toast/ToastContext';
 
 const EditTool = () => {
   const { name } = useParams();
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+  const { success } = useToast();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -65,6 +67,7 @@ const EditTool = () => {
     e.preventDefault();
     try {
       await api.patch(`/tools/${name}`, formData);
+      success("FICHE TECHNIQUE MISE À JOUR");
       navigate(`/tools/${formData.name.toLowerCase()}`);
     } catch (err) {
       setError("ERREUR DE MODIFICATION : " + (err.response?.data?.message || err.message));

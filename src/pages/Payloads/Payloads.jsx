@@ -4,6 +4,7 @@ import { Copy, Terminal, Search, Plus, AlertTriangle, X } from 'lucide-react';
 import PayloadModal from '../../components/PayloadModal';
 import './Payloads.css';
 import { PAYLOAD_SEVERITIES } from '../../utils/constants';
+import Skeleton from '../../components/Skeleton/Skeleton';
 
 const Payloads = () => {
   const [payloads, setPayloads] = useState([]);
@@ -63,7 +64,15 @@ const Payloads = () => {
 
       <div className="payload-grid">
         {loading ? (
-          <p className="loading-text">ACCÈS AU MAINFRAME EN COURS...</p>
+          // SKELETONS
+          Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="payload-card" style={{ pointerEvents: 'none' }}>
+              <Skeleton width={60} height={16} style={{ position: 'absolute', top: 0, right: 0 }} />
+              <Skeleton width="60%" height={24} style={{ margin: '1rem 0' }} />
+              <Skeleton width="100%" height={60} style={{ borderRadius: '4px' }} />
+              <Skeleton width="40%" height={16} style={{ marginTop: '1rem' }} />
+            </div>
+          ))
         ) : filteredPayloads.length > 0 ? (
           filteredPayloads.map((p) => (
             <div key={p._id} className="payload-card">

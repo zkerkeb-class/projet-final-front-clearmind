@@ -14,9 +14,11 @@ import BoxDetail from './pages/Boxes/BoxDetail';
 import EditTool from './pages/Tools/EditTool';
 import AdminPanel from './pages/Admin/AdminPanel';
 import ProtectedRoute from './components/ProtectedRoute'; // Import du garde
+import { ToastProvider } from './components/Toast/ToastContext';
 
 function App() {
   return (
+    <ToastProvider>
     <Router>
       <Routes>
         {/* Route Publique */}
@@ -95,6 +97,7 @@ function App() {
         <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
     </Router>
+    </ToastProvider>
   );
 }
 

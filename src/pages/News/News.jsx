@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import { Radio, ExternalLink, Clock, Search, ShieldAlert, AlertTriangle, X } from 'lucide-react';
 import './News.css';
+import Skeleton from '../../components/Skeleton/Skeleton';
 
 const News = () => {
   const [articles, setArticles] = useState([]);
@@ -53,13 +54,6 @@ const News = () => {
     article.contentSnippet?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  if (loading) return (
-    <div className="loading-status">
-      <div className="scanner-line"></div>
-      SCANNING_GLOBAL_FEEDS...
-    </div>
-  );
-
   return (
     <div className="news-container">
       <style>{`
@@ -93,7 +87,18 @@ const News = () => {
        </header>
 
       <div className="news-feed">
-        {filteredArticles.length > 0 ? (
+        {loading ? (
+          Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="news-card" style={{ pointerEvents: 'none', border: '1px solid #333' }}>
+              <div className="card-header" style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'space-between' }}>
+                <Skeleton width={100} height={20} />
+                <Skeleton width={80} height={16} />
+              </div>
+              <Skeleton width="70%" height={24} style={{ marginBottom: '1rem' }} />
+              <Skeleton width="100%" height={60} />
+            </div>
+          ))
+        ) : filteredArticles.length > 0 ? (
           filteredArticles.map((item, index) => {
             const level = getCriticality(item.title);
             

@@ -59,3 +59,52 @@ export const PAYLOAD_SEVERITIES = {
   HIGH: 'High',
   CRITICAL: 'Critical'
 };
+
+export const PAYLOAD_CATEGORIES = {
+  WEB: [
+    'XSS',
+    'SQLi',
+    'NoSQLi',
+    'LFI',
+    'RCE',
+    'SSTI',
+    'SSRF',
+    'XXE'
+  ],
+  SYSTEM: [
+    'Auth-Bypass',
+    'Priv-Esc',
+    'Command-Inj',
+    'Directory-Trav',
+    'IDOR'
+  ],
+  API: [
+    'BOLA',
+    'Mass-Assignment',
+    'JWT-Attack',
+    'GraphQL-Inj',
+    'Rate-Limit-Bypass'
+  ]
+};
+
+export const CODE_LANGUAGES = [
+  { value: 'text', label: 'TEXT' },
+  { value: 'bash', label: 'BASH' },
+  { value: 'powershell', label: 'POWERSHELL' },
+  { value: 'javascript', label: 'JAVASCRIPT' },
+  { value: 'python', label: 'PYTHON' },
+  { value: 'cpp', label: 'C++' },
+  { value: 'csharp', label: 'C#' },
+  { value: 'go', label: 'GO' },
+  { value: 'java', label: 'JAVA' },
+  { value: 'php', label: 'PHP' },
+  { value: 'ruby', label: 'RUBY' },
+  { value: 'rust', label: 'RUST' },
+  { value: 'sql', label: 'SQL' },
+  { value: 'html', label: 'HTML' },
+  { value: 'css', label: 'CSS' },
+  { value: 'json', label: 'JSON' },
+  { value: 'yaml', label: 'YAML' },
+  { value: 'xml', label: 'XML' },
+  { value: 'markdown', label: 'MARKDOWN' }
+];

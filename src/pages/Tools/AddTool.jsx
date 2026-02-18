@@ -4,11 +4,13 @@ import api from '../../api/axios';
 import { Plus, Trash2, Save, ChevronLeft, AlertTriangle, X } from 'lucide-react';
 import './AddTool.css';
 import { TOOL_CATEGORIES } from '../../utils/constants';
+import { useToast } from '../../components/Toast/ToastContext';
 
 const AddTool = () => {
   const navigate = useNavigate();
   const { name } = useParams();
   const [error, setError] = useState(null);
+  const { success } = useToast();
 
   const [formData, setFormData] = useState({
     name: name || '',
@@ -46,6 +48,7 @@ const AddTool = () => {
     e.preventDefault();
     try {
       await api.post('/tools', formData);
+      success("OUTIL AJOUTÉ À L'ARSENAL");
       navigate(`/tools/${formData.name.toLowerCase()}`);
     } catch (err) {
       setError("ERREUR D'ENREGISTREMENT : " + (err.response?.data?.message || err.message));

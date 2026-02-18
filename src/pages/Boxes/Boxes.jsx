@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { getUserRole } from '../../utils/auth';
-import { Monitor, Search, Plus, Trash2, X, Save, Trophy, AlertTriangle } from 'lucide-react';
+import { Monitor, Search, Plus, Trash2, X, Save, Trophy, AlertTriangle, ChevronLeft, ChevronRight } from 'lucide-react';
 import './Boxes.css';
 import { ROLES, BOX_STATUSES, BOX_DIFFICULTIES, BOX_PLATFORMS, TARGET_OS } from '../../utils/constants';
+import Skeleton from '../../components/Skeleton/Skeleton';
+import { useToast } from '../../components/Toast/ToastContext';
+import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 
 const Boxes = () => {
   const navigate = useNavigate();
@@ -12,6 +15,8 @@ const Boxes = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const userRole = getUserRole(); // Récupération du rôle
+  const { success, info } = useToast();
+  const [boxToDelete, setBoxToDelete] = useState(null);
   
   // État pour la modale d'ajout
   const [showModal, setShowModal] = useState(false);
@@ -27,6 +32,8 @@ const Boxes = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState("All");
   const [platformFilter, setPlatformFilter] = useState("All");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
@@ -39,18 +46,27 @@ const Boxes = () => {
   };
 
   useEffect(() => {
+    // Debounce pour la recherche
+    const timer = setTimeout(() => {
+      fetchBoxes();
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [page, searchTerm, difficultyFilter, platformFilter]);
+
     const fetchBoxes = async () => {
+      setLoading(true);
       try {
-        const res = await api.get('/boxes');
+        const res = await api.get('/boxes', {
+          params: { page, limit: 12, search: searchTerm, difficulty: difficultyFilter, platform: platformFilter }
+        });
         setBoxes(res.data.data.boxes);
+        setTotalPages(res.data.totalPages);
         setLoading(false);
       } catch (err) {
         console.error("Erreur de récupération des boxes:", err);
         setLoading(false);
       }
     };
-    fetchBoxes();
-  }, []);
 
   // --- ACTIONS ---
 
@@ -62,19 +78,25 @@ const Boxes = () => {
       setBoxes([...boxes, res.data.data]); // Ajoute la nouvelle box à la liste locale
       setShowModal(false);
       setNewBox({ name: '', ipAddress: '', platform: BOX_PLATFORMS.HTB, difficulty: BOX_DIFFICULTIES.EASY, status: BOX_STATUSES.TODO });
+      success("NOUVELLE CIBLE INITIALISÉE");
     } catch (err) {
       setError("ERREUR D'AJOUT : " + (err.response?.data?.message || err.message));
     }
   };
 
-  const handleDeleteBox = async (id) => {
-    if (!window.confirm("Confirmer la suppression de cette cible ?")) return;
+  const confirmDeleteBox = (id) => {
+    setBoxToDelete(id);
+  };
+
+  const executeDeleteBox = async () => {
     try {
-      await api.delete(`/boxes/${id}`);
-      setBoxes(boxes.filter(b => b._id !== id));
+      await api.delete(`/boxes/${boxToDelete}`);
+      setBoxes(boxes.filter(b => b._id !== boxToDelete));
+      info("CIBLE SUPPRIMÉE");
     } catch (err) {
       setError("IMPOSSIBLE DE SUPPRIMER LA MACHINE.");
     }
+    setBoxToDelete(null);
   };
 
   const handleStatusChange = async (id, newStatus) => {
@@ -82,22 +104,11 @@ const Boxes = () => {
       // Mise à jour optimiste de l'UI
       setBoxes(boxes.map(b => b._id === id ? { ...b, status: newStatus } : b));
       await api.patch(`/boxes/${id}`, { status: newStatus });
+      success("STATUT MIS À JOUR");
     } catch (err) {
       setError("ERREUR DE SYNCHRONISATION DU STATUT.");
     }
   };
-
-  // Logique de filtrage combinée
-  const filteredBoxes = boxes.filter(box => {
-    const matchSearch = box.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                        box.ipAddress.includes(searchTerm);
-    const matchDifficulty = difficultyFilter === "All" || box.difficulty === difficultyFilter;
-    const matchPlatform = platformFilter === "All" || box.platform === platformFilter;
-
-    return matchSearch && matchDifficulty && matchPlatform;
-  });
-
-  if (loading) return <div className="loading-text">ACCÈS AU SEGMENT ISOLÉ...</div>;
 
   return (
     <div className="boxes-container">
@@ -167,7 +178,23 @@ const Boxes = () => {
       </div>
 
       <div className="boxes-grid">
-        {filteredBoxes.length > 0 ? filteredBoxes.map(box => (
+        {loading ? (
+          // SKELETONS
+          Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className="box-card" style={{ pointerEvents: 'none' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Skeleton width={40} height={40} style={{ borderRadius: '50%' }} />
+                <Skeleton width={60} height={20} />
+              </div>
+              <Skeleton width="70%" height={24} style={{ marginTop: '1rem' }} />
+              <Skeleton width="50%" height={16} style={{ marginTop: '0.5rem' }} />
+              <Skeleton width="100%" height={8} style={{ marginTop: '1rem' }} />
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
+                <Skeleton width={80} height={20} />
+              </div>
+            </div>
+          ))
+        ) : boxes.length > 0 ? boxes.map(box => (
           <div 
             key={box._id} 
             className="box-card" 
@@ -219,7 +246,7 @@ const Boxes = () => {
               
               {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
                 <button 
-                  onClick={(e) => { e.stopPropagation(); handleDeleteBox(box._id); }} 
+                  onClick={(e) => { e.stopPropagation(); confirmDeleteBox(box._id); }} 
                   className="delete-icon-btn" 
                   style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
                 >
@@ -229,9 +256,18 @@ const Boxes = () => {
             </div>
           </div>
         )) : (
-          <div style={{ width: '100%', textAlign: 'center', color: '#888', marginTop: '2rem' }}>AUCUNE CIBLE DÉTECTÉE AVEC CES PARAMÈTRES.</div>
+          <div style={{ width: '100%', textAlign: 'center', color: '#888', marginTop: '2rem', gridColumn: '1 / -1' }}>AUCUNE CIBLE DÉTECTÉE AVEC CES PARAMÈTRES.</div>
         )}
       </div>
+
+      {/* PAGINATION */}
+      {!loading && totalPages > 1 && (
+        <div className="pagination-controls" style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '2rem' }}>
+          <button disabled={page === 1} onClick={() => setPage(p => p - 1)} style={{ background: 'transparent', border: '1px solid #333', color: page === 1 ? '#555' : '#fff', padding: '5px 10px', cursor: page === 1 ? 'not-allowed' : 'pointer' }}><ChevronLeft /></button>
+          <span style={{ color: '#fff', alignSelf: 'center' }}>PAGE {page} / {totalPages}</span>
+          <button disabled={page === totalPages} onClick={() => setPage(p => p + 1)} style={{ background: 'transparent', border: '1px solid #333', color: page === totalPages ? '#555' : '#fff', padding: '5px 10px', cursor: page === totalPages ? 'not-allowed' : 'pointer' }}><ChevronRight /></button>
+        </div>
+      )}
 
       {/* MODALE D'AJOUT */}
       {showModal && (
@@ -266,6 +302,15 @@ const Boxes = () => {
           </div>
         </div>
       )}
+
+      {/* MODALE DE CONFIRMATION */}
+      <ConfirmationModal 
+        isOpen={!!boxToDelete}
+        onClose={() => setBoxToDelete(null)}
+        onConfirm={executeDeleteBox}
+        title="SUPPRESSION_MACHINE"
+        message="Attention : Supprimer cette machine effacera également toutes les notes et cibles associées."
+      />
 
       {/* MODALE D'ERREUR */}
       {error && (

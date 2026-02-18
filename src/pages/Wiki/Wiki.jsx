@@ -6,7 +6,10 @@ import api from '../../api/axios';
 import { Search, BookOpen, Plus, Save, X, Trash2, AlertTriangle, Edit, Eye, Copy, Check, Code } from 'lucide-react';
 import { getUserRole } from '../../utils/auth';
 import './Wiki.css';
-import { ROLES } from '../../utils/constants';
+import Skeleton from '../../components/Skeleton/Skeleton';
+import { useToast } from '../../components/Toast/ToastContext';
+import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
+import { CODE_LANGUAGES } from '../../utils/constants';
 
 // Composant pour les blocs de code avec bouton copier
 const CodeBlock = ({ inline, className, children, ...props }) => {
@@ -43,25 +46,9 @@ const CodeBlock = ({ inline, className, children, ...props }) => {
           className="code-lang-select"
           style={{ width: `${language.length + 3}ch` }}
         >
-          <option value="text">TEXT</option>
-          <option value="bash">BASH</option>
-          <option value="powershell">POWERSHELL</option>
-          <option value="javascript">JAVASCRIPT</option>
-          <option value="python">PYTHON</option>
-          <option value="cpp">C++</option>
-          <option value="csharp">C#</option>
-          <option value="go">GO</option>
-          <option value="java">JAVA</option>
-          <option value="php">PHP</option>
-          <option value="ruby">RUBY</option>
-          <option value="rust">RUST</option>
-          <option value="sql">SQL</option>
-          <option value="html">HTML</option>
-          <option value="css">CSS</option>
-          <option value="json">JSON</option>
-          <option value="yaml">YAML</option>
-          <option value="xml">XML</option>
-          <option value="markdown">MARKDOWN</option>
+          {CODE_LANGUAGES.map(lang => (
+            <option key={lang.value} value={lang.value}>{lang.label}</option>
+          ))}
         </select>
         <button onClick={handleCopy} className="copy-code-btn" title="Copier">
           {isCopied ? <Check size={14} color="#00ff41" /> : <Copy size={14} />}
@@ -97,7 +84,9 @@ const Wiki = () => {
   const [formData, setFormData] = useState({ port: '', service: '', content: '' });
   
   const userRole = getUserRole();
-  const canEdit = userRole === ROLES.ADMIN || userRole === ROLES.PENTESTER;
+  const canEdit = userRole === 'admin' || userRole === 'pentester';
+  const { success, info } = useToast();
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // Charger la liste des méthodes (sidebar)
   useEffect(() => {
@@ -138,20 +127,22 @@ const Wiki = () => {
       }
       setShowModal(false);
       setFormData({ port: '', service: '', content: '' });
+      success(isEditMode ? "FICHE MISE À JOUR" : "NOUVELLE FICHE CRÉÉE");
     } catch (err) {
       setError("ERREUR D'ENREGISTREMENT : " + (err.response?.data?.message || err.message));
     }
   };
 
-  const handleDelete = async () => {
-    if (!window.confirm("Supprimer cette fiche méthodologique ?")) return;
+  const executeDelete = async () => {
     try {
       await api.delete(`/wiki/${selectedTopic._id}`);
       setSelectedTopic(null);
       fetchMethods();
+      info("FICHE SUPPRIMÉE");
     } catch (err) {
       setError("ERREUR DE SUPPRESSION.");
     }
+    setShowDeleteConfirm(false);
   };
 
   const openAddModal = () => {
@@ -207,7 +198,14 @@ const Wiki = () => {
         </div>
 
         <div className="wiki-list">
-        {filteredMethods.map(m => (
+        {loading ? (
+          Array.from({ length: 10 }).map((_, i) => (
+            <div key={i} className="wiki-nav-item" style={{ pointerEvents: 'none' }}>
+              <Skeleton width={30} height={16} />
+              <Skeleton width={100} height={16} />
+            </div>
+          ))
+        ) : filteredMethods.map(m => (
           <div 
             key={m._id} 
             className={`wiki-nav-item ${selectedTopic?._id === m._id ? 'active' : ''}`}
@@ -238,7 +236,7 @@ const Wiki = () => {
                 {canEdit && (
                   <>
                   <button onClick={openEditModal} className="wiki-action-btn edit"><Edit size={16}/> ÉDITER</button>
-                  <button onClick={handleDelete} className="wiki-action-btn delete"><Trash2 size={16}/></button>
+                  <button onClick={() => setShowDeleteConfirm(true)} className="wiki-action-btn delete"><Trash2 size={16}/></button>
                   </>
                 )}
               </div>
@@ -312,6 +310,15 @@ const Wiki = () => {
           </div>
         </div>
       )}
+
+      {/* MODALE DE CONFIRMATION */}
+      <ConfirmationModal 
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={executeDelete}
+        title="SUPPRESSION_FICHE"
+        message="Confirmez-vous la suppression définitive de cette fiche méthodologique ?"
+      />
 
       {/* MODALE D'ERREUR */}
       {error && (

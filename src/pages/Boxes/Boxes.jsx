@@ -44,6 +44,7 @@ const Boxes = () => {
 
   const handleAddBox = async (e) => {
     e.preventDefault();
+
     try {
       const res = await api.post('/boxes', newBox);
       setBoxes([...boxes, res.data.data]); // Ajoute la nouvelle box à la liste locale

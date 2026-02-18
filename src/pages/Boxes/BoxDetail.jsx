@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import api from '../../api/axios';
-import { ChevronLeft, Save, Monitor, Hash, Activity, Eye, Edit, Copy, Check, Settings, X } from 'lucide-react';
+import { ChevronLeft, Save, Monitor, Hash, Activity, Eye, Edit, Copy, Check, Settings, X, Target } from 'lucide-react';
 import { getUserRole } from '../../utils/auth';
 import './BoxDetail.css';
 
@@ -96,6 +96,7 @@ const BoxDetail = () => {
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const res = await api.patch(`/boxes/${id}`, editData);
       setBox(res.data.data);
@@ -137,6 +138,26 @@ const BoxDetail = () => {
           <Save size={16} style={{ opacity: saving ? 1 : 0.5 }} />
         </div>
       </header>
+
+      {/* SECTION SCOPE / CIBLES LIÉES */}
+      {box.linkedTargets && box.linkedTargets.length > 0 && (
+        <div className="linked-targets-container">
+          <div className="linked-targets-title">
+            <Target size={16} /> SCOPE_ASSOCIÉ ({box.linkedTargets.length})
+          </div>
+          <div className="targets-list">
+            {box.linkedTargets.map(t => (
+              <div key={t._id} className="target-chip">
+                <span className="target-name">{t.name}</span>
+                <span className="target-ip">{t.ip}</span>
+                {t.ports && t.ports.length > 0 && (
+                  <span className="target-ports">[{t.ports.join(', ')}]</span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="editor-wrapper">
         <div className="editor-toolbar">

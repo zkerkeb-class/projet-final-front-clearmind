@@ -120,3 +120,16 @@
 }
 
 .copy-btn:hover { color: #00d4ff; }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .payload-grid {
+    grid-template-columns: 1fr; /* Une seule colonne sur mobile */
+  }
+}

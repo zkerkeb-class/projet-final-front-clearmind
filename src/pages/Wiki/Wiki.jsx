@@ -14,6 +14,12 @@ const Wiki = () => {
 
   return (
     <div className="wiki-container">
+      <style>{`
+        @media (max-width: 768px) {
+          .wiki-container { flex-direction: column; }
+          .wiki-sidebar { width: 100% !important; border-right: none; border-bottom: 1px solid #333; max-height: 200px; overflow-y: auto; }
+        }
+      `}</style>
       {/* Sidebar de navigation des ports */}
       <div className="wiki-sidebar">
         <h3 className="wiki-nav-title">PORTS_METHODS</h3>

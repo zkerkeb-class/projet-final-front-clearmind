@@ -90,6 +90,13 @@ const Boxes = () => {
 
   return (
     <div className="boxes-container">
+      <style>{`
+        @media (max-width: 768px) {
+          .boxes-grid { grid-template-columns: 1fr !important; }
+          .controls-bar { flex-direction: column; }
+          .filters-wrapper { flex-direction: column; width: 100%; }
+        }
+      `}</style>
       <header className="page-header">
         <h2 className="page-title">ACTIVE_<span>BOXES</span></h2>
         

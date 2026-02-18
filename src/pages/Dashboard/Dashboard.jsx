@@ -41,6 +41,11 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
+      <style>{`
+        @media (max-width: 768px) {
+          .stats-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
       <header className="dashboard-header">
         <h2 className="dashboard-title">Terminal_<span>Root</span>@RedSheet</h2>
       </header>

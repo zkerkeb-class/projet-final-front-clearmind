@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import './Sidebar.css';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   
   // Récupération du rôle pour l'affichage conditionnel
@@ -25,47 +25,65 @@ const Sidebar = () => {
     navigate('/login');
   };
 
+  // Gestion du clic sur un lien pour fermer le menu sur mobile
+  const handleNavClick = () => {
+    if (onClose) onClose();
+  };
+
   return (
-    <aside className="sidebar">
+    <>
+    <style>{`
+      @media (max-width: 992px) {
+        .sidebar {
+          transform: translateX(-100%);
+          transition: transform 0.3s ease-in-out;
+          position: fixed !important;
+          z-index: 1500;
+          height: 100vh;
+        }
+        .sidebar.open { transform: translateX(0); }
+      }
+    `}</style>
+    <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-header">
         <ShieldAlert className="sidebar-logo-icon" size={28} color="#00d4ff" />
         <h1 className="sidebar-title">Red<span>Sheet</span></h1>
       </div>
 
       <nav className="nav-links">
-        <NavLink to="/dashboard" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+        <NavLink to="/dashboard" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
           <Terminal size={20} />
           <span>Tableau de bord</span>
         </NavLink>
 
-        <NavLink to="/payloads" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+        <NavLink to="/payloads" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
           <Search size={20} />
           <span>Payloads</span>
         </NavLink>
 
-        <NavLink to="/targets" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+        <NavLink to="/targets" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
           <Target size={20} />
           <span>Targets</span>
         </NavLink>
 
-        <NavLink to="/boxes" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+        <NavLink to="/boxes" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
           <BoxIcon size={20} />
           <span>Machines (Boxes)</span>
         </NavLink>
 
-        <NavLink to="/news" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+        <NavLink to="/news" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
           <Radio size={20} />
           <span>Veille Cyber</span>
         </NavLink>
 
-        <NavLink to="/killchain" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+        <NavLink to="/killchain" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
           <Layers size={20} />
           <span>Kill Chain</span>
         </NavLink>
 
         {/* --- SECTION ADMIN --- */}
         {userRole === 'admin' && (
-          <NavLink to="/admin" className={({ isActive }) => isActive ? "nav-item admin-item active" : "nav-item admin-item"}>
+          <NavLink to="/admin" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item admin-item active" : "nav-item admin-item"}>
             <ShieldCheck size={20} color="#ff003c" />
             <span style={{ color: '#ff003c', fontWeight: 'bold' }}>PANEL ADMIN</span>
           </NavLink>
@@ -77,6 +95,7 @@ const Sidebar = () => {
         <span>Déconnexion</span>
       </div>
     </aside>
+    </>
   );
 };
 

@@ -88,6 +88,12 @@ const ToolDetail = () => {
 
   return (
     <div className="tool-detail-container">
+      <style>{`
+        @media (max-width: 768px) {
+          .tool-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+          .commands-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
       <button onClick={() => navigate(-1)} className="back-btn">
         <ChevronLeft size={16} /> RETOUR
       </button>

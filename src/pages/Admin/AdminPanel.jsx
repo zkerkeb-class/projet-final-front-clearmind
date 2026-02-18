@@ -111,6 +111,12 @@ const AdminPanel = () => {
 
   return (
     <div className="admin-container">
+      <style>{`
+        @media (max-width: 768px) {
+          .admin-data-table { display: block; overflow-x: auto; white-space: nowrap; }
+          .admin-tabs { flex-direction: column; }
+        }
+      `}</style>
       <header className="admin-header">
         <h2 className="admin-title">
           <ShieldCheck size={32} color="#ff003c" /> 

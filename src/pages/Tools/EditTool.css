@@ -94,3 +94,14 @@ select option {
   background: #008eb3;
   box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
 }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .input-group {
+    grid-template-columns: 1fr;
+  }
+  
+  .command-input-row {
+    flex-direction: column;
+  }
+}

@@ -50,9 +50,19 @@ function App() {
           </ProtectedRoute>
         } />
 
-        <Route path="/killchain" element={<Layout><KillChain /></Layout>} />
+        <Route path="/killchain" element={
+          <ProtectedRoute>
+            <Layout><KillChain /></Layout>
+          </ProtectedRoute>
+        } />
+
         <Route path="/tools/:name" element={<ProtectedRoute><Layout><ToolDetail /></Layout></ProtectedRoute>} />
-        <Route path="/tools/add/:name?" element={<Layout><AddTool /></Layout>} />
+        <Route path="/tools/add/:name?" element={
+          <ProtectedRoute>
+            <Layout><AddTool /></Layout>
+          </ProtectedRoute>
+        } />
+
         <Route path="/admin" element={
           <ProtectedRoute>
             <Layout><AdminPanel /></Layout>

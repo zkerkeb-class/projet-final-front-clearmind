@@ -65,16 +65,19 @@ const Sidebar = ({ isOpen, onClose }) => {
           <span>Payloads</span>
         </NavLink>
 
-        <NavLink to="/targets" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
-          <Target size={20} />
-          <span>Targets</span>
-        </NavLink>
-
-        <NavLink to="/boxes" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
-          <BoxIcon size={20} />
-          <span>Machines (Boxes)</span>
-        </NavLink>
-
+        {userRole !== ROLES.GUEST && (
+          <>
+            <NavLink to="/targets" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+              <Target size={20} />
+              <span>Targets</span>
+            </NavLink>
+            <NavLink to="/boxes" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+              <BoxIcon size={20} />
+              <span>Machines (Boxes)</span>
+            </NavLink>
+          </>
+        )}
+        
         <NavLink to="/news" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
           <Radio size={20} />
           <span>Veille Cyber</span>

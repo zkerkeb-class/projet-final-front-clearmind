@@ -13,6 +13,7 @@ import AddTool from './pages/Tools/AddTool';
 import BoxDetail from './pages/Boxes/BoxDetail';
 import EditTool from './pages/Tools/EditTool';
 import AdminPanel from './pages/Admin/AdminPanel';
+import NotFound from './pages/NotFound/NotFound';
 import ProtectedRoute from './components/ProtectedRoute'; // Import du garde
 import { ToastProvider } from './components/Toast/ToastContext';
 import { ROLES } from './utils/constants';
@@ -59,6 +60,9 @@ function App() {
         
         {/* Redirection par défaut */}
         <Route path="/" element={<Navigate to="/login" />} />
+
+        {/* Page 404 - Doit être la dernière route */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
     </ToastProvider>

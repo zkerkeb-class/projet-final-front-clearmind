@@ -194,7 +194,8 @@ const Targets = () => {
                 <td><Skeleton width={80} height={20} /></td>
               </tr>
             ))
-          ) : targets.map((t) => (
+          ) : targets.length > 0 ? (
+            targets.map((t) => (
             <tr key={t._id} className="target-row">
               <td><Server size={14} style={{marginRight: '10px', color: '#00d4ff'}} /> {t.name}</td>
               <td>{t.domain || "N/A"}</td>
@@ -242,7 +243,14 @@ const Targets = () => {
                 </td>
               )}
             </tr>
-          ))}
+          ))
+          ) : (
+            <tr>
+              <td colSpan="6" style={{ textAlign: 'center', padding: '3rem', color: '#666', fontFamily: 'Orbitron' }}>
+                AUCUNE CIBLE DÉTECTÉE DANS LE SCOPE
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
 

@@ -256,7 +256,7 @@ const Boxes = () => {
             </div>
           </div>
         )) : (
-          <div style={{ width: '100%', textAlign: 'center', color: '#888', marginTop: '2rem', gridColumn: '1 / -1' }}>AUCUNE CIBLE DÉTECTÉE AVEC CES PARAMÈTRES.</div>
+          <div style={{ width: '100%', textAlign: 'center', color: '#888', marginTop: '2rem', gridColumn: '1 / -1' }}>AUCUNE MACHINE DÉTECTÉE AVEC CES PARAMÈTRES.</div>
         )}
       </div>
 

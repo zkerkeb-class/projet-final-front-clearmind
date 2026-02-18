@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import './Dashboard.css';
 import { Terminal, Target, Box, Zap } from 'lucide-react';
+import { getUserRole } from '../../utils/auth';
+import { ROLES } from '../../utils/constants';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -11,15 +13,23 @@ const Dashboard = () => {
     inProgress: 0
   });
   const [loading, setLoading] = useState(true);
+  const userRole = getUserRole();
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const [payloadsRes, targetsRes, boxesRes] = await Promise.all([
-          api.get('/payloads'),
-          api.get('/targets'),
-          api.get('/boxes')
-        ]);
+        // On ne charge que ce qui est autorisé
+        const promises = [api.get('/payloads')];
+        if (userRole !== ROLES.GUEST) {
+          promises.push(api.get('/targets'));
+          promises.push(api.get('/boxes'));
+        }
+
+        const results = await Promise.all(promises);
+        
+        const payloadsRes = results[0];
+        const targetsRes = userRole !== ROLES.GUEST ? results[1] : { data: { data: { targets: [] } } };
+        const boxesRes = userRole !== ROLES.GUEST ? results[2] : { data: { data: { boxes: [] } } };
 
         const boxes = boxesRes.data.data.boxes || [];
 
@@ -37,7 +47,7 @@ const Dashboard = () => {
     };
 
     fetchDashboardData();
-  }, []);
+  }, [userRole]);
 
   return (
     <div className="dashboard-container">
@@ -57,23 +67,27 @@ const Dashboard = () => {
           <Terminal size={40} style={{position: 'absolute', right: 10, bottom: 10, opacity: 0.1, color: '#00d4ff'}} />
         </div>
 
-        <div className="stat-card">
-          <div className="stat-label">Cibles Actives</div>
-          <div className="stat-value">{loading ? '...' : stats.targets}</div>
-          <Target size={40} style={{position: 'absolute', right: 10, bottom: 10, opacity: 0.1, color: '#00d4ff'}} />
-        </div>
+        {userRole !== ROLES.GUEST && (
+          <>
+            <div className="stat-card">
+              <div className="stat-label">Cibles Actives</div>
+              <div className="stat-value">{loading ? '...' : stats.targets}</div>
+              <Target size={40} style={{position: 'absolute', right: 10, bottom: 10, opacity: 0.1, color: '#00d4ff'}} />
+            </div>
 
-        <div className="stat-card critical">
-          <div className="stat-label">Machines compromises</div>
-          <div className="stat-value">{loading ? '...' : String(stats.compromised).padStart(2, '0')}</div>
-          <Box size={40} style={{position: 'absolute', right: 10, bottom: 10, opacity: 0.1, color: '#ff003c'}} />
-        </div>
+            <div className="stat-card critical">
+              <div className="stat-label">Machines compromises</div>
+              <div className="stat-value">{loading ? '...' : String(stats.compromised).padStart(2, '0')}</div>
+              <Box size={40} style={{position: 'absolute', right: 10, bottom: 10, opacity: 0.1, color: '#ff003c'}} />
+            </div>
 
-        <div className="stat-card">
-          <div className="stat-label">Opérations en cours</div>
-          <div className="stat-value">{loading ? '...' : String(stats.inProgress).padStart(2, '0')}</div>
-          <Zap size={40} style={{position: 'absolute', right: 10, bottom: 10, opacity: 0.1, color: '#00d4ff'}} />
-        </div>
+            <div className="stat-card">
+              <div className="stat-label">Opérations en cours</div>
+              <div className="stat-value">{loading ? '...' : String(stats.inProgress).padStart(2, '0')}</div>
+              <Zap size={40} style={{position: 'absolute', right: 10, bottom: 10, opacity: 0.1, color: '#00d4ff'}} />
+            </div>
+          </>
+        )}
       </div>
 
       <div className="activity-section">
@@ -83,8 +97,17 @@ const Dashboard = () => {
             <p>{'>'} [INFO] Connexion à la base de données établie.</p>
             {!loading && (
               <>
-                <p>{'>'} [STATUS] {stats.payloads} vecteurs d'attaque chargés.</p>
-                <p>{'>'} [STATUS] {stats.targets} cibles identifiées dans le scope.</p>
+                {userRole === ROLES.GUEST ? (
+                  <>
+                    <p>{'>'} [SYSTEM] Accès invité restreint.</p>
+                    <p>{'>'} [INFO] Consultation de la base de connaissances autorisée.</p>
+                  </>
+                ) : (
+                  <>
+                    <p>{'>'} [STATUS] {stats.payloads} vecteurs d'attaque chargés.</p>
+                    <p>{'>'} [STATUS] {stats.targets} cibles identifiées dans le scope.</p>
+                  </>
+                )}
               </>
             )}
          </div>

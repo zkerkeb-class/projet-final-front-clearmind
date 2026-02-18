@@ -1,8 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import api from '../../api/axios';
 import './Dashboard.css';
 import { Terminal, Target, Box, Zap } from 'lucide-react';
 
 const Dashboard = () => {
+  const [stats, setStats] = useState({
+    payloads: 0,
+    targets: 0,
+    compromised: 0,
+    inProgress: 0
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const [payloadsRes, targetsRes, boxesRes] = await Promise.all([
+          api.get('/payloads'),
+          api.get('/targets'),
+          api.get('/boxes')
+        ]);
+
+        const boxes = boxesRes.data.data.boxes || [];
+
+        setStats({
+          payloads: payloadsRes.data.data.payloads?.length || 0,
+          targets: targetsRes.data.data.targets?.length || 0,
+          compromised: boxes.filter(b => ['User-Flag', 'Root-Flag'].includes(b.status)).length,
+          inProgress: boxes.filter(b => b.status === 'In-Progress').length
+        });
+      } catch (err) {
+        console.error("Erreur chargement dashboard:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
@@ -12,25 +48,25 @@ const Dashboard = () => {
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-label">Payloads Stockés</div>
-          <div className="stat-value">128</div>
+          <div className="stat-value">{loading ? '...' : stats.payloads}</div>
           <Terminal size={40} style={{position: 'absolute', right: 10, bottom: 10, opacity: 0.1, color: '#00d4ff'}} />
         </div>
 
         <div className="stat-card">
           <div className="stat-label">Cibles Actives</div>
-          <div className="stat-value">12</div>
+          <div className="stat-value">{loading ? '...' : stats.targets}</div>
           <Target size={40} style={{position: 'absolute', right: 10, bottom: 10, opacity: 0.1, color: '#00d4ff'}} />
         </div>
 
         <div className="stat-card critical">
           <div className="stat-label">Machines compromises</div>
-          <div className="stat-value">04</div>
+          <div className="stat-value">{loading ? '...' : String(stats.compromised).padStart(2, '0')}</div>
           <Box size={40} style={{position: 'absolute', right: 10, bottom: 10, opacity: 0.1, color: '#ff003c'}} />
         </div>
 
         <div className="stat-card">
-          <div className="stat-label">Scans en cours</div>
-          <div className="stat-value">02</div>
+          <div className="stat-label">Opérations en cours</div>
+          <div className="stat-value">{loading ? '...' : String(stats.inProgress).padStart(2, '0')}</div>
           <Zap size={40} style={{position: 'absolute', right: 10, bottom: 10, opacity: 0.1, color: '#00d4ff'}} />
         </div>
       </div>
@@ -38,9 +74,14 @@ const Dashboard = () => {
       <div className="activity-section">
          <h3 style={{color: '#ff003c', letterSpacing: '2px', marginBottom: '1rem'}}>LOGS_ACTIVITE_RECENTS</h3>
          <div style={{fontFamily: 'monospace', color: '#00d4ff', backgroundColor: 'rgba(0,0,0,0.5)', padding: '1rem', borderRadius: '4px', border: '1px solid #333'}}>
-            <p>{'>'} [INFO] Connexion établie depuis l'IP 192.168.1.45</p>
-            <p>{'>'} [WARN] Tentative d'accès non autorisé détectée sur Target_Alpha</p>
-            <p>{'>'} [SUCCESS] Nouveau Payload XSS enregistré avec succès</p>
+            <p>{'>'} [SYSTEM] Initialisation du dashboard...</p>
+            <p>{'>'} [INFO] Connexion à la base de données établie.</p>
+            {!loading && (
+              <>
+                <p>{'>'} [STATUS] {stats.payloads} vecteurs d'attaque chargés.</p>
+                <p>{'>'} [STATUS] {stats.targets} cibles identifiées dans le scope.</p>
+              </>
+            )}
          </div>
       </div>
     </div>

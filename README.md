@@ -1,16 +1,8 @@
-# React + Vite
+# Justification du choix d'authentification (JWT) :
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Nous avons opté pour une authentification basée sur les JSON Web Tokens (JWT) plutôt que sur les sessions serveur classiques pour plusieurs raisons :
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Architecture Stateless (Sans état) : Le serveur n'a pas besoin de stocker l'état de session de chaque utilisateur en mémoire ou en base de données. Cela rend l'application plus rapide et facilite la scalabilité (montée en charge) si nous devions ajouter plusieurs serveurs backend.
+- Performance : La vérification du token se fait par calcul cryptographique (signature) sans nécessiter une requête en base de données à chaque appel API pour vérifier une table de sessions.
+- Flexibilité Frontend : Le token est stocké côté client (LocalStorage), ce qui permet au Frontend (React) de gérer facilement l'état "connecté" et d'accéder aux informations utilisateur (ID, Rôle) directement depuis le payload du token sans re-interroger le serveur.
+- Sécurité : Les tokens sont signés numériquement côté serveur, garantissant qu'ils n'ont pas été altérés. Nous avons également mis en place une expiration automatique pour limiter les risques en cas de vol de token.

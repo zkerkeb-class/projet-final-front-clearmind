@@ -23,9 +23,13 @@ api.interceptors.response.use(
   (error) => {
     // Si le backend renvoie 401 (Non autorisé), on déconnecte l'utilisateur
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('role');
-      window.location.href = '/login';
+      // On ignore la redirection si c'est une erreur lors du login (mauvais mot de passe)
+      // pour laisser le composant Login afficher le message d'erreur
+      if (!error.config.url.includes('/login')) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }

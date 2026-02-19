@@ -46,9 +46,15 @@ function App() {
             <ProtectedRoute allowedRoles={[ROLES.PENTESTER, ROLES.ADMIN]}><EditPayloads /></ProtectedRoute>
           } />
 
-          <Route path="/targets" element={<Targets />} />
-          <Route path="/boxes" element={<Boxes />} />
-          <Route path="/boxes/:id" element={<BoxDetail />} />
+          <Route path="/targets" element={
+            <ProtectedRoute allowedRoles={[ROLES.PENTESTER, ROLES.ADMIN]}><Targets /></ProtectedRoute>
+          } />
+          <Route path="/boxes" element={
+            <ProtectedRoute allowedRoles={[ROLES.PENTESTER, ROLES.ADMIN]}><Boxes /></ProtectedRoute>
+          } />
+          <Route path="/boxes/:id" element={
+            <ProtectedRoute allowedRoles={[ROLES.PENTESTER, ROLES.ADMIN]}><BoxDetail /></ProtectedRoute>
+          } />
           <Route path="/news" element={<News />} />
           <Route path="/wiki" element={<Wiki />} />
           {/* Route vide pour CyberChef car il est géré dans le Layout */}

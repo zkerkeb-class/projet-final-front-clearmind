@@ -2,25 +2,30 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Terminal, Box, Target, FileText, Shield, Command, Layers, Binary } from 'lucide-react';
 import './CommandPalette.css';
+import { ROLES } from '../../utils/constants';
 
 const CommandPalette = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const navigate = useNavigate();
+  
+  // Récupération du rôle (depuis localStorage pour être synchrone et rapide)
+  const userRole = localStorage.getItem('role');
 
   const actions = [
-    { id: 'dash', label: 'Go to Dashboard', icon: <Terminal size={18} />, path: '/dashboard' },
-    { id: 'payloads', label: 'Database Payloads', icon: <Search size={18} />, path: '/payloads' },
-    { id: 'targets', label: 'Scope / Targets', icon: <Target size={18} />, path: '/targets' },
-    { id: 'boxes', label: 'Active Boxes', icon: <Box size={18} />, path: '/boxes' },
-    { id: 'news', label: 'Threat Intelligence', icon: <FileText size={18} />, path: '/news' },
-    { id: 'killchain', label: 'Kill Chain Methodology', icon: <Layers size={18} />, path: '/killchain' },
-    { id: 'wiki', label: 'Knowledge Base', icon: <Shield size={18} />, path: '/wiki' },
-    { id: 'cyberchef', label: 'Open CyberChef', icon: <Binary size={18} />, path: '/cyberchef' },
+    { id: 'dash', label: 'Go to Dashboard', icon: <Terminal size={18} />, path: '/dashboard', roles: [] },
+    { id: 'payloads', label: 'Database Payloads', icon: <Search size={18} />, path: '/payloads', roles: [] },
+    { id: 'targets', label: 'Scope / Targets', icon: <Target size={18} />, path: '/targets', roles: [ROLES.PENTESTER, ROLES.ADMIN] },
+    { id: 'boxes', label: 'Active Boxes', icon: <Box size={18} />, path: '/boxes', roles: [ROLES.PENTESTER, ROLES.ADMIN] },
+    { id: 'news', label: 'Threat Intelligence', icon: <FileText size={18} />, path: '/news', roles: [] },
+    { id: 'killchain', label: 'Kill Chain Methodology', icon: <Layers size={18} />, path: '/killchain', roles: [] },
+    { id: 'wiki', label: 'Knowledge Base', icon: <Shield size={18} />, path: '/wiki', roles: [] },
+    { id: 'cyberchef', label: 'Open CyberChef', icon: <Binary size={18} />, path: '/cyberchef', roles: [] },
   ];
 
-  const filteredActions = actions.filter(action =>
+  const filteredActions = actions.filter(action => 
+    (action.roles.length === 0 || action.roles.includes(userRole)) &&
     action.label.toLowerCase().includes(query.toLowerCase())
   );
 

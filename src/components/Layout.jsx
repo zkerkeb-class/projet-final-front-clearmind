@@ -4,6 +4,7 @@ import Sidebar from './Sidebar';
 import { Menu, X } from 'lucide-react';
 import './Layout.css';
 import CyberChef from '../pages/Cyberchef/CyberChef';
+import CommandPalette from './CommandPalette/CommandPalette';
 
 const Layout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -12,6 +13,9 @@ const Layout = ({ children }) => {
 
   return (
     <div className="app-layout">
+      {/* Palette de commande globale (Ctrl+K) */}
+      <CommandPalette />
+
       {/* Bouton Mobile */}
       <button className="mobile-menu-btn" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
         {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}

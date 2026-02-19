@@ -185,7 +185,8 @@ const Dashboard = () => {
         <div className="chart-card">
             <h3 className="chart-title"><Globe size={16} style={{marginRight:'8px'}}/> RÉPARTITION_PAR_SOURCE</h3>
             {loadingNews ? <Skeleton width="100%" height={300} /> : (
-            <ResponsiveContainer width="100%" height={300}>
+            chartsData.sourcesData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                     <Pie
                         data={chartsData.sourcesData}
@@ -204,13 +205,20 @@ const Dashboard = () => {
                     <Legend />
                 </PieChart>
             </ResponsiveContainer>
+            ) : (
+              <div style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', flexDirection: 'column' }}>
+                <Globe size={48} style={{ marginBottom: 10, opacity: 0.2 }} />
+                <span style={{ fontFamily: 'monospace', letterSpacing: '1px' }}>AUCUNE SOURCE DÉTECTÉE</span>
+              </div>
+            )
             )}
         </div>
 
         <div className="chart-card">
             <h3 className="chart-title"><ShieldAlert size={16} style={{marginRight:'8px'}}/> VULNÉRABILITÉS_PAR_CRITICITÉ</h3>
             {loadingNews ? <Skeleton width="100%" height={300} /> : (
-            <ResponsiveContainer width="100%" height={300}>
+            chartsData.vulnsData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                     <Pie data={chartsData.vulnsData} cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
                         {chartsData.vulnsData.map((entry, index) => (
@@ -221,6 +229,12 @@ const Dashboard = () => {
                     <Legend />
                 </PieChart>
             </ResponsiveContainer>
+            ) : (
+              <div style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', flexDirection: 'column' }}>
+                <ShieldAlert size={48} style={{ marginBottom: 10, opacity: 0.2 }} />
+                <span style={{ fontFamily: 'monospace', letterSpacing: '1px' }}>AUCUNE VULNÉRABILITÉ</span>
+              </div>
+            )
             )}
         </div>
       </div>
@@ -230,6 +244,7 @@ const Dashboard = () => {
         <div className="charts-grid">
           <div className="chart-card">
             <h3 className="chart-title"><BarChart2 size={16} style={{marginRight:'8px'}}/> DIFFICULTÉ_DES_MACHINES</h3>
+            {chartsData.boxDifficultyData.some(d => d.value > 0) ? (
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={chartsData.boxDifficultyData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
@@ -246,10 +261,17 @@ const Dashboard = () => {
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
+            ) : (
+              <div style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', flexDirection: 'column' }}>
+                <BarChart2 size={48} style={{ marginBottom: 10, opacity: 0.2 }} />
+                <span style={{ fontFamily: 'monospace', letterSpacing: '1px' }}>AUCUNE MACHINE ACTIVE</span>
+              </div>
+            )}
           </div>
 
           <div className="chart-card">
             <h3 className="chart-title"><Monitor size={16} style={{marginRight:'8px'}}/> RÉPARTITION_OS_CIBLES</h3>
+            {chartsData.targetOsData.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie data={chartsData.targetOsData} cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
@@ -261,6 +283,12 @@ const Dashboard = () => {
                 <Legend />
               </PieChart>
             </ResponsiveContainer>
+            ) : (
+              <div style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', flexDirection: 'column' }}>
+                <Monitor size={48} style={{ marginBottom: 10, opacity: 0.2 }} />
+                <span style={{ fontFamily: 'monospace', letterSpacing: '1px' }}>AUCUNE CIBLE DÉFINIE</span>
+              </div>
+            )}
           </div>
         </div>
       )}

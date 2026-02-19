@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../api/axios';
-import { Radio, ExternalLink, Clock, Search, ShieldAlert, AlertTriangle, X, Filter, ArrowUpDown, Calendar } from 'lucide-react';
+import { Radio, ExternalLink, Clock, Search, ShieldAlert, AlertTriangle, X, Filter, ArrowUpDown, Calendar, RefreshCw, RotateCcw, CheckSquare, Square } from 'lucide-react';
 import './News.css';
 import Skeleton from '../../components/Skeleton/Skeleton';
 
@@ -15,21 +15,25 @@ const News = () => {
   const [activeSources, setActiveSources] = useState([]);
   const [sortDesc, setSortDesc] = useState(true); // true = plus récent en premier
 
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const res = await api.get('/news');
-        setArticles(res.data.data.items);
-        // Initialiser les sources actives avec toutes les sources disponibles
+  const fetchNews = async (init = false) => {
+    if (!init) setLoading(true);
+    try {
+      const res = await api.get('/news');
+      setArticles(res.data.data.items);
+      // Si c'est l'initialisation, on active toutes les sources par défaut
+      if (init) {
         const uniqueSources = [...new Set(res.data.data.items.map(item => item.source))];
         setActiveSources(uniqueSources);
-        setLoading(false);
-      } catch (err) {
-        setError("ÉCHEC DE CONNEXION AUX FLUX DE MENACES.");
-        setLoading(false);
       }
-    };
-    fetchNews();
+      setLoading(false);
+    } catch (err) {
+      setError("ÉCHEC DE CONNEXION AUX FLUX DE MENACES.");
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNews(true);
   }, []);
 
   // --- LOGIQUE DE DÉTECTION DE CRITICITÉ ---
@@ -69,6 +73,16 @@ const News = () => {
     setActiveSources(prev => 
       prev.includes(source) ? prev.filter(s => s !== source) : [...prev, source]
     );
+  };
+
+  const selectAllSources = () => setActiveSources(allSources);
+  const deselectAllSources = () => setActiveSources([]);
+
+  const resetFilters = () => {
+    setSearchTerm("");
+    setActiveLevels(['critical', 'high', 'medium', 'low']);
+    setActiveSources(allSources);
+    setSortDesc(true);
   };
 
   // --- LOGIQUE DE FILTRAGE COMBINÉE ---
@@ -135,8 +149,34 @@ const News = () => {
 
       {/* BARRE DE FILTRES AVANCÉS */}
       <div className="filters-section">
+        <button 
+          className="icon-btn refresh-btn" 
+          onClick={() => fetchNews(false)}
+          title="Rafraîchir les flux"
+          style={{ position: 'absolute', top: '15px', right: '15px' }}
+        >
+          <RefreshCw size={16} />
+        </button>
         <div className="filter-group sources">
-          <span className="filter-label"><Filter size={12} /> SOURCES :</span>
+          <div className="filter-header">
+            <span className="filter-label"><Filter size={12} /> SOURCES :</span>
+            <div className="mini-actions">
+              <button 
+                onClick={selectAllSources} 
+                title="Tout sélectionner"
+                className={activeSources.length === allSources.length && allSources.length > 0 ? 'active' : ''}
+              >
+                <CheckSquare size={10} /> TOUT
+              </button>
+              <button 
+                onClick={deselectAllSources} 
+                title="Tout désélectionner"
+                className={activeSources.length === 0 ? 'active' : ''}
+              >
+                <Square size={10} /> RIEN
+              </button>
+            </div>
+          </div>
           <div className="sources-list">
             {allSources.map(source => (
               <button 
@@ -164,6 +204,12 @@ const News = () => {
               </div>
             ))}
           </div>
+        </div>
+
+        <div className="filter-actions-right">
+          <button className="reset-filters-btn" onClick={resetFilters}>
+            <RotateCcw size={12} /> RÉINITIALISER
+          </button>
         </div>
       </div>
 

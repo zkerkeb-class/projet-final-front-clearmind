@@ -324,6 +324,7 @@
   border: 1px solid #222;
   padding: 15px;
   border-radius: 4px;
+  position: relative;
 }
 
 .filter-group {
@@ -331,6 +332,12 @@
   align-items: center;
   gap: 15px;
   flex-wrap: wrap;
+}
+
+.filter-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .filter-label {
@@ -341,6 +348,36 @@
   align-items: center;
   gap: 6px;
   min-width: 100px;
+}
+
+.mini-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.mini-actions button {
+  background: transparent;
+  border: 1px solid #333;
+  color: #666;
+  font-size: 0.6rem;
+  padding: 2px 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.mini-actions button:hover {
+  border-color: #00d4ff;
+  color: #00d4ff;
+}
+
+.mini-actions button.active {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: #00d4ff;
+  color: #00d4ff;
+  box-shadow: 0 0 5px rgba(0, 212, 255, 0.2);
 }
 
 .sources-list {
@@ -391,4 +428,50 @@
 .sort-btn:hover {
   background: rgba(0, 212, 255, 0.1);
   border-color: #00d4ff;
+}
+
+.icon-btn {
+  background: transparent;
+  border: 1px solid #333;
+  color: #00d4ff;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
+
+.icon-btn:hover {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: #00d4ff;
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+}
+
+.filter-actions-right {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  border-top: 1px solid #222;
+  padding-top: 10px;
+}
+
+.reset-filters-btn {
+  background: transparent;
+  border: 1px solid #ff003c;
+  color: #ff003c;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.7rem;
+  padding: 5px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: 0.3s;
+}
+
+.reset-filters-btn:hover {
+  background: rgba(255, 0, 60, 0.1);
+  box-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
 }

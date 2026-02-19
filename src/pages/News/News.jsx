@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../api/axios';
-import { Radio, ExternalLink, Clock, Search, ShieldAlert, AlertTriangle, X } from 'lucide-react';
+import { Radio, ExternalLink, Clock, Search, ShieldAlert, AlertTriangle, X, Filter, ArrowUpDown, Calendar } from 'lucide-react';
 import './News.css';
 import Skeleton from '../../components/Skeleton/Skeleton';
 
@@ -9,12 +9,20 @@ const News = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // États pour les filtres
+  const [activeLevels, setActiveLevels] = useState(['critical', 'high', 'medium', 'low']);
+  const [activeSources, setActiveSources] = useState([]);
+  const [sortDesc, setSortDesc] = useState(true); // true = plus récent en premier
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
         const res = await api.get('/news');
         setArticles(res.data.data.items);
+        // Initialiser les sources actives avec toutes les sources disponibles
+        const uniqueSources = [...new Set(res.data.data.items.map(item => item.source))];
+        setActiveSources(uniqueSources);
         setLoading(false);
       } catch (err) {
         setError("ÉCHEC DE CONNEXION AUX FLUX DE MENACES.");
@@ -50,12 +58,39 @@ const News = () => {
     );
   };
 
-  // Logique de filtrage
-  const filteredArticles = articles.filter(article => 
-    article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    article.source.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    article.contentSnippet?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // --- GESTION DES FILTRES ---
+  const toggleLevel = (level) => {
+    setActiveLevels(prev => 
+      prev.includes(level) ? prev.filter(l => l !== level) : [...prev, level]
+    );
+  };
+
+  const toggleSource = (source) => {
+    setActiveSources(prev => 
+      prev.includes(source) ? prev.filter(s => s !== source) : [...prev, source]
+    );
+  };
+
+  // --- LOGIQUE DE FILTRAGE COMBINÉE ---
+  const filteredArticles = articles
+    .filter(article => {
+      const matchesSearch = 
+        article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        article.source.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        article.contentSnippet?.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const level = getCriticality(article.title);
+      const matchesLevel = activeLevels.includes(level);
+      const matchesSource = activeSources.includes(article.source);
+
+      return matchesSearch && matchesLevel && matchesSource;
+    })
+    .sort((a, b) => {
+      return sortDesc ? new Date(b.pubDate) - new Date(a.pubDate) : new Date(a.pubDate) - new Date(b.pubDate);
+    });
+
+  // Liste unique des sources pour l'affichage des filtres
+  const allSources = [...new Set(articles.map(item => item.source))];
 
   return (
     <div className="news-container">
@@ -83,11 +118,54 @@ const News = () => {
 
         <div className="header-right">
             <div className="live-indicator">
-            <Radio size={16} className="pulse-icon" /> 
-            <span>{filteredArticles.length} ALERTES_TROUVÉES</span>
+              <Radio size={16} className="pulse-icon" /> 
+              <span>{filteredArticles.length} ALERTES</span>
             </div>
+            <button 
+              className="sort-btn" 
+              onClick={() => setSortDesc(!sortDesc)}
+              title={sortDesc ? "Plus récent en premier" : "Plus ancien en premier"}
+            >
+              <Calendar size={14} />
+              {sortDesc ? "RÉCENT" : "ANCIEN"}
+              <ArrowUpDown size={14} />
+            </button>
         </div>
        </header>
+
+      {/* BARRE DE FILTRES AVANCÉS */}
+      <div className="filters-section">
+        <div className="filter-group sources">
+          <span className="filter-label"><Filter size={12} /> SOURCES :</span>
+          <div className="sources-list">
+            {allSources.map(source => (
+              <button 
+                key={source}
+                className={`filter-chip ${activeSources.includes(source) ? 'active' : ''}`}
+                onClick={() => toggleSource(source)}
+              >
+                {source}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="filter-group levels">
+          <span className="filter-label">FILTRER_PAR_CRITICITÉ :</span>
+          <div className="threat-legend interactive">
+            {['critical', 'high', 'medium', 'low'].map(level => (
+              <div 
+                key={level}
+                className={`legend-item ${activeLevels.includes(level) ? 'active' : 'inactive'}`}
+                onClick={() => toggleLevel(level)}
+              >
+                <span className={`legend-dot ${level}`}></span>
+                {level.toUpperCase()}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
       <div className="news-feed">
         {loading ? (

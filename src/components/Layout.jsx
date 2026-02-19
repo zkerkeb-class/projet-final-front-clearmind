@@ -5,6 +5,7 @@ import { Menu, X } from 'lucide-react';
 import './Layout.css';
 import CyberChef from '../pages/Cyberchef/CyberChef';
 import CommandPalette from './CommandPalette/CommandPalette';
+import TerminalLogs from './TerminalLogs/TerminalLogs';
 
 const Layout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -44,6 +45,9 @@ const Layout = ({ children }) => {
           {children}
         </div>
       </main>
+
+      {/* Terminal de Logs Système (Footer) */}
+      <TerminalLogs />
     </div>
   );
 };

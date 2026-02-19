@@ -16,12 +16,13 @@ import {
 } from 'lucide-react';
 import './Sidebar.css';
 import { ROLES } from '../../utils/constants';
+import { getUserRole } from '../../utils/auth';
 
 const Sidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   
   // Récupération du rôle pour l'affichage conditionnel
-  const userRole = localStorage.getItem('role');
+  const userRole = getUserRole();
 
   const handleLogout = () => {
     localStorage.removeItem('token');

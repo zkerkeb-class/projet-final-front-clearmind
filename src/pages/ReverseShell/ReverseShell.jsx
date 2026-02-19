@@ -48,6 +48,7 @@ const ReverseShell = () => {
     } catch (err) {
       console.error("Erreur chargement shells", err);
       setError("Impossible de contacter le serveur. Vérifiez que la route API est bien déclarée dans app.js");
+      toastError("ERREUR_CONNEXION_API_REVERSESHELLS");
       setLoading(false);
     }
   };

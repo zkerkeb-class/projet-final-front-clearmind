@@ -180,6 +180,14 @@ const BoxDetail = () => {
 
   return (
     <div className="box-detail-container">
+      <style>{`
+        @media (max-width: 768px) {
+          .box-header-detail { flex-direction: column; align-items: flex-start; gap: 1rem; }
+          .box-meta { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+          .editor-toolbar { flex-direction: column; align-items: flex-start; gap: 1rem; }
+          .editor-toolbar > div { width: 100%; justify-content: space-between; }
+        }
+      `}</style>
       <button onClick={() => navigate('/boxes')} className="back-btn">
         <ChevronLeft size={16} /> RETOUR_LISTE
       </button>

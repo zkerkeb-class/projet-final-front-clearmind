@@ -19,11 +19,13 @@ import ProtectedRoute from './components/ProtectedRoute'; // Import du garde
 import { ToastProvider } from './components/Toast/ToastContext';
 import { ROLES } from './utils/constants';
 import ReverseShell from './pages/ReverseShell/ReverseShell';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
     <ToastProvider>
     <Router>
+      <ScrollToTop />
       <Routes>
         {/* Route Publique */}
         <Route path="/login" element={<Login />} />

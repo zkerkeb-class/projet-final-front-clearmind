@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Search, Terminal, Box, Target, FileText, Shield, Command, Layers, Binary, Cpu } from 'lucide-react';
 import './CommandPalette.css';
 import { ROLES } from '../../utils/constants';
+import { getUserRole } from '../../utils/auth';
 
 const CommandPalette = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +12,7 @@ const CommandPalette = () => {
   const navigate = useNavigate();
   
   // Récupération du rôle (depuis localStorage pour être synchrone et rapide)
-  const userRole = localStorage.getItem('role');
+  const userRole = getUserRole();
 
   const actions = [
     { id: 'dash', label: 'Go to Dashboard', icon: <Terminal size={18} />, path: '/dashboard', roles: [] },

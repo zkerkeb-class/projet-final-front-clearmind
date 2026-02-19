@@ -141,14 +141,60 @@ const AdminPanel = () => {
     <div className="admin-container">
       <style>{`
         @media (max-width: 768px) {
-          .admin-data-table { display: block; overflow-x: auto; white-space: nowrap; }
           .admin-tabs { flex-direction: column; }
+          
+          /* Header Responsive */
+          .admin-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+          .admin-title { font-size: 1.1rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+          .admin-status { font-size: 0.7rem; align-self: flex-start; }
+
+          /* Transformation Table -> Cards pour Mobile */
+          .admin-data-table { display: block; width: 100%; }
+          .admin-data-table thead { display: none; }
+          .admin-data-table tbody { display: block; width: 100%; }
+          
+          .admin-data-table tr { 
+            display: flex; 
+            flex-direction: column; 
+            background: rgba(20, 20, 30, 0.6); 
+            margin-bottom: 1rem; 
+            border: 1px solid #333; 
+            border-radius: 4px;
+            padding: 0;
+            overflow: hidden;
+          }
+          
+          .admin-data-table td { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 1rem 1.5rem; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+            text-align: right;
+            width: 100%;
+          }
+          
+          .admin-data-table td:last-child { 
+            border-bottom: none; 
+            justify-content: flex-end; 
+            gap: 10px; 
+            margin-top: 0;
+            background: rgba(0, 0, 0, 0.2);
+          }
+
+          /* Labels contextuels via CSS (Pseudo-éléments) */
+          .arsenal-mgmt td:nth-of-type(1)::before { content: "NOM"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
+          .arsenal-mgmt td:nth-of-type(2)::before { content: "CATÉGORIE"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
+          
+          .users-mgmt td:nth-of-type(1)::before { content: "USER"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
+          .users-mgmt td:nth-of-type(2)::before { content: "EMAIL"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
+          .users-mgmt td:nth-of-type(3)::before { content: "RÔLE"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
         }
       `}</style>
       <header className="admin-header">
         <h2 className="admin-title">
-          <ShieldCheck size={32} color="#ff003c" /> 
-          CONSOLE_<span>ADMINISTRATION</span>
+          <ShieldCheck size={32} color="#ff003c" />
+          <span><span style={{ color: '#ffffff' }}>CONSOLE_</span><span>ADMINISTRATION</span></span>
         </h2>
         <div className="admin-status">MODE_ROOT_ACTIF</div>
       </header>

@@ -35,9 +35,10 @@
   background: rgba(0, 0, 0, 0.6);
   border: 1px solid #333;
   border-left: 3px solid #00d4ff; /* Rappel du style des inputs login */
-  padding: 0.5rem 1rem;
+  padding: 0;
   margin-bottom: 2.5rem;
   transition: all 0.3s ease;
+  position: relative;
 }
 
 .search-bar-container:focus-within {
@@ -46,8 +47,10 @@
 }
 
 .search-icon {
+  position: absolute;
+  left: 10px;
   color: #00d4ff;
-  margin-right: 1rem;
+  pointer-events: none;
 }
 
 .search-input {
@@ -59,6 +62,7 @@
   outline: none;
   font-size: 0.9rem;
   letter-spacing: 1px;
+  padding: 0.8rem 1rem 0.8rem 3.5rem;
 }
 
 .search-input::placeholder {

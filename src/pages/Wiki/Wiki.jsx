@@ -175,6 +175,11 @@ const Wiki = () => {
         @media (max-width: 768px) {
           .wiki-container { flex-direction: column; }
           .wiki-sidebar { width: 100% !important; border-right: none; border-bottom: 1px solid #333; max-height: 200px; overflow-y: auto; }
+          
+          /* Responsive Header & Actions */
+          .wiki-content-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+          .wiki-actions { width: 100%; display: flex; gap: 10px; }
+          .btn-text { display: none; }
         }
       `}</style>
       
@@ -230,12 +235,12 @@ const Wiki = () => {
                   onClick={() => setIsMainPreview(!isMainPreview)} 
                   className="wiki-action-btn preview-toggle"
                 >
-                  {isMainPreview ? <><Code size={16}/> SOURCE</> : <><Eye size={16}/> APERÇU</>}
+                  {isMainPreview ? <><Code size={16}/> <span className="btn-text">SOURCE</span></> : <><Eye size={16}/> <span className="btn-text">APERÇU</span></>}
                 </button>
 
                 {canEdit && (
                   <>
-                  <button onClick={openEditModal} className="wiki-action-btn edit"><Edit size={16}/> ÉDITER</button>
+                  <button onClick={openEditModal} className="wiki-action-btn edit"><Edit size={16}/> <span className="btn-text">ÉDITER</span></button>
                   <button onClick={() => setShowDeleteConfirm(true)} className="wiki-action-btn delete"><Trash2 size={16}/></button>
                   </>
                 )}

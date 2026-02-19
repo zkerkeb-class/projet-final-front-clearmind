@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
-import { Terminal, ChevronLeft, ExternalLink, Copy, AlertTriangle, Search } from 'lucide-react';
+import { Terminal, ChevronLeft, ExternalLink, Copy, AlertTriangle, Search, Pencil } from 'lucide-react';
 import './ToolDetail.css';
 import { ROLES } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
+import { getUserRole } from '../../utils/auth';
 
 const ToolDetail = () => {
   const { name } = useParams();
@@ -13,7 +14,7 @@ const ToolDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const userRole = localStorage.getItem('role');
+  const userRole = getUserRole();
 
   useEffect(() => {
     const fetchTool = async () => {
@@ -115,6 +116,23 @@ const ToolDetail = () => {
           .tool-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
           .commands-grid { grid-template-columns: 1fr !important; }
         }
+        .edit-tool-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          background: transparent;
+          border: 1px solid #ffa500;
+          color: #ffa500;
+          padding: 5px 12px;
+          cursor: pointer;
+          font-weight: bold;
+          font-size: 0.8rem;
+          transition: all 0.2s;
+        }
+        .edit-tool-btn:hover {
+          background: rgba(255, 165, 0, 0.1);
+          box-shadow: 0 0 10px rgba(255, 165, 0, 0.2);
+        }
       `}</style>
       <button onClick={() => navigate(-1)} className="back-btn">
         <ChevronLeft size={16} /> RETOUR
@@ -125,11 +143,21 @@ const ToolDetail = () => {
           <h1>{tool.name.toUpperCase()}</h1>
           <span className="tool-category-badge">{tool.category}</span>
         </div>
-        {tool.link && (
-          <a href={tool.link} target="_blank" rel="noreferrer" className="doc-link">
-            DOC_OFFICIELLE <ExternalLink size={14} />
-          </a>
-        )}
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          {userRole === ROLES.ADMIN && (
+            <button 
+              onClick={() => navigate(`/tools/edit/${tool.name}`)} 
+              className="edit-tool-btn"
+            >
+              <Pencil size={14} /> ÉDITER
+            </button>
+          )}
+          {tool.link && (
+            <a href={tool.link} target="_blank" rel="noreferrer" className="doc-link">
+              DOC_OFFICIELLE <ExternalLink size={14} />
+            </a>
+          )}
+        </div>
       </header>
 
       <section className="tool-description">

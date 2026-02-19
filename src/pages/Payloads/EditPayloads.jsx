@@ -65,6 +65,12 @@ const EditPayloads = () => {
 
   return (
     <div className="edit-payload-container">
+      <style>{`
+        .split-group { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        @media (max-width: 768px) {
+          .split-group { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
       <header className="page-header">
         <h2 className="page-title">{isEditMode ? 'EDIT_' : 'NEW_'}<span>PAYLOAD</span></h2>
       </header>
@@ -82,7 +88,7 @@ const EditPayloads = () => {
           <input type="text" className="form-input" required value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="Ex: Reverse Shell Python" />
         </div>
 
-        <div className="form-group" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+        <div className="form-group split-group">
           <div>
             <label>CATÉGORIE</label>
             <input type="text" className="form-input" required value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} placeholder="Ex: RCE, XSS, SQLi" />

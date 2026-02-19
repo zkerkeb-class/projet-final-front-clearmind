@@ -30,10 +30,13 @@ const News = () => {
     if (t.includes('critical') || t.includes('rce') || t.includes('zero-day') || t.includes('0-day') || t.includes('pre-auth')) {
       return 'critical';
     }
-    if (t.includes('high') || t.includes('exploit') || t.includes('vulnerability') || t.includes('bypass')) {
+    if (t.includes('high') || t.includes('exploit') || t.includes('vulnerability') || t.includes('bypass') || t.includes('cve')) {
       return 'high';
     }
-    return 'info';
+    if (t.includes('malware') || t.includes('ransomware') || t.includes('backdoor') || t.includes('trojan') || t.includes('campaign') || t.includes('attack') || t.includes('breach') || t.includes('hack')) {
+      return 'medium';
+    }
+    return 'low';
   };
 
   // --- LOGIQUE DE SURLIGNAGE DES CVE ---
@@ -101,9 +104,13 @@ const News = () => {
         ) : filteredArticles.length > 0 ? (
           filteredArticles.map((item, index) => {
             const level = getCriticality(item.title);
+            const sourceColor = item.color || '#00d4ff';
             
             return (
-              <article key={index} className={`news-card alert-${level}`}>
+              <article 
+                key={index} 
+                className={`news-card alert-${level}`}
+              >
                 {level === 'critical' && (
                   <div className="critical-badge">
                     <ShieldAlert size={12} /> CRITICAL_THREAT
@@ -111,7 +118,14 @@ const News = () => {
                 )}
                 
                 <div className="card-header">
-                  <span className={`source-tag tag-${item.source.toLowerCase().replace(' ', '-')}`}>
+                  <span 
+                    className="source-tag"
+                    style={{ 
+                      color: sourceColor, 
+                      border: `1px solid ${sourceColor}`, 
+                      backgroundColor: `${sourceColor}1a` 
+                    }}
+                  >
                     {item.source}
                   </span>
                   <span className="news-date">

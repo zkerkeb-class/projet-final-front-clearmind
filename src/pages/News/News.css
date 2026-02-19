@@ -111,11 +111,6 @@
   backdrop-filter: blur(5px);
 }
 
-/* Bordures automatiques par source (via ton code existant amélioré) */
-.news-card:has(.tag-cert-fr) { border-left-color: #00d4ff; }
-.news-card:has(.tag-unit-42) { border-left-color: #ff8000; }
-.news-card:has(.tag-hacker-news) { border-left-color: #ff003c; }
-
 .news-card:hover {
   border-color: rgba(0, 212, 255, 0.3);
   transform: translateX(10px);
@@ -189,10 +184,6 @@
   font-weight: bold;
 }
 
-.tag-cert-fr { background: rgba(0, 212, 255, 0.1); border: 1px solid #00d4ff; color: #00d4ff; }
-.tag-unit-42 { background: rgba(255, 128, 0, 0.1); border: 1px solid #ff8000; color: #ff8000; }
-.tag-hacker-news { background: rgba(255, 0, 60, 0.1); border: 1px solid #ff003c; color: #ff4d79; }
-
 /* Nouveau : Surlignage CVE */
 .cve-highlight {
   background: rgba(0, 212, 255, 0.15);
@@ -237,6 +228,16 @@
 .alert-high {
   border-left: 4px solid #ff8000 !important;
   background: linear-gradient(90deg, rgba(255, 128, 0, 0.05) 0%, rgba(0,0,0,0) 100%);
+}
+
+.alert-medium {
+  border-left: 4px solid #ffd700 !important; /* Gold */
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.05) 0%, rgba(0,0,0,0) 100%);
+}
+
+.alert-low {
+  border-left: 4px solid #00ff41 !important; /* Green */
+  background: linear-gradient(90deg, rgba(0, 255, 65, 0.05) 0%, rgba(0,0,0,0) 100%);
 }
 
 @keyframes pulse-border {

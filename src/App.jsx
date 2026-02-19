@@ -18,6 +18,7 @@ import NotFound from './pages/NotFound/NotFound';
 import ProtectedRoute from './components/ProtectedRoute'; // Import du garde
 import { ToastProvider } from './components/Toast/ToastContext';
 import { ROLES } from './utils/constants';
+import ReverseShell from './pages/ReverseShell/ReverseShell';
 
 function App() {
   return (
@@ -60,6 +61,7 @@ function App() {
           {/* Route vide pour CyberChef car il est géré dans le Layout */}
           <Route path="/cyberchef" element={<div />} />
           <Route path="/killchain" element={<KillChain />} />
+          <Route path="/revshell" element={<ReverseShell />} />
           <Route path="/tools/:name" element={<ToolDetail />} />
           
           {/* Routes Administrateur Uniquement */}

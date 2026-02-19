@@ -11,7 +11,8 @@ import {
   Layers,
   BookOpen,
   ShieldCheck, // Ajout de l'icône Admin
-  Binary // Pour CyberChef
+  Binary, // Pour CyberChef
+  Cpu // Pour RevShell
 } from 'lucide-react';
 import './Sidebar.css';
 import { ROLES } from '../../utils/constants';
@@ -96,6 +97,11 @@ const Sidebar = ({ isOpen, onClose }) => {
         <NavLink to="/cyberchef" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
           <Binary size={20} />
           <span>CyberChef</span>
+        </NavLink>
+
+        <NavLink to="/revshell" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+          <Cpu size={20} />
+          <span>RevShell Gen</span>
         </NavLink>
 
         {/* --- SECTION ADMIN --- */}

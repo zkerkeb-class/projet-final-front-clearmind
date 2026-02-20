@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Copy, Check, Terminal, Settings, Cpu, Wifi, ChevronRight, Plus, Edit, Trash2, Save, X, Database, AlertTriangle, Search } from 'lucide-react';
 import './ReverseShell.css';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useToast } from '../../components/Toast/ToastContext';
 import api from '../../api/axios';
 import { getUserRole } from '../../utils/auth';
@@ -64,6 +66,23 @@ const ReverseShell = () => {
 
   const formatCode = (codeTemplate) => {
     return codeTemplate.replace(/LHOST/g, ip).replace(/LPORT/g, port);
+  };
+
+  // Détermine le langage de coloration syntaxique selon la catégorie
+  const getLanguageFromCategory = (category) => {
+    const cat = category.toLowerCase();
+    if (cat.includes('python')) return 'python';
+    if (cat.includes('bash') || cat.includes('zsh') || cat.includes('sh') || cat.includes('nc') || cat.includes('netcat') || cat.includes('socat') || cat.includes('telnet')) return 'bash';
+    if (cat.includes('powershell')) return 'powershell';
+    if (cat.includes('php')) return 'php';
+    if (cat.includes('perl')) return 'perl';
+    if (cat.includes('ruby')) return 'ruby';
+    if (cat.includes('java')) return 'java';
+    if (cat.includes('go')) return 'go';
+    if (cat.includes('lua')) return 'lua';
+    if (cat.includes('node') || cat.includes('js')) return 'javascript';
+    if (cat === 'c' || cat.includes('gcc')) return 'c';
+    return 'bash'; // Fallback par défaut
   };
 
   const handleCopy = (code, index) => {
@@ -157,7 +176,7 @@ const ReverseShell = () => {
             <Search size={14} className="search-icon" />
             <input 
               type="text" 
-              placeholder="Filtrer..." 
+              placeholder="FILTRER..." 
               value={categorySearch} 
               onChange={(e) => setCategorySearch(e.target.value)} 
             />
@@ -216,7 +235,14 @@ const ReverseShell = () => {
                   </div>
                 </div>
                 <div className="shell-code">
-                  <code>{formatCode(shell.code)}</code>
+                  <SyntaxHighlighter
+                    language={getLanguageFromCategory(shell.category)}
+                    style={vscDarkPlus}
+                    customStyle={{ margin: 0, padding: 0, background: 'transparent', fontSize: '0.85rem' }}
+                    wrapLongLines={true}
+                  >
+                    {formatCode(shell.code)}
+                  </SyntaxHighlighter>
                 </div>
               </div>
             ))}

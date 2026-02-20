@@ -24,7 +24,7 @@
 
 .wiki-nav-title {
   color: #00d4ff;
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 1rem;
   margin: 0;
   display: flex;
@@ -47,30 +47,40 @@
 .wiki-add-btn:hover { background: rgba(0, 255, 65, 0.1); }
 
 .wiki-search {
-  padding: 10px;
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid #333;
+  border-left: 3px solid #00d4ff;
+  padding: 0 12px;
+  gap: 12px;
+  margin: 15px;
+  transition: all 0.3s ease;
   position: relative;
-  border-bottom: 1px solid #333;
+}
+
+.wiki-search:focus-within {
+  border-color: #ff003c;
+  box-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
 }
 
 .wiki-search input {
+  background: transparent;
+  border: none;
+  color: white;
   width: 100%;
-  background: #000;
-  border: 1px solid #333;
-  color: #fff;
-  padding: 8px 8px 8px 30px;
   font-family: 'JetBrains Mono', monospace;
   outline: none;
-  box-sizing: border-box;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  padding: 10px 0;
 }
 
 .wiki-search input:focus { border-color: #00d4ff; }
 
 .wiki-search-icon {
-  position: absolute;
-  left: 18px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #666;
+  color: #00d4ff;
+  pointer-events: none;
 }
 
 .wiki-list {
@@ -91,7 +101,7 @@
 .wiki-nav-item:hover { background: rgba(255, 255, 255, 0.05); }
 .wiki-nav-item.active { background: rgba(0, 212, 255, 0.1); border-left: 3px solid #00d4ff; }
 
-.wiki-port { color: #ffa500; font-weight: bold; font-family: 'JetBrains Mono'; min-width: 40px; }
+.wiki-port { color: #ffa500; font-weight: bold; font-family: 'JetBrains Mono', monospace; min-width: 40px; }
 .wiki-service { color: #e0e0e0; }
 
 /* --- CONTENT --- */
@@ -113,16 +123,39 @@
   margin-bottom: 20px;
 }
 
-.wiki-content-header h1 { margin: 0; color: #00d4ff; font-family: 'Orbitron'; }
+.wiki-content-header h1 { margin: 0; color: #00d4ff; font-family: 'JetBrains Mono', monospace; }
 
 .wiki-actions { display: flex; gap: 10px; }
-.wiki-action-btn { background: transparent; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px; font-family: 'Orbitron'; font-size: 0.8rem; padding: 5px 10px; border: 1px solid transparent; }
-.wiki-action-btn.edit { color: #ffa500; border-color: #ffa500; }
-.wiki-action-btn.edit:hover { background: rgba(255, 165, 0, 0.1); }
-.wiki-action-btn.delete { color: #ff003c; border-color: #ff003c; }
-.wiki-action-btn.delete:hover { background: rgba(255, 0, 60, 0.1); }
 
-.wiki-placeholder { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #555; font-family: 'Orbitron'; letter-spacing: 2px; text-align: center; }
+.wiki-action-btn { 
+  background: transparent; 
+  border: 1px solid transparent; 
+  cursor: pointer; 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  font-family: 'JetBrains Mono', monospace; 
+  font-size: 0.7rem; 
+  padding: 5px 10px; 
+  color: #888; /* Texte gris comme demandé */
+  transition: all 0.3s ease;
+  border-radius: 2px;
+  font-weight: bold;
+}
+
+.wiki-action-btn.edit { border-color: #ffa500; }
+.wiki-action-btn.edit svg { color: #ffa500; }
+.wiki-action-btn.edit:hover { background: rgba(255, 165, 0, 0.1); box-shadow: 0 0 10px rgba(255, 165, 0, 0.2); }
+
+.wiki-action-btn.delete { border-color: #ff003c; }
+.wiki-action-btn.delete svg { color: #ff003c; }
+.wiki-action-btn.delete:hover { background: rgba(255, 0, 60, 0.1); box-shadow: 0 0 10px rgba(255, 0, 60, 0.2); }
+
+.wiki-action-btn.preview-toggle { border-color: #00d4ff; }
+.wiki-action-btn.preview-toggle svg { color: #00d4ff; }
+.wiki-action-btn.preview-toggle:hover { background: rgba(0, 212, 255, 0.1); box-shadow: 0 0 10px rgba(0, 212, 255, 0.2); }
+
+.wiki-placeholder { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #555; font-family: 'JetBrains Mono', monospace; letter-spacing: 2px; text-align: center; }
 
 /* Markdown styles hérités de BoxDetail ou globaux */
 .markdown-body {
@@ -213,14 +246,6 @@
   font-family: 'JetBrains Mono', monospace;
   white-space: pre-wrap;
   overflow-x: auto;
-}
-
-.wiki-action-btn.preview-toggle {
-  color: #00d4ff;
-  border-color: #00d4ff;
-}
-.wiki-action-btn.preview-toggle:hover {
-  background: rgba(0, 212, 255, 0.1);
 }
 
 /* --- MODAL EDITOR STYLES --- */

@@ -112,51 +112,35 @@ const Boxes = () => {
 
   return (
     <div className="boxes-container">
-      <style>{`
-        @media (max-width: 768px) {
-          .boxes-grid { grid-template-columns: 1fr !important; }
-          .controls-bar { flex-direction: column; }
-          .filters-wrapper { flex-direction: column; width: 100%; }
-        }
-      `}</style>
       <header className="page-header">
         <h2 className="page-title">ACTIVE_<span>BOXES</span></h2>
         
         {/* Affichage conditionnel du bouton selon le rôle */}
         {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
-          <button className="add-btn" onClick={() => setShowModal(true)} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#00d4ff', color: '#000', border: 'none', padding: '8px 16px', fontWeight: 'bold', cursor: 'pointer' }}>
+          <button className="add-btn" onClick={() => setShowModal(true)}>
             <Plus size={18} /> NOUVELLE CIBLE
           </button>
         )}
       </header>
 
       {/* Barre de contrôle : Recherche et Filtres */}
-      <div className="controls-bar" style={{ display: 'flex', gap: '1rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
-        <div className="search-wrapper" style={{ flex: 1, minWidth: '250px', position: 'relative' }}>
-          <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#00d4ff', pointerEvents: 'none', zIndex: 2 }} />
+      <div className="controls-bar">
+        <div className="boxes-search-container">
+          <Search size={20} className="boxes-search-icon" />
           <input 
             type="text" 
-            placeholder="Rechercher une machine (Nom, IP)..." 
+            placeholder="RECHERCHER UNE MACHINE (NOM, IP)..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px 10px 10px 40px',
-              background: 'rgba(0,0,0,0.3)',
-              border: '1px solid #333',
-              color: '#fff',
-              fontFamily: 'monospace',
-              outline: 'none',
-              boxSizing: 'border-box'
-            }}
+            className="boxes-search-input"
           />
         </div>
 
-        <div className="filters-wrapper" style={{ display: 'flex', gap: '1rem' }}>
+        <div className="filters-wrapper">
           <select 
             value={difficultyFilter} 
             onChange={(e) => setDifficultyFilter(e.target.value)}
-            style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff', fontFamily: 'monospace', cursor: 'pointer' }}
+            className="boxes-filter-select"
           >
             <option value="All">DIFFICULTÉ (TOUTES)</option>
             <option value={BOX_DIFFICULTIES.EASY}>EASY</option>
@@ -168,7 +152,7 @@ const Boxes = () => {
           <select 
             value={platformFilter} 
             onChange={(e) => setPlatformFilter(e.target.value)}
-            style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff', fontFamily: 'monospace', cursor: 'pointer' }}
+            className="boxes-filter-select"
           >
             <option value="All">OS (TOUS)</option>
             <option value={TARGET_OS.LINUX}>LINUX</option>
@@ -202,13 +186,13 @@ const Boxes = () => {
             style={{ cursor: 'pointer' }}
           >
             {/* Mapping de tes difficultés réelles */}
-            <div className="box-difficulty" style={{ color: getDifficultyColor(box.difficulty) }}>
+            <div className="box-difficulty" style={{ color: getDifficultyColor(box.difficulty), borderColor: getDifficultyColor(box.difficulty) }}>
               {box.difficulty?.toUpperCase()}
             </div>
             
             <Monitor size={32} color="#00d4ff" />
-            <h3 style={{ marginTop: '1rem' }}>{box.name}</h3>
-            <p style={{ color: '#555', fontSize: '0.8rem' }}>{box.ipAddress} @ {box.platform}</p>
+            <h3>{box.name}</h3>
+            <p>{box.ipAddress} @ {box.platform}</p>
 
             <div className="difficulty-bar">
               <div 
@@ -228,14 +212,7 @@ const Boxes = () => {
                   onClick={(e) => e.stopPropagation()}
                   onChange={(e) => handleStatusChange(box._id, e.target.value)}
                   className="status-select"
-                  style={{
-                    background: 'transparent',
-                    border: '1px solid #333',
-                    color: box.status === BOX_STATUSES.ROOT_FLAG ? '#ff003c' : '#00d4ff',
-                    padding: '5px',
-                    fontSize: '0.8rem',
-                    cursor: 'pointer'
-                  }}
+                  style={{ color: box.status === BOX_STATUSES.ROOT_FLAG ? '#ff003c' : '#00d4ff' }}
                 >
                   <option value={BOX_STATUSES.TODO}>TODO</option>
                   <option value={BOX_STATUSES.IN_PROGRESS}>IN PROGRESS</option>
@@ -248,7 +225,6 @@ const Boxes = () => {
                 <button 
                   onClick={(e) => { e.stopPropagation(); confirmDeleteBox(box._id); }} 
                   className="delete-icon-btn" 
-                  style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
                 >
                   <Trash2 size={16} color="#555" className="hover-red" />
                 </button>

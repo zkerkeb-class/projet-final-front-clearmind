@@ -181,11 +181,20 @@ const BoxDetail = () => {
   return (
     <div className="box-detail-container">
       <style>{`
+        .preview-toggle-btn.source-btn {
+          border: 1px solid #00d4ff;
+          color: #00d4ff;
+        }
+        .preview-toggle-btn.source-btn:hover {
+          background: rgba(0, 212, 255, 0.1);
+          box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
         @media (max-width: 768px) {
           .box-header-detail { flex-direction: column; align-items: flex-start; gap: 1rem; }
           .box-meta { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
           .editor-toolbar { flex-direction: column; align-items: flex-start; gap: 1rem; }
-          .editor-toolbar > div { width: 100%; justify-content: space-between; }
+          .editor-toolbar > div { width: 100%; }
+          .btn-text { display: none; }
         }
       `}</style>
       <button onClick={() => navigate('/boxes')} className="back-btn">
@@ -252,11 +261,11 @@ const BoxDetail = () => {
         <div className="editor-toolbar">
           <span style={{ fontSize: '0.9rem', color: '#fff', fontFamily: 'Orbitron' }}>NOTES_DE_MISSION.md</span>
           <div style={{ display: 'flex', gap: '10px' }}>
-            <button onClick={() => setIsMainPreview(!isMainPreview)} className="preview-toggle-btn">
-              {isMainPreview ? <><Code size={14}/> SOURCE</> : <><Eye size={14}/> APERÇU</>}
+            <button onClick={() => setIsMainPreview(!isMainPreview)} className="preview-toggle-btn source-btn">
+              {isMainPreview ? <><Code size={14}/> <span className="btn-text">SOURCE</span></> : <><Eye size={14}/> <span className="btn-text">APERÇU</span></>}
             </button>
             <button onClick={openNotesModal} className="preview-toggle-btn edit-btn">
-              <Edit size={14}/> ÉDITER
+              <Edit size={14}/> <span className="btn-text">ÉDITER</span>
             </button>
             <button onClick={() => setShowClearConfirm(true)} className="preview-toggle-btn delete-btn">
               <Trash2 size={14}/>

@@ -153,14 +153,14 @@ const Targets = () => {
         <h2 className="page-title">SYSTEM_<span>TARGETS</span></h2>
         
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <div className="search-wrapper" style={{ position: 'relative' }}>
-            <Search size={16} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#555' }} />
+          <div className="targets-search-container">
+            <Search className="targets-search-icon" size={20} />
             <input 
               type="text" 
-              placeholder="Filtrer..." 
+              placeholder="FILTRER..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ padding: '8px 8px 8px 35px', background: '#111', border: '1px solid #333', color: '#fff', borderRadius: '4px' }}
+              className="targets-search-input"
             />
           </div>
 
@@ -197,9 +197,14 @@ const Targets = () => {
           ) : targets.length > 0 ? (
             targets.map((t) => (
             <tr key={t._id} className="target-row">
-              <td><Server size={14} style={{marginRight: '10px', color: '#00d4ff'}} /> {t.name}</td>
-              <td>{t.domain || "N/A"}</td>
-              <td>
+              <td data-label="HOST"><Server size={14} style={{marginRight: '10px', color: '#00d4ff'}} /> {t.name}</td>
+              <td data-label="IP / DOMAINE">
+                <div style={{display: 'flex', flexDirection: 'column'}}>
+                  <span style={{color: '#fff', fontWeight: 'bold'}}>{t.ip}</span>
+                  {t.domain && <span style={{fontSize: '0.75rem', color: '#888'}}>{t.domain}</span>}
+                </div>
+              </td>
+              <td data-label="OS">
                 {t.os}
                 {/* Indicateur de lien vers une Box */}
                 {t.linkedBox && (
@@ -215,12 +220,12 @@ const Targets = () => {
                   </div>
                 )}
               </td>
-              <td style={{color: '#4df3ff', fontSize: '0.85rem'}}>
+              <td data-label="PORTS" style={{color: '#4df3ff', fontSize: '0.85rem'}}>
                 {t.ports && t.ports.length > 0 
                   ? t.ports.map(p => `${p.port} (${p.service || '?'})`).join(', ') 
                   : "N/A"}
               </td>
-              <td>
+              <td data-label="STATUT">
                 <span className="status-badge" style={{
                   backgroundColor: t.status === TARGET_STATUSES.COMPROMISED ? 'rgba(255, 0, 60, 0.2)' : 'rgba(0, 212, 255, 0.1)',
                   color: t.status === TARGET_STATUSES.COMPROMISED ? '#ff003c' : '#00d4ff',
@@ -233,7 +238,7 @@ const Targets = () => {
                 </span>
               </td>
               {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
-                <td>
+                <td data-label="ACTIONS" className="actions-cell">
                   <button onClick={() => openEditModal(t)} style={{background: 'transparent', border: 'none', cursor: 'pointer', marginRight: '10px'}}>
                     <Pencil size={16} color="#ffa500" />
                   </button>
@@ -266,7 +271,7 @@ const Targets = () => {
       {/* MODALE D'AJOUT */}
       {showModal && (
         <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
-          <div className="modal-content" style={{ background: '#0a0a0a', border: '1px solid #00d4ff', padding: '2rem', width: '400px', position: 'relative' }}>
+          <div className="target-modal-content">
             <button onClick={() => setShowModal(false)} style={{ position: 'absolute', top: '10px', right: '10px', background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>
               <X size={24} />
             </button>
@@ -284,7 +289,7 @@ const Targets = () => {
                   <button type="button" onClick={addPortRow} style={{ background: 'transparent', border: '1px solid #00ff41', color: '#00ff41', fontSize: '0.7rem', padding: '2px 6px', cursor: 'pointer' }}>+ AJOUTER</button>
                 </div>
                 {newTarget.ports.map((p, index) => (
-                  <div key={index} style={{ display: 'flex', gap: '5px', marginBottom: '5px' }}>
+                  <div key={index} className="port-row">
                     <input 
                       type="text" 
                       placeholder="Port (80)" 

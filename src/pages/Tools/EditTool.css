@@ -2,22 +2,31 @@
   max-width: 900px;
   margin: 0 auto;
   padding: 40px 20px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .form-header h1 {
   font-family: 'Orbitron', sans-serif;
   color: #fff;
   margin-bottom: 5px;
+  letter-spacing: 2px;
 }
 
-.form-header span { color: #00d4ff; }
+.form-header span { color: #00d4ff; text-shadow: 0 0 10px rgba(0, 212, 255, 0.4); }
 
 .tool-form {
-  background: rgba(10, 10, 10, 0.8);
+  background: rgba(10, 10, 15, 0.8);
   border: 1px solid #333;
   padding: 30px;
-  border-radius: 8px;
+  border-radius: 4px;
   margin-top: 20px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
 }
 
 .form-section { margin-bottom: 30px; }
@@ -27,31 +36,40 @@
   font-size: 0.9rem;
   letter-spacing: 2px;
   border-left: 3px solid #00d4ff;
-  padding-left: 10px;
+  padding-left: 15px;
   margin-bottom: 20px;
+  text-transform: uppercase;
 }
 
 .input-group {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  margin-bottom: 15px;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
-input, textarea, select {
-  background: #111;
-  border: 1px solid #222;
+.edit-tool-container input, .edit-tool-container textarea, .edit-tool-container select {
+  background: #0a0a0a;
+  border: 1px solid #333;
   color: #fff;
-  padding: 12px;
+  padding: 12px 15px;
   border-radius: 4px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: inherit; /* Retour à la police standard pour plus de cohérence */
   width: 100%;
+  transition: all 0.3s ease;
 }
 
-input:focus, textarea:focus, select:focus {
+.edit-tool-container input:focus, .edit-tool-container textarea:focus, .edit-tool-container select:focus {
   border-color: #00d4ff;
   outline: none;
-  box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.15);
+  background: #111;
+}
+
+.edit-tool-container textarea {
+  min-height: 120px;
+  font-family: 'JetBrains Mono', monospace; /* On garde le style code pour les zones de texte */
+  resize: vertical;
 }
 
 select option {
@@ -69,9 +87,18 @@ select option {
   background: transparent;
   color: #00ff41;
   border: 1px solid #00ff41;
-  padding: 5px 10px;
+  padding: 8px 15px;
   cursor: pointer;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  border-radius: 2px;
+}
+
+.add-row-btn:hover {
+  background: rgba(0, 255, 65, 0.1);
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
 }
 
 .save-btn {
@@ -80,19 +107,25 @@ select option {
   color: #000;
   border: none;
   padding: 15px;
-  font-weight: bold;
+  font-weight: 900;
   font-family: 'Orbitron', sans-serif;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 20px;
+  border-radius: 4px;
 }
 
 .save-btn:hover {
-  background: #008eb3;
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+  background: #fff;
+  color: #00d4ff;
+  box-shadow: 0 0 25px rgba(0, 212, 255, 0.5);
+  transform: translateY(-2px);
 }
 
 /* --- RESPONSIVE --- */
@@ -103,5 +136,8 @@ select option {
   
   .command-input-row {
     flex-direction: column;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 10px;
+    border-radius: 4px;
   }
 }

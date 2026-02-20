@@ -119,8 +119,8 @@ const News = () => {
             <h2 className="page-title">THREAT_<span>INTELLIGENCE</span></h2>
         </div>
         
-        <div className="search-bar-container">
-            <Search size={18} className="search-icon" />
+        <div className="news-search-container">
+            <Search size={18} className="news-search-icon" />
             <input 
             type="text" 
             placeholder="Filtrer par mot-clé (CVE, OS, Source)..." 

@@ -41,6 +41,28 @@
   flex-direction: column;
   gap: 0.75rem;
   flex-grow: 1;
+  overflow-y: auto; /* Active le scroll vertical si le contenu dépasse */
+  min-height: 0; /* Indispensable pour que le scroll fonctionne dans un flex container */
+  padding-right: 5px; /* Espace pour éviter que la scrollbar ne colle au texte */
+  margin-bottom: 1rem; /* Espace de sécurité avant le bouton logout */
+}
+
+/* Scrollbar fine et discrète pour le menu */
+.nav-links::-webkit-scrollbar {
+  width: 4px;
+}
+
+.nav-links::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nav-links::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 2px;
+}
+
+.nav-links::-webkit-scrollbar-thumb:hover {
+  background: #00d4ff;
 }
 
 .nav-item {

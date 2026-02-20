@@ -71,7 +71,7 @@ const ToolDetail = () => {
             border: 1px solid #00d4ff;
             color: #00d4ff;
             padding: 1rem 2rem;
-            font-family: 'Courier New', monospace;
+            font-family: 'JetBrains Mono', monospace
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -115,6 +115,7 @@ const ToolDetail = () => {
         @media (max-width: 768px) {
           .tool-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
           .commands-grid { grid-template-columns: 1fr !important; }
+          .btn-text { display: none; }
         }
         .edit-tool-btn {
           display: flex;
@@ -122,16 +123,20 @@ const ToolDetail = () => {
           gap: 8px;
           background: transparent;
           border: 1px solid #ffa500;
-          color: #ffa500;
-          padding: 5px 12px;
+          color: #888;
+          padding: 5px 10px;
           cursor: pointer;
           font-weight: bold;
-          font-size: 0.8rem;
-          transition: all 0.2s;
+          font-size: 0.7rem;
+          font-family: 'JetBrains Mono', monospace;
+          transition: all 0.3s ease;
+          border-radius: 2px;
         }
+        .edit-tool-btn svg { color: #ffa500; }
         .edit-tool-btn:hover {
           background: rgba(255, 165, 0, 0.1);
           box-shadow: 0 0 10px rgba(255, 165, 0, 0.2);
+          color: #fff;
         }
       `}</style>
       <button onClick={() => navigate(-1)} className="back-btn">
@@ -149,7 +154,7 @@ const ToolDetail = () => {
               onClick={() => navigate(`/tools/edit/${tool.name}`)} 
               className="edit-tool-btn"
             >
-              <Pencil size={14} /> ÉDITER
+              <Pencil size={14} /> <span className="btn-text">ÉDITER</span>
             </button>
           )}
           {tool.link && (

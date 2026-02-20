@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// Instance Axios avec l'URL de base de ton API
+// Instance Axios avec l'URL du backend
 const api = axios.create({
   baseURL: 'http://localhost:5000/api/v1'
 });

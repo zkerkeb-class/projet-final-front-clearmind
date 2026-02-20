@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
-import { Copy, Terminal, Search, Plus, AlertTriangle, X, Pencil, Trash2 } from 'lucide-react';
+import { Copy, Search, Plus, AlertTriangle, X, Pencil, Trash2 } from 'lucide-react';
 import './Payloads.css';
 import { PAYLOAD_SEVERITIES, ROLES } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
@@ -103,12 +103,12 @@ const Payloads = () => {
         )}
       </header>
 
-      <div className="search-bar-container">
-        <Search className="search-icon" size={20} />
+      <div className="payload-search-container">
+        <Search className="payload-search-icon" size={20} />
         <input 
           type="text" 
           placeholder="RECHERCHER UN VECTEUR D'ATTAQUE (XSS, SQLI, ETC...)" 
-          className="search-input"
+          className="payload-search-input"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)} // Mise à jour de l'état
         />

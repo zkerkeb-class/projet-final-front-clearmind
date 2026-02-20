@@ -28,41 +28,41 @@
 
 .add-btn:hover { background: #00d4ff; color: #000; box-shadow: 0 0 15px #00d4ff; }
 
-/* Container de la barre de recherche */
-.search-bar-container {
+/* Container de la barre de recherche (Renommé pour éviter les conflits) */
+.payload-search-container {
   display: flex;
   align-items: center;
   background: rgba(0, 0, 0, 0.6);
   border: 1px solid #333;
   border-left: 3px solid #00d4ff; /* Rappel du style des inputs login */
-  padding: 0;
+  padding: 0 12px; /* Ajuste ici pour décaler l'ensemble (icône + texte) */
+  gap: 12px; /* Ajuste ici pour l'espace entre l'icône et le texte */
   margin-bottom: 2.5rem;
   transition: all 0.3s ease;
   position: relative;
 }
 
-.search-bar-container:focus-within {
+.payload-search-container:focus-within {
   border-color: #ff003c; /* Devient rose au focus */
   box-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
 }
 
-.search-icon {
-  position: absolute;
-  left: 10px;
+.payload-search-icon {
   color: #00d4ff;
   pointer-events: none;
+  /* Plus de position absolute ici, l'icône suit le flux flexbox */
 }
 
-.search-input {
+.payload-search-input {
   background: transparent;
   border: none;
   color: white;
   width: 100%;
-  font-family: 'monospace';
+  font-family: 'JetBrains Mono', monospace;
   outline: none;
   font-size: 0.9rem;
   letter-spacing: 1px;
-  padding: 0.8rem 1rem 0.8rem 3.5rem;
+  padding: 0.8rem 0; /* On retire le padding gauche artificiel */
 }
 
 .search-input::placeholder {
@@ -84,6 +84,8 @@
   padding: 1.5rem;
   position: relative;
   transition: 0.3s;
+  display: flex;
+  flex-direction: column;
 }
 
 .payload-card:hover { border-color: #ff003c; box-shadow: 0 0 10px rgba(255, 0, 60, 0.1); }
@@ -107,7 +109,7 @@
   padding: 1rem;
   border-radius: 4px;
   position: relative;
-  font-family: monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 0.9rem;
   border: 1px solid #222;
   overflow-x: auto;
@@ -126,7 +128,8 @@
 .copy-btn:hover { color: #00d4ff; }
 
 .payload-footer {
-  margin-top: 1rem;
+  margin-top: auto; /* Pousse le footer tout en bas de la carte */
+  padding-top: 1rem; /* Garde un espacement minimum avec le contenu au-dessus */
   display: flex;
   justify-content: flex-end;
   font-size: 0.8rem;
@@ -142,5 +145,21 @@
   
   .payload-grid {
     grid-template-columns: 1fr; /* Une seule colonne sur mobile */
+  }
+
+  .payload-card {
+    padding: 1rem;
+  }
+
+  .payload-name {
+    font-size: 1rem;
+    word-break: break-word; /* Coupe les mots trop longs */
+    padding-right: 50px; /* Évite le chevauchement avec les boutons d'action */
+    margin-top: 1.2rem; /* Espace supplémentaire pour le badge */
+  }
+
+  .code-box {
+    font-size: 0.75rem; /* Code plus petit sur mobile */
+    padding: 0.8rem;
   }
 }

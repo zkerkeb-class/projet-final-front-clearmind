@@ -196,7 +196,7 @@ const Wiki = () => {
           <Search size={14} className="wiki-search-icon"/>
           <input 
             type="text" 
-            placeholder="Rechercher (ex: 80, smb)..." 
+            placeholder="RECHERCHER (EX: 80, SMB)..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />

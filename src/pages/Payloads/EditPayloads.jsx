@@ -85,17 +85,17 @@ const EditPayloads = () => {
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>TITRE DU PAYLOAD</label>
-          <input type="text" className="form-input" required value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="Ex: Reverse Shell Python" />
+          <input type="text" className="edit-payload-input" required value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="Ex: Reverse Shell Python" />
         </div>
 
         <div className="form-group split-group">
           <div>
             <label>CATÉGORIE</label>
-            <input type="text" className="form-input" required value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} placeholder="Ex: RCE, XSS, SQLi" />
+            <input type="text" className="edit-payload-input" required value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} placeholder="Ex: RCE, XSS, SQLi" />
           </div>
           <div>
             <label>SÉVÉRITÉ</label>
-            <select className="form-select" value={formData.severity} onChange={(e) => setFormData({...formData, severity: e.target.value})}>
+            <select className="edit-payload-select" value={formData.severity} onChange={(e) => setFormData({...formData, severity: e.target.value})}>
               <option value={PAYLOAD_SEVERITIES.LOW}>LOW</option>
               <option value={PAYLOAD_SEVERITIES.MEDIUM}>MEDIUM</option>
               <option value={PAYLOAD_SEVERITIES.HIGH}>HIGH</option>
@@ -106,7 +106,7 @@ const EditPayloads = () => {
 
         <div className="form-group">
           <label>CODE / COMMANDE</label>
-          <textarea className="form-textarea" required value={formData.code} onChange={(e) => setFormData({...formData, code: e.target.value})} placeholder="# Insérez votre code ici..." spellCheck="false"></textarea>
+          <textarea className="edit-payload-textarea" required value={formData.code} onChange={(e) => setFormData({...formData, code: e.target.value})} placeholder="# Insérez votre code ici..." spellCheck="false"></textarea>
         </div>
 
         <div className="form-actions">

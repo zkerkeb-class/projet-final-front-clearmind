@@ -1,11 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Terminal, Shield, Database, Target, BookOpen, Cpu, ChevronRight } from 'lucide-react';
+import { Terminal, Shield, Database, Target, BookOpen, Cpu, ChevronRight, Activity, Users, Globe, MessageSquare, Star } from 'lucide-react';
 import './Landing.css';
 
 const Landing = () => {
+  const [typedText, setTypedText] = useState('');
+  const fullText = "PENTEST_OPERATIONS";
+
+  useEffect(() => {
+    let index = 0;
+    const timer = setInterval(() => {
+      setTypedText(fullText.slice(0, index));
+      index++;
+      if (index > fullText.length) clearInterval(timer);
+    }, 100);
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleMouseMove = (e) => {
+    const x = (window.innerWidth - e.pageX * 2) / 50;
+    const y = (window.innerHeight - e.pageY * 2) / 50;
+    document.documentElement.style.setProperty('--mouse-x', `${x}px`);
+    document.documentElement.style.setProperty('--mouse-y', `${y}px`);
+  };
+
   return (
-    <div className="landing-container">
+    <div className="landing-container" onMouseMove={handleMouseMove}>
       <nav className="landing-nav">
         <div className="landing-logo">
           <Terminal size={24} />
@@ -20,7 +40,10 @@ const Landing = () => {
 
       <header className="landing-hero">
         <div className="hero-content">
-          <h1 className="hero-title">CENTRALIZED<br/><span>PENTEST_OPERATIONS</span></h1>
+          <h1 className="hero-title">
+            CENTRALIZED<br/>
+            <span>{typedText}</span><span className="cursor">_</span>
+          </h1>
           <p className="hero-subtitle">
             La plateforme ultime pour gérer vos audits de sécurité. 
             Centralisez vos payloads, suivez vos cibles et documentez vos exploits en temps réel.
@@ -61,6 +84,63 @@ const Landing = () => {
           <Cpu size={40} className="feature-icon" />
           <h3>TOOL_ARSENAL</h3>
           <p>Gestionnaire d'outils de pentest avec fiches techniques et commandes rapides prêtes à l'emploi.</p>
+        </div>
+      </section>
+
+      <section className="stats-section">
+        <div className="stat-item">
+          <Activity size={32} className="stat-icon" />
+          <div className="stat-info">
+            <span className="stat-value">99.9%</span>
+            <span className="stat-label">SYSTEM_UPTIME</span>
+          </div>
+        </div>
+        <div className="stat-item">
+          <Database size={32} className="stat-icon" />
+          <div className="stat-info">
+            <span className="stat-value">5,000+</span>
+            <span className="stat-label">PAYLOADS_INDEXED</span>
+          </div>
+        </div>
+        <div className="stat-item">
+          <Users size={32} className="stat-icon" />
+          <div className="stat-info">
+            <span className="stat-value">120+</span>
+            <span className="stat-label">ACTIVE_OPERATORS</span>
+          </div>
+        </div>
+        <div className="stat-item">
+          <Globe size={32} className="stat-icon" />
+          <div className="stat-info">
+            <span className="stat-value">GLOBAL</span>
+            <span className="stat-label">THREAT_INTEL</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="testimonials-section">
+        <h2 className="section-title">RETOURS_<span>OPÉRATEURS</span></h2>
+        <div className="testimonials-grid">
+          <div className="testimonial-card">
+            <div className="testimonial-header">
+              <MessageSquare size={24} className="quote-icon" />
+              <div className="stars">
+                {[...Array(5)].map((_, i) => <Star key={i} size={12} fill="#00d4ff" color="#00d4ff" />)}
+              </div>
+            </div>
+            <p>"L'outil ultime pour centraliser nos engagements Red Team. Le module de reporting est un gain de temps phénoménal."</p>
+            <div className="testimonial-author">- Sarah C., Lead Pentester</div>
+          </div>
+          <div className="testimonial-card">
+            <div className="testimonial-header">
+              <MessageSquare size={24} className="quote-icon" />
+              <div className="stars">
+                {[...Array(5)].map((_, i) => <Star key={i} size={12} fill="#00d4ff" color="#00d4ff" />)}
+              </div>
+            </div>
+            <p>"Interface fluide, sombre et efficace. La base de payloads partagée a considérablement accéléré nos phases d'exploitation."</p>
+            <div className="testimonial-author">- Marc D., Security Researcher</div>
+          </div>
         </div>
       </section>
 

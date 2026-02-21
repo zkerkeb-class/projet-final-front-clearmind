@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Terminal, Users, Code, Shield, ChevronLeft } from 'lucide-react';
+import { Terminal, Users, Code, Shield, ChevronLeft, Github, Linkedin, Database, Server, Cpu, Globe } from 'lucide-react';
 import './About.css';
 
 const About = () => {
@@ -37,6 +37,10 @@ const About = () => {
               Architecte de l'infrastructure et développeur principal. 
               Passionné par l'automatisation et le développement d'outils offensifs.
             </p>
+            <div className="creator-socials">
+              <a href="#" className="social-link"><Github size={18} /></a>
+              <a href="#" className="social-link"><Linkedin size={18} /></a>
+            </div>
           </div>
 
           <div className="creator-card">
@@ -49,6 +53,36 @@ const About = () => {
               Expert en méthodologies d'intrusion et analyse de vulnérabilités. 
               Garant de la pertinence technique des outils intégrés.
             </p>
+            <div className="creator-socials">
+              <a href="#" className="social-link"><Github size={18} /></a>
+              <a href="#" className="social-link"><Linkedin size={18} /></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="tech-stack-section">
+        <h2 className="section-title"><Cpu size={24} /> ARCHITECTURE_SYSTÈME</h2>
+        <div className="tech-grid">
+          <div className="tech-card">
+            <Globe size={32} className="tech-icon" />
+            <h4>FRONTEND_CORE</h4>
+            <p className="blurred-text" title="CLASSIFIED">Visual Basic 6 GUI Interface</p>
+          </div>
+          <div className="tech-card">
+            <Server size={32} className="tech-icon" />
+            <h4>BACKEND_API</h4>
+            <p className="blurred-text" title="CLASSIFIED">Windows 95 Batch Scripts</p>
+          </div>
+          <div className="tech-card">
+            <Database size={32} className="tech-icon" />
+            <h4>DATA_PERSISTENCE</h4>
+            <p className="blurred-text" title="CLASSIFIED">Post-it notes on a wall</p>
+          </div>
+          <div className="tech-card">
+            <Shield size={32} className="tech-icon" />
+            <h4>SECURITY_LAYER</h4>
+            <p className="blurred-text" title="CLASSIFIED">We asked nicely not to hack us</p>
           </div>
         </div>
       </section>

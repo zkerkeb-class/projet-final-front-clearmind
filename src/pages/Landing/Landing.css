@@ -87,6 +87,18 @@
   text-shadow: 0 0 20px rgba(255, 0, 60, 0.4);
 }
 
+/* Animation Curseur Typewriter */
+.cursor {
+  display: inline-block;
+  color: #ff003c;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 .hero-subtitle {
   color: #aaa;
   font-size: 1.1rem;
@@ -152,6 +164,8 @@
   color: #ff003c;
   box-shadow: 0 0 50px rgba(255, 0, 60, 0.1);
   animation: pulse 4s infinite ease-in-out;
+  transform: translate(var(--mouse-x), var(--mouse-y));
+  transition: transform 0.1s ease-out;
 }
 
 @keyframes pulse {
@@ -199,6 +213,105 @@
   color: #888;
   font-size: 0.9rem;
   line-height: 1.5;
+}
+
+/* STATS SECTION */
+.stats-section {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 4rem 2rem;
+  background: rgba(0, 212, 255, 0.02);
+  border-top: 1px solid rgba(0, 212, 255, 0.1);
+  border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+  gap: 2rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.stat-icon {
+  color: #ff003c;
+  filter: drop-shadow(0 0 5px rgba(255, 0, 60, 0.4));
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: #00d4ff;
+  letter-spacing: 1px;
+}
+
+/* TESTIMONIALS */
+.testimonials-section {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-title {
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  margin-bottom: 3rem;
+  color: #fff;
+}
+
+.section-title span {
+  color: #00d4ff;
+  text-shadow: 0 0 10px #00d4ff;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.testimonial-card {
+  background: rgba(15, 15, 20, 0.6);
+  border: 1px solid #333;
+  padding: 2rem;
+  border-radius: 4px;
+  position: relative;
+}
+
+.testimonial-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.quote-icon { color: #333; }
+
+.testimonial-card p {
+  color: #ccc;
+  font-style: italic;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.testimonial-author {
+  color: #00d4ff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  text-align: right;
 }
 
 /* FOOTER */
@@ -256,5 +369,15 @@
   .visual-circle {
     width: 250px;
     height: 250px;
+  }
+
+  .stats-section {
+    flex-direction: column;
+    align-items: center;
+    text-align: left;
+  }
+  
+  .stat-item {
+    width: 200px; /* Alignement propre sur mobile */
   }
 }

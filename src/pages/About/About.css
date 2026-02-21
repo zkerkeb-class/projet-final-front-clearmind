@@ -146,6 +146,80 @@
   font-size: 0.9rem;
 }
 
+/* SOCIAL LINKS */
+.creator-socials {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.social-link {
+  color: #666;
+  transition: 0.3s;
+}
+
+.social-link:hover {
+  color: #00d4ff;
+  transform: translateY(-2px);
+}
+
+/* TECH STACK SECTION */
+.tech-stack-section {
+  padding: 2rem 2rem 4rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+}
+
+.tech-card {
+  background: rgba(10, 10, 15, 0.4);
+  border: 1px solid #222;
+  padding: 2rem;
+  text-align: center;
+  transition: 0.3s;
+  border-radius: 4px;
+}
+
+.tech-card:hover {
+  border-color: #00d4ff;
+  background: rgba(0, 212, 255, 0.02);
+  transform: translateY(-5px);
+}
+
+.tech-icon {
+  color: #00d4ff;
+  margin-bottom: 1rem;
+}
+
+.tech-card h4 {
+  font-family: 'Orbitron', sans-serif;
+  color: #fff;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.tech-card p {
+  color: #888;
+  font-size: 0.8rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.blurred-text {
+  color: #00d4ff !important;
+  filter: blur(5px);
+  user-select: none;
+  cursor: not-allowed;
+  text-shadow: 0 0 10px #00d4ff;
+}
+
 /* MISSION SECTION */
 .mission-section {
   background: rgba(10, 10, 10, 0.5);

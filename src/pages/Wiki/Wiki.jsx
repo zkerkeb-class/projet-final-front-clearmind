@@ -229,13 +229,13 @@ const Wiki = () => {
                   onClick={() => setIsMainPreview(!isMainPreview)} 
                   className="wiki-action-btn preview-toggle"
                 >
-                  {isMainPreview ? <><Code size={16}/> <span className="btn-text">SOURCE</span></> : <><Eye size={16}/> <span className="btn-text">APERÇU</span></>}
+                  {isMainPreview ? <><Code size={14}/> <span className="btn-text">SOURCE</span></> : <><Eye size={14}/> <span className="btn-text">APERÇU</span></>}
                 </button>
 
                 {canEdit && (
                   <>
-                  <button onClick={openEditModal} className="wiki-action-btn edit"><Edit size={16}/> <span className="btn-text">ÉDITER</span></button>
-                  <button onClick={() => setShowDeleteConfirm(true)} className="wiki-action-btn delete"><Trash2 size={16}/></button>
+                  <button onClick={openEditModal} className="wiki-action-btn edit"><Edit size={14}/> <span className="btn-text">ÉDITER</span></button>
+                  <button onClick={() => setShowDeleteConfirm(true)} className="wiki-action-btn delete"><Trash2 size={14}/></button>
                   </>
                 )}
               </div>

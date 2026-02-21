@@ -178,3 +178,14 @@
   font-weight: bold;
   margin-left: 5px;
 }
+
+@media (max-width: 480px) {
+  .signup-card {
+    width: 90% !important;
+    padding: 1.5rem !important;
+  }
+
+  .signup-title {
+    font-size: 1.5rem;
+  }
+}

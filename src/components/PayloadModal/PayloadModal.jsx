@@ -33,13 +33,6 @@ const PayloadModal = ({ isOpen, onClose, onPayloadAdded }) => {
 
   return (
     <div className="modal-overlay">
-      <style>{`
-        .modal-row { display: flex; gap: 1rem; }
-        @media (max-width: 600px) {
-          .modal-content { width: 95% !important; padding: 1.5rem !important; }
-          .modal-row { flex-direction: column; gap: 1rem; }
-        }
-      `}</style>
       <div className="modal-content">
         <div className="modal-header">
           <h2 className="modal-title">NOUVEAU_<span>PAYLOAD</span></h2>
@@ -60,7 +53,7 @@ const PayloadModal = ({ isOpen, onClose, onPayloadAdded }) => {
           </div>
 
           <div className="modal-row">
-            <div className="input-group" style={{ flex: 1 }}>
+            <div className="input-group">
               <label>Catégorie</label>
               <select 
                 className="modal-select"
@@ -80,7 +73,7 @@ const PayloadModal = ({ isOpen, onClose, onPayloadAdded }) => {
                 <option value="Other">Other</option>
               </select>
             </div>
-            <div className="input-group" style={{flex: 1}}>
+            <div className="input-group">
               <label>Sévérité</label>
               <select 
                 className="modal-select"

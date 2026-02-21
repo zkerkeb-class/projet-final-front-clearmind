@@ -147,7 +147,7 @@ const Targets = () => {
       <header className="page-header">
         <h2 className="page-title">SYSTEM_<span>TARGETS</span></h2>
         
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <div className="header-actions">
           <div className="targets-search-container">
             <Search className="targets-search-icon" size={20} />
             <input 
@@ -192,11 +192,11 @@ const Targets = () => {
           ) : targets.length > 0 ? (
             targets.map((t) => (
             <tr key={t._id} className="target-row">
-              <td data-label="HOST"><Server size={14} style={{marginRight: '10px', color: '#00d4ff'}} /> {t.name}</td>
+              <td data-label="HOST"><Server size={14} className="target-icon" /> {t.name}</td>
               <td data-label="IP / DOMAINE">
-                <div style={{display: 'flex', flexDirection: 'column'}}>
-                  <span style={{color: '#fff', fontWeight: 'bold'}}>{t.ip}</span>
-                  {t.domain && <span style={{fontSize: '0.75rem', color: '#888'}}>{t.domain}</span>}
+                <div className="ip-domain-wrapper">
+                  <span className="ip-text">{t.ip}</span>
+                  {t.domain && <span className="domain-text">{t.domain}</span>}
                 </div>
               </td>
               <td data-label="OS">
@@ -208,14 +208,14 @@ const Targets = () => {
                       e.stopPropagation();
                       navigate(`/boxes/${t.linkedBox._id}`);
                     }}
-                    style={{ display: 'inline-flex', alignItems: 'center', marginLeft: '8px', cursor: 'pointer', color: '#ffa500', fontSize: '0.7rem', border: '1px solid #ffa500', padding: '2px 4px', borderRadius: '3px' }}
+                    className="linked-box-badge"
                     title={`Lié à la box : ${t.linkedBox.name}`}
                   >
-                    <Box size={10} style={{ marginRight: '3px' }} /> LINKED
+                    <Box size={10} className="linked-icon" /> LINKED
                   </div>
                 )}
               </td>
-              <td data-label="PORTS" style={{color: '#4df3ff', fontSize: '0.85rem'}}>
+              <td data-label="PORTS" className="ports-cell">
                 {t.ports && t.ports.length > 0 
                   ? t.ports.map(p => `${p.port} (${p.service || '?'})`).join(', ') 
                   : "N/A"}
@@ -234,10 +234,10 @@ const Targets = () => {
               </td>
               {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
                 <td data-label="ACTIONS" className="actions-cell">
-                  <button onClick={() => openEditModal(t)} style={{background: 'transparent', border: 'none', cursor: 'pointer', marginRight: '10px'}}>
+                  <button onClick={() => openEditModal(t)} className="action-btn">
                     <Pencil size={16} color="#ffa500" />
                   </button>
-                  <button onClick={() => confirmDeleteTarget(t._id)} style={{background: 'transparent', border: 'none', cursor: 'pointer'}}>
+                  <button onClick={() => confirmDeleteTarget(t._id)} className="action-btn">
                     <Trash2 size={16} color="#555" className="hover-red" />
                   </button>
                 </td>
@@ -246,7 +246,7 @@ const Targets = () => {
           ))
           ) : (
             <tr>
-              <td colSpan="6" style={{ textAlign: 'center', padding: '3rem', color: '#666', fontFamily: 'Orbitron' }}>
+              <td colSpan="6" className="empty-state-row">
                 AUCUNE CIBLE DÉTECTÉE DANS LE SCOPE
               </td>
             </tr>
@@ -256,10 +256,10 @@ const Targets = () => {
 
       {/* PAGINATION */}
       {!loading && totalPages > 1 && (
-        <div className="pagination-controls" style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '2rem' }}>
-          <button disabled={page === 1} onClick={() => setPage(p => p - 1)} style={{ background: 'transparent', border: '1px solid #333', color: page === 1 ? '#555' : '#fff', padding: '5px 10px', cursor: page === 1 ? 'not-allowed' : 'pointer' }}><ChevronLeft /></button>
-          <span style={{ color: '#fff', alignSelf: 'center' }}>PAGE {page} / {totalPages}</span>
-          <button disabled={page === totalPages} onClick={() => setPage(p => p + 1)} style={{ background: 'transparent', border: '1px solid #333', color: page === totalPages ? '#555' : '#fff', padding: '5px 10px', cursor: page === totalPages ? 'not-allowed' : 'pointer' }}><ChevronRight /></button>
+        <div className="pagination-controls">
+          <button disabled={page === 1} onClick={() => setPage(p => p - 1)} className="pagination-btn"><ChevronLeft /></button>
+          <span className="pagination-info">PAGE {page} / {totalPages}</span>
+          <button disabled={page === totalPages} onClick={() => setPage(p => p + 1)} className="pagination-btn"><ChevronRight /></button>
         </div>
       )}
 

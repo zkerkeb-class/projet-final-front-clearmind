@@ -220,3 +220,37 @@
   font-weight: bold;
   cursor: pointer;
 }
+
+/* --- CLEANUP STYLES --- */
+.empty-state-msg {
+  width: 100%;
+  text-align: center;
+  color: #888;
+  margin-top: 2rem;
+  grid-column: 1 / -1;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.pagination-btn {
+  background: transparent;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.pagination-btn:disabled {
+  color: #555;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  color: #fff;
+  align-self: center;
+}

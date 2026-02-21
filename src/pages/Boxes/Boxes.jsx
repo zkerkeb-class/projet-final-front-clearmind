@@ -233,16 +233,16 @@ const Boxes = () => {
             </div>
           </div>
         )) : (
-          <div style={{ width: '100%', textAlign: 'center', color: '#888', marginTop: '2rem', gridColumn: '1 / -1' }}>AUCUNE MACHINE DÉTECTÉE AVEC CES PARAMÈTRES.</div>
+          <div className="empty-state-msg">AUCUNE MACHINE DÉTECTÉE AVEC CES PARAMÈTRES.</div>
         )}
       </div>
 
       {/* PAGINATION */}
       {!loading && totalPages > 1 && (
-        <div className="pagination-controls" style={{ display: 'flex', justifyContent: 'center', gap: '1rem', marginTop: '2rem' }}>
-          <button disabled={page === 1} onClick={() => setPage(p => p - 1)} style={{ background: 'transparent', border: '1px solid #333', color: page === 1 ? '#555' : '#fff', padding: '5px 10px', cursor: page === 1 ? 'not-allowed' : 'pointer' }}><ChevronLeft /></button>
-          <span style={{ color: '#fff', alignSelf: 'center' }}>PAGE {page} / {totalPages}</span>
-          <button disabled={page === totalPages} onClick={() => setPage(p => p + 1)} style={{ background: 'transparent', border: '1px solid #333', color: page === totalPages ? '#555' : '#fff', padding: '5px 10px', cursor: page === totalPages ? 'not-allowed' : 'pointer' }}><ChevronRight /></button>
+        <div className="pagination-controls">
+          <button disabled={page === 1} onClick={() => setPage(p => p - 1)} className="pagination-btn"><ChevronLeft /></button>
+          <span className="pagination-info">PAGE {page} / {totalPages}</span>
+          <button disabled={page === totalPages} onClick={() => setPage(p => p + 1)} className="pagination-btn"><ChevronRight /></button>
         </div>
       )}
 

@@ -247,3 +247,94 @@
   font-weight: bold;
   cursor: pointer;
 }
+
+/* --- CLEANUP STYLES --- */
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.target-icon {
+  margin-right: 10px;
+  color: #00d4ff;
+}
+
+.ip-domain-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.ip-text {
+  color: #fff;
+  font-weight: bold;
+}
+
+.domain-text {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.linked-box-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  cursor: pointer;
+  color: #ffa500;
+  font-size: 0.7rem;
+  border: 1px solid #ffa500;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.linked-icon {
+  margin-right: 3px;
+}
+
+.ports-cell {
+  color: #4df3ff;
+  font-size: 0.85rem;
+}
+
+.action-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.action-btn:last-child {
+  margin-right: 0;
+}
+
+.empty-state-row {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.pagination-btn {
+  background: transparent;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.pagination-btn:disabled {
+  color: #555;
+  cursor: not-allowed;
+}
+
+.pagination-info {
+  color: #fff;
+  align-self: center;
+}

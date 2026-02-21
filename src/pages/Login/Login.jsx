@@ -61,8 +61,8 @@ const Login = () => {
             Initialiser la session
           </button>
 
-          <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.8rem', color: '#666' }}>
-            Pas de compte ? <Link to="/signup" style={{ color: '#00d4ff', textDecoration: 'none', fontWeight: 'bold', marginLeft: '5px' }}>Créer un accès</Link>
+          <div className="auth-footer">
+            Pas de compte ? <Link to="/signup" className="auth-link">Créer un accès</Link>
           </div>
         </form>
       </div>

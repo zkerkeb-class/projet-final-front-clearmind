@@ -115,6 +115,10 @@
   color: #fff;
 }
 
+.file-input-icon {
+  margin-left: auto;
+}
+
 .signup-button {
   width: 100%;
   background: transparent;
@@ -160,3 +164,17 @@
 .req-item { display: inline-block; }
 .req-item.valid { color: #00ff41; text-shadow: 0 0 5px #00ff41; }
 .req-item.invalid { color: #555; }
+
+.auth-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.auth-link {
+  color: #00d4ff;
+  text-decoration: none;
+  font-weight: bold;
+  margin-left: 5px;
+}

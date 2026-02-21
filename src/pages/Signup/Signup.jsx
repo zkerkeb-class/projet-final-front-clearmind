@@ -157,7 +157,7 @@ const Signup = () => {
               onChange={handleFileChange} 
               style={{ display: 'none' }} 
             />
-            {file && <Image size={20} color="#00d4ff" style={{marginLeft: 'auto'}} />}
+            {file && <Image size={20} color="#00d4ff" className="file-input-icon" />}
           </div>
 
           {error && (
@@ -172,8 +172,8 @@ const Signup = () => {
           </button>
         </form>
 
-        <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.8rem', color: '#666' }}>
-          Déjà un accès ? <Link to="/login" style={{ color: '#00d4ff', textDecoration: 'none', fontWeight: 'bold', marginLeft: '5px' }}>Se connecter</Link>
+        <div className="auth-footer">
+          Déjà un accès ? <Link to="/login" className="auth-link">Se connecter</Link>
         </div>
       </div>
     </div>

@@ -134,7 +134,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         {userRole === ROLES.ADMIN && (
           <NavLink to="/admin" onClick={handleNavClick} className={({ isActive }) => isActive ? "nav-item admin-item active" : "nav-item admin-item"}>
             <ShieldCheck size={20} color="#ff003c" />
-            <span style={{ color: '#ff003c', fontWeight: 'bold' }}>PANEL ADMIN</span>
+            <span className="admin-label">PANEL ADMIN</span>
           </NavLink>
         )}
       </nav>

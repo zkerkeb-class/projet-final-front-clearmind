@@ -278,10 +278,10 @@ const Targets = () => {
               <input type="text" placeholder="Domaine (ex: corp.local)" value={newTarget.domain} onChange={e => setNewTarget({...newTarget, domain: e.target.value})} className="modal-form-input" />
               
               {/* Gestion des Ports en Tableau */}
-              <div style={{ background: '#111', padding: '10px', border: '1px solid #333', borderRadius: '4px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <label style={{ color: '#00d4ff', fontSize: '0.8rem', fontFamily: 'Orbitron' }}>PORTS & SERVICES</label>
-                  <button type="button" onClick={addPortRow} style={{ background: 'transparent', border: '1px solid #00ff41', color: '#00ff41', fontSize: '0.7rem', padding: '2px 6px', cursor: 'pointer' }}>+ AJOUTER</button>
+              <div className="ports-manager">
+                <div className="ports-header">
+                  <label>PORTS & SERVICES</label>
+                  <button type="button" onClick={addPortRow} className="add-port-btn">+ AJOUTER</button>
                 </div>
                 {newTarget.ports.map((p, index) => (
                   <div key={index} className="port-row">
@@ -290,16 +290,16 @@ const Targets = () => {
                       placeholder="Port (80)" 
                       value={p.port} 
                       onChange={(e) => handlePortChange(index, 'port', e.target.value)}
-                      style={{ flex: 1, padding: '8px', background: '#0a0a0a', border: '1px solid #333', color: '#fff' }} 
+                      className="port-input flex-1"
                     />
                     <input 
                       type="text" 
                       placeholder="Service (HTTP)" 
                       value={p.service} 
                       onChange={(e) => handlePortChange(index, 'service', e.target.value)}
-                      style={{ flex: 2, padding: '8px', background: '#0a0a0a', border: '1px solid #333', color: '#fff' }} 
+                      className="port-input flex-2"
                     />
-                    <button type="button" onClick={() => removePortRow(index)} style={{ background: 'transparent', border: 'none', color: '#ff003c', cursor: 'pointer' }}><Trash2 size={14}/></button>
+                    <button type="button" onClick={() => removePortRow(index)} className="remove-port-btn"><Trash2 size={14}/></button>
                   </div>
                 ))}
               </div>

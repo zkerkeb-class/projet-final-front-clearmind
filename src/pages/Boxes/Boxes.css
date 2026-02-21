@@ -138,6 +138,11 @@
   border-radius: 4px;
 }
 
+.boxes-container .boxes-filter-select option {
+  background: #111;
+  color: #fff;
+}
+
 .boxes-container .boxes-filter-select:hover {
   background: rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 255, 255, 0.2);
@@ -246,6 +251,11 @@
   transition: color 0.3s;
 }
 
+.boxes-container .status-select option {
+  background: #111;
+  color: #fff;
+}
+
 .boxes-container .delete-icon-btn {
   background: transparent;
   border: none;
@@ -308,6 +318,11 @@
   outline: none;
   transition: all 0.2s ease;
   box-sizing: border-box;
+}
+
+.boxes-container .modal-select option {
+  background: #111;
+  color: #fff;
 }
 
 .boxes-container .modal-input::placeholder {

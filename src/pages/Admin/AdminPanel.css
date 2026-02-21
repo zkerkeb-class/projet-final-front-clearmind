@@ -185,6 +185,11 @@
   font-size: 0.8rem;
 }
 
+.admin-container .role-select option {
+  background: #111;
+  color: #fff;
+}
+
 .admin-container .role-select:focus {
   border-color: #00d4ff;
   background: rgba(0, 212, 255, 0.05);
@@ -304,6 +309,11 @@
   font-family: 'JetBrains Mono', monospace;
   outline: none;
   transition: all 0.2s ease;
+}
+
+.admin-container .admin-modal select option {
+  background: #111;
+  color: #fff;
 }
 
 .admin-container .admin-modal input::placeholder {

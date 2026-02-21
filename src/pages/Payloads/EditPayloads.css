@@ -77,6 +77,11 @@
   outline: none;
 }
 
+.edit-payload-container .edit-payload-select option {
+  background: #111;
+  color: #fff;
+}
+
 .edit-payload-container .edit-payload-input::placeholder, 
 .edit-payload-container .edit-payload-textarea::placeholder {
   color: #666;

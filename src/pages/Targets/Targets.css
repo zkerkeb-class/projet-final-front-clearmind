@@ -196,6 +196,10 @@
 
 /* --- RESPONSIVE CARD VIEW (Mobile Optimization) --- */
 @media (max-width: 768px) {
+  .targets-container {
+    padding: 20px 10px;
+  }
+
   .targets-container .page-header { 
     flex-direction: column; 
     align-items: flex-start; 
@@ -296,6 +300,11 @@
     border-left: none;
     border-right: none;
   }
+
+  .targets-container .target-modal-content {
+    padding: 1.5rem;
+    width: 95%;
+  }
 }
 
 /* --- MODAL RESPONSIVE --- */
@@ -320,11 +329,6 @@
 }
 
 @media (max-width: 480px) {
-  .targets-container .target-modal-content {
-    padding: 1.5rem;
-    width: 95%; /* S'adapte aux petits écrans */
-  }
-
   .targets-container .port-row {
     flex-direction: column; /* Empile les inputs verticalement */
     background: rgba(255, 255, 255, 0.05);
@@ -361,6 +365,11 @@
   outline: none;
   transition: all 0.2s ease;
   box-sizing: border-box;
+}
+
+.targets-container .modal-select option {
+  background: #111;
+  color: #fff;
 }
 
 .targets-container .modal-input::placeholder {
@@ -635,7 +644,7 @@
 }
 
 /* Responsive Grid Fallback */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .targets-container .modal-form {
     grid-template-columns: 1fr;
   }

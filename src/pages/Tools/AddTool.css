@@ -214,6 +214,14 @@
 
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
+  .add-tool-container {
+    padding: 20px 10px;
+  }
+
+  .add-tool-container .tool-form {
+    padding: 1.5rem;
+  }
+
   .add-tool-container .input-group {
     grid-template-columns: 1fr;
   }

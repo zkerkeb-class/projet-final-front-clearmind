@@ -341,6 +341,11 @@
   box-sizing: border-box;
 }
 
+.box-detail-container .edit-select option {
+  background: #111;
+  color: #fff;
+}
+
 .box-detail-container .edit-input::placeholder {
   color: #666;
   text-transform: uppercase;

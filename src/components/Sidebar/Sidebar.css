@@ -11,7 +11,7 @@
   left: 0;
   top: 0;
   box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5); /* Ombre plus marquée pour la profondeur */
-  z-index: 100;
+  z-index: 1500;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Animation plus fluide */
 }
 

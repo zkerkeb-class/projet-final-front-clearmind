@@ -492,6 +492,11 @@
   font-size: 0.9rem;
 }
 
+.revshell-container .shell-form select option {
+  background: #111;
+  color: #fff;
+}
+
 .revshell-container .shell-form input::placeholder, 
 .revshell-container .shell-form textarea::placeholder {
   color: #666;

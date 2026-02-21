@@ -4,13 +4,13 @@
   margin: 0 auto;
 }
 
-.profile-grid {
+.profile-container .profile-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 2rem;
 }
 
-.profile-card {
+.profile-container .profile-card {
   background: rgba(15, 15, 25, 0.6);
   border: 1px solid #333;
   padding: 2rem;
@@ -18,10 +18,10 @@
   position: relative;
 }
 
-.info-card { border-top: 3px solid #00d4ff; }
-.security-card { border-top: 3px solid #ff003c; }
+.profile-container .info-card { border-top: 3px solid #00d4ff; }
+.profile-container .security-card { border-top: 3px solid #ff003c; }
 
-.card-header {
+.profile-container .card-header {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -30,21 +30,21 @@
   padding-bottom: 1rem;
 }
 
-.card-header h3 {
+.profile-container .card-header h3 {
   margin: 0;
   font-family: 'Orbitron', sans-serif;
   letter-spacing: 1px;
   font-size: 1.2rem;
 }
 
-.photo-upload-section {
+.profile-container .photo-upload-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 2rem;
 }
 
-.photo-preview {
+.profile-container .photo-preview {
   width: 120px;
   height: 120px;
   border-radius: 50%;
@@ -54,13 +54,13 @@
   box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
 }
 
-.photo-preview img {
+.profile-container .photo-preview img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.photo-placeholder {
+.profile-container .photo-placeholder {
   width: 100%;
   height: 100%;
   display: flex;
@@ -69,7 +69,7 @@
   background: #000;
 }
 
-.photo-edit-btn {
+.profile-container .photo-edit-btn {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -82,11 +82,11 @@
   transition: 0.3s;
 }
 
-.photo-edit-btn:hover {
+.profile-container .photo-edit-btn:hover {
   background: rgba(0, 212, 255, 0.8);
 }
 
-.delete-photo-btn {
+.profile-container .delete-photo-btn {
   margin-top: 10px;
   background: transparent;
   border: 1px solid #ff003c;
@@ -101,12 +101,12 @@
   transition: 0.3s;
 }
 
-.delete-photo-btn:hover {
+.profile-container .delete-photo-btn:hover {
   background: rgba(255, 0, 60, 0.1);
   box-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
 }
 
-.role-badge {
+.profile-container .role-badge {
   margin-top: 10px;
   background: #333;
   padding: 4px 12px;
@@ -117,18 +117,18 @@
   color: #888;
 }
 
-.form-group {
+.profile-container .form-group {
   margin-bottom: 1.5rem;
 }
 
-.form-group label {
+.profile-container .form-group label {
   display: block;
   margin-bottom: 0.5rem;
   font-size: 0.8rem;
   color: #888;
 }
 
-.input-wrapper {
+.profile-container .input-wrapper {
   display: flex;
   align-items: center;
   background: rgba(0, 0, 0, 0.3);
@@ -136,7 +136,7 @@
   padding: 0 12px;
 }
 
-.input-wrapper input {
+.profile-container .input-wrapper input {
   width: 100%;
   background: transparent;
   border: none;
@@ -146,11 +146,11 @@
   outline: none;
 }
 
-.input-wrapper:focus-within {
+.profile-container .input-wrapper:focus-within {
   border-color: #00d4ff;
 }
 
-.save-btn {
+.profile-container .save-btn {
   width: 100%;
   padding: 12px;
   background: #00d4ff;
@@ -166,21 +166,21 @@
   text-transform: uppercase;
 }
 
-.save-btn:hover { box-shadow: 0 0 15px rgba(0, 212, 255, 0.4); }
+.profile-container .save-btn:hover { box-shadow: 0 0 15px rgba(0, 212, 255, 0.4); }
 
-.save-btn.danger {
+.profile-container .save-btn.danger {
   background: transparent;
   border: 1px solid #ff003c;
   color: #ff003c;
 }
 
-.save-btn.danger:hover {
+.profile-container .save-btn.danger:hover {
   background: #ff003c;
   color: white;
   box-shadow: 0 0 15px rgba(255, 0, 60, 0.4);
 }
 
-.password-requirements {
+.profile-container .password-requirements {
   font-size: 0.7rem;
   color: #666;
   margin-bottom: 1.5rem;
@@ -189,30 +189,30 @@
   gap: 15px;
 }
 
-.req-item { transition: color 0.3s; }
-.req-item.valid { color: #00ff41; text-shadow: 0 0 5px #00ff41; }
-.req-item.invalid { color: #555; }
+.profile-container .req-item { transition: color 0.3s; }
+.profile-container .req-item.valid { color: #00ff41; text-shadow: 0 0 5px #00ff41; }
+.profile-container .req-item.invalid { color: #555; }
 
-.page-title {
+.profile-container .page-title {
   font-size: 1.5rem;
   text-transform: uppercase;
   letter-spacing: 3px;
   font-weight: 900;
 }
 
-.page-title span {
+.profile-container .page-title span {
   color: #ff003c;
   text-shadow: 0 0 10px #ff003c;
 }
 
 @media (max-width: 768px) {
-  .page-header {
+  .profile-container .page-header {
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
 
-  .profile-grid {
+  .profile-container .profile-grid {
     grid-template-columns: 1fr;
   }
 }

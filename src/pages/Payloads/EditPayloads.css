@@ -5,24 +5,24 @@
   color: #fff;
 }
 
-.page-header {
+.edit-payload-container .page-header {
   margin-bottom: 2rem;
   border-bottom: 1px solid #333;
   padding-bottom: 1rem;
 }
 
-.page-title {
+.edit-payload-container .page-title {
   font-family: 'Orbitron', sans-serif;
   font-size: 1.8rem;
   color: #fff;
 }
 
-.page-title span {
+.edit-payload-container .page-title span {
   color: #ff003c;
   text-shadow: 0 0 10px #ff003c;
 }
 
-.error-banner {
+.edit-payload-container .error-banner {
   background: rgba(255, 0, 60, 0.1);
   border: 1px solid #ff003c;
   color: #ff003c;
@@ -34,11 +34,11 @@
   border-radius: 4px;
 }
 
-.form-group {
+.edit-payload-container .form-group {
   margin-bottom: 1.5rem;
 }
 
-.form-group label {
+.edit-payload-container .form-group label {
   display: block;
   margin-bottom: 0.5rem;
   color: #00d4ff;
@@ -47,7 +47,7 @@
   letter-spacing: 1px;
 }
 
-.edit-payload-input, .edit-payload-select, .edit-payload-textarea {
+.edit-payload-container .edit-payload-input, .edit-payload-container .edit-payload-select, .edit-payload-container .edit-payload-textarea {
   width: 100%;
   background: #0a0a0a;
   border: 1px solid #333;
@@ -60,31 +60,31 @@
   transition: border-color 0.3s;
 }
 
-.edit-payload-input:focus, .edit-payload-select:focus, .edit-payload-textarea:focus {
+.edit-payload-container .edit-payload-input:focus, .edit-payload-container .edit-payload-select:focus, .edit-payload-container .edit-payload-textarea:focus {
   outline: none;
   border-color: #00d4ff;
   box-shadow: 0 0 10px rgba(0, 212, 255, 0.1);
 }
 
-.edit-payload-textarea {
+.edit-payload-container .edit-payload-textarea {
   min-height: 200px;
   resize: vertical;
 }
 
-.split-group {
+.edit-payload-container .split-group {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
 
-.form-actions {
+.edit-payload-container .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
   margin-top: 2rem;
 }
 
-.cancel-btn {
+.edit-payload-container .cancel-btn {
   background: transparent;
   border: 1px solid #555;
   color: #888;
@@ -94,12 +94,12 @@
   transition: 0.3s;
 }
 
-.cancel-btn:hover {
+.edit-payload-container .cancel-btn:hover {
   border-color: #fff;
   color: #fff;
 }
 
-.add-btn {
+.edit-payload-container .add-btn {
   background: #00d4ff;
   border: none;
   color: #000;
@@ -113,15 +113,15 @@
   transition: 0.3s;
 }
 
-.add-btn:hover {
+.edit-payload-container .add-btn:hover {
   box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
 }
 
-.add-btn:disabled {
+.edit-payload-container .add-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
 
 @media (max-width: 768px) {
-  .split-group { grid-template-columns: 1fr !important; }
+  .edit-payload-container .split-group { grid-template-columns: 1fr !important; }
 }

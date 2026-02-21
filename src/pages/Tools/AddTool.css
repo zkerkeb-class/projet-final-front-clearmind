@@ -4,15 +4,15 @@
   padding: 40px 20px;
 }
 
-.form-header h1 {
+.add-tool-container .form-header h1 {
   font-family: 'Orbitron', sans-serif;
   color: #fff;
   margin-bottom: 5px;
 }
 
-.form-header span { color: #ff003c; text-shadow: 0 0 10px #ff003c; }
+.add-tool-container .form-header span { color: #ff003c; text-shadow: 0 0 10px #ff003c; }
 
-.tool-form {
+.add-tool-container .tool-form {
   background: rgba(10, 10, 10, 0.8);
   border: 1px solid #333;
   padding: 30px;
@@ -20,9 +20,9 @@
   margin-top: 20px;
 }
 
-.form-section { margin-bottom: 30px; }
+.add-tool-container .form-section { margin-bottom: 30px; }
 
-.form-section h3 {
+.add-tool-container .form-section h3 {
   color: #00d4ff;
   font-size: 0.9rem;
   letter-spacing: 2px;
@@ -31,14 +31,14 @@
   margin-bottom: 20px;
 }
 
-.input-group {
+.add-tool-container .input-group {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 15px;
   margin-bottom: 15px;
 }
 
-.add-tool-container input, .add-tool-container textarea, .add-tool-container select {
+.add-tool-container .tool-form input, .add-tool-container .tool-form textarea, .add-tool-container .tool-form select {
   background: #0a0a0a;
   border: 1px solid #333;
   color: #fff;
@@ -49,24 +49,24 @@
   transition: all 0.3s ease;
 }
 
-.add-tool-container input:focus, .add-tool-container textarea:focus, .add-tool-container select:focus {
+.add-tool-container .tool-form input:focus, .add-tool-container .tool-form textarea:focus, .add-tool-container .tool-form select:focus {
   border-color: #00d4ff;
   outline: none;
   box-shadow: 0 0 10px rgba(0, 212, 255, 0.1);
 }
 
-select option {
+.add-tool-container select option {
   background: #111;
   color: #fff;
 }
 
-.command-input-row {
+.add-tool-container .command-input-row {
   display: flex;
   gap: 10px;
   margin-bottom: 10px;
 }
 
-.add-row-btn {
+.add-tool-container .add-row-btn {
   background: transparent;
   color: #00ff41;
   border: 1px solid #00ff41;
@@ -75,7 +75,7 @@ select option {
   font-size: 0.7rem;
 }
 
-.save-btn {
+.add-tool-container .save-btn {
   width: 100%;
   background: #00d4ff;
   color: #000;
@@ -91,24 +91,24 @@ select option {
   transition: 0.3s;
 }
 
-.save-btn:hover {
+.add-tool-container .save-btn:hover {
   background: #008eb3;
   box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
 }
 
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
-  .form-header h1 {
+  .add-tool-container .form-header h1 {
     font-size: 1.5rem; /* Réduit la taille du titre */
     line-height: 1.3;
     word-break: break-word; /* Permet de couper les mots longs si nécessaire */
   }
 
   /* On passe les inputs en une seule colonne pour éviter qu'ils soient trop écrasés */
-  .input-group {
+  .add-tool-container .input-group {
     grid-template-columns: 1fr;
     gap: 10px;
   }
   
-  .command-input-row { flex-direction: column; }
+  .add-tool-container .command-input-row { flex-direction: column; }
 }

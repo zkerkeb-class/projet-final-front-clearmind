@@ -5,7 +5,7 @@
   background-color: #050505;
 }
 
-.main-content {
+.app-layout .main-content {
   margin-left: 260px;
   padding: 2.5rem;
   width: calc(100% - 260px);
@@ -14,7 +14,7 @@
   transition: margin-left 0.3s ease, width 0.3s ease, padding 0.3s ease;
 }
 
-.mobile-menu-btn {
+.app-layout .mobile-menu-btn {
   display: none;
   position: fixed;
   top: 15px;
@@ -31,21 +31,21 @@
 
 /* --- RESPONSIVE MOBILE & TABLETTE --- */
 @media (max-width: 992px) {
-  .main-content {
+  .app-layout .main-content {
     margin-left: 0;
     width: 100%;
     padding: 1.5rem;
     padding-top: 4rem; /* Espace pour le header mobile éventuel */
   }
 
-  .mobile-menu-btn {
+  .app-layout .mobile-menu-btn {
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
   /* Overlay sombre quand le menu est ouvert */
-  .sidebar-overlay {
+  .app-layout .sidebar-overlay {
     position: fixed;
     top: 0;
     left: 0;

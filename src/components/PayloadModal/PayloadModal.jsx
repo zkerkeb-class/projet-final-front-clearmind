@@ -32,18 +32,18 @@ const PayloadModal = ({ isOpen, onClose, onPayloadAdded }) => {
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <div className="modal-header">
-          <h2 className="modal-title">NOUVEAU_<span>PAYLOAD</span></h2>
-          <button onClick={onClose} className="close-btn"><X size={24}/></button>
+    <div className="payload-modal-overlay">
+      <div className="payload-modal-content">
+        <div className="payload-modal-header">
+          <h2 className="payload-modal-title">NOUVEAU_<span>PAYLOAD</span></h2>
+          <button onClick={onClose} className="payload-close-btn"><X size={24}/></button>
         </div>
 
-        <form className="modal-form" onSubmit={handleSubmit}>
+        <form className="payload-modal-form" onSubmit={handleSubmit}>
           <div className="input-group">
             <label>Titre de l'attaque</label>
             <input 
-              className="modal-input" 
+              className="payload-modal-input" 
               type="text" 
               placeholder="Ex: Polyglot XSS Bypass"
               value={formData.title}
@@ -52,11 +52,11 @@ const PayloadModal = ({ isOpen, onClose, onPayloadAdded }) => {
             />
           </div>
 
-          <div className="modal-row">
+          <div className="payload-modal-row">
             <div className="input-group">
               <label>Catégorie</label>
               <select 
-                className="modal-select"
+                className="payload-modal-select"
                 value={formData.category}
                 onChange={(e) => setFormData({...formData, category: e.target.value})}
               >
@@ -76,7 +76,7 @@ const PayloadModal = ({ isOpen, onClose, onPayloadAdded }) => {
             <div className="input-group">
               <label>Sévérité</label>
               <select 
-                className="modal-select"
+                className="payload-modal-select"
                 value={formData.severity}
                 onChange={(e) => setFormData({...formData, severity: e.target.value})}
               >
@@ -91,7 +91,7 @@ const PayloadModal = ({ isOpen, onClose, onPayloadAdded }) => {
           <div className="input-group">
             <label>Code / Script</label>
             <textarea 
-              className="modal-textarea" 
+              className="payload-modal-textarea" 
               rows="4"
               placeholder="<script>alert(1)</script>"
               value={formData.code}
@@ -100,7 +100,7 @@ const PayloadModal = ({ isOpen, onClose, onPayloadAdded }) => {
             />
           </div>
 
-          <button type="submit" className="submit-btn">Exécuter l'injection</button>
+          <button type="submit" className="payload-submit-btn">Exécuter l'injection</button>
         </form>
       </div>
 

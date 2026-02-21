@@ -4,7 +4,7 @@
   margin: 0 auto;
 }
 
-.subtitle {
+.killchain-container .subtitle {
   color: #555;
   font-family: monospace;
   font-size: 0.8rem;
@@ -12,26 +12,26 @@
   margin-bottom: 30px;
 }
 
-.steps-timeline {
+.killchain-container .steps-timeline {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-.kill-step {
+.killchain-container .kill-step {
   display: flex;
   gap: 30px;
 }
 
 /* Ligne de connection verticale */
-.step-aside {
+.killchain-container .step-aside {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 40px;
 }
 
-.step-id {
+.killchain-container .step-id {
   font-family: 'Orbitron', sans-serif;
   color: #00d4ff;
   font-weight: bold;
@@ -39,7 +39,7 @@
   text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
 }
 
-.connector-line {
+.killchain-container .connector-line {
   flex: 1;
   width: 2px;
   background: linear-gradient(to bottom, #00d4ff, #ff003c);
@@ -47,12 +47,12 @@
   margin: 10px 0;
 }
 
-.kill-step:last-child .connector-line {
+.killchain-container .kill-step:last-child .connector-line {
   display: none;
 }
 
 /* Cartes des étapes */
-.step-card {
+.killchain-container .step-card {
   flex: 1;
   background: rgba(10, 10, 15, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -64,13 +64,13 @@
   overflow: hidden;
 }
 
-.step-card:hover {
+.killchain-container .step-card:hover {
   background: rgba(0, 212, 255, 0.03);
   border-color: rgba(0, 212, 255, 0.3);
   transform: translateX(10px);
 }
 
-.step-icon-wrapper {
+.killchain-container .step-icon-wrapper {
   background: rgba(0, 212, 255, 0.1);
   color: #00d4ff;
   width: 50px;
@@ -81,26 +81,26 @@
   border-radius: 4px;
 }
 
-.step-info h3 {
+.killchain-container .step-info h3 {
   margin: 0 0 5px 0;
   letter-spacing: 2px;
   color: #fff;
 }
 
-.step-info p {
+.killchain-container .step-info p {
   color: #888;
   font-size: 0.9rem;
   margin-bottom: 15px;
 }
 
 /* Badges Outils */
-.tools-list {
+.killchain-container .tools-list {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-.kill-tool-tag {
+.killchain-container .kill-tool-tag {
   background: rgba(255, 0, 60, 0.05);
   border: 1px solid rgba(255, 0, 60, 0.3);
   color: #ff003c;
@@ -111,37 +111,37 @@
   transition: 0.3s;
 }
 
-.kill-tool-tag:hover {
+.killchain-container .kill-tool-tag:hover {
   background: #ff003c;
   color: #fff;
   cursor: default;
 }
 
 /* --- SKELETONS --- */
-.skeleton-step-card {
+.killchain-container .skeleton-step-card {
   width: 100%;
 }
 
-.skeleton-icon-wrapper {
+.killchain-container .skeleton-icon-wrapper {
   background: #1a1a1a;
   border: none;
 }
 
-.skeleton-info {
+.killchain-container .skeleton-info {
   width: 100%;
 }
 
-.skeleton-tools {
+.killchain-container .skeleton-tools {
   display: flex;
   gap: 10px;
 }
 
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
-  .kill-step { flex-direction: column; }
-  .step-aside { display: none; } /* On cache la ligne de temps sur mobile pour simplifier */
+  .killchain-container .kill-step { flex-direction: column; }
+  .killchain-container .step-aside { display: none; } /* On cache la ligne de temps sur mobile pour simplifier */
   
   /* Responsive Header */
-  .page-header { flex-direction: column; align-items: center; text-align: center; gap: 0.5rem; }
-  .page-title { font-size: 1.2rem; display: flex; justify-content: center; flex-wrap: wrap; gap: 5px; }
+  .killchain-container .page-header { flex-direction: column; align-items: center; text-align: center; gap: 0.5rem; }
+  .killchain-container .page-title { font-size: 1.2rem; display: flex; justify-content: center; flex-wrap: wrap; gap: 5px; }
 }

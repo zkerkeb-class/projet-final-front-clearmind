@@ -12,7 +12,7 @@
 }
 
 /* --- HEADER DE LA CONSOLE --- */
-.admin-header {
+.admin-container .admin-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -21,19 +21,19 @@
   margin-bottom: 35px;
 }
 
-.page-title {
+.admin-container .page-title {
   font-family: 'Orbitron', sans-serif;
   color: #fff;
   letter-spacing: 2px;
   margin: 0;
 }
 
-.page-title span {
+.admin-container .page-title span {
   color: #ff003c;
   text-shadow: 0 0 10px #ff003c;
 }
 
-.admin-status {
+.admin-container .admin-status {
   font-family: 'JetBrains Mono', monospace;
   color: #ff003c;
   border: 1px solid #ff003c;
@@ -44,13 +44,13 @@
 }
 
 /* --- NAVIGATION PAR ONGLETS --- */
-.admin-tabs {
+.admin-container .admin-tabs {
   display: flex;
   gap: 15px;
   margin-bottom: 30px;
 }
 
-.tab {
+.admin-container .tab {
   background: #0a0a0a;
   border: 1px solid #222;
   color: #666;
@@ -64,20 +64,20 @@
   border-radius: 4px;
 }
 
-.tab.active {
+.admin-container .tab.active {
   border-color: #ff003c;
   color: #fff;
   background: rgba(255, 0, 60, 0.1);
 }
 
 /* --- TABLEAU DE DONNÉES --- */
-.admin-data-table {
+.admin-container .admin-data-table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0 8px;
 }
 
-.admin-data-table th {
+.admin-container .admin-data-table th {
   text-align: left;
   padding: 15px 20px;
   background: rgba(255, 255, 255, 0.02);
@@ -87,7 +87,7 @@
   border-bottom: 1px solid #222;
 }
 
-.admin-data-table td {
+.admin-container .admin-data-table td {
   padding: 15px 20px;
   background: #0f0f0f;
   color: #e0e0e0;
@@ -97,12 +97,12 @@
   border-bottom: 1px solid #1a1a1a;
 }
 
-.admin-data-table tr td:first-child { border-left: 1px solid #1a1a1a; border-radius: 4px 0 0 4px; }
-.admin-data-table tr td:last-child { border-right: 1px solid #1a1a1a; border-radius: 0 4px 4px 0; }
+.admin-container .admin-data-table tr td:first-child { border-left: 1px solid #1a1a1a; border-radius: 4px 0 0 4px; }
+.admin-container .admin-data-table tr td:last-child { border-right: 1px solid #1a1a1a; border-radius: 0 4px 4px 0; }
 
-.tool-name { font-weight: bold; color: #fff; }
+.admin-container .tool-name { font-weight: bold; color: #fff; }
 
-.cat-tag {
+.admin-container .cat-tag {
   background: rgba(0, 212, 255, 0.1);
   color: #00d4ff;
   padding: 4px 10px;
@@ -111,7 +111,7 @@
 }
 
 /* --- INPUTS & ACTIONS --- */
-.role-select {
+.admin-container .role-select {
   background: #1a1a1a;
   color: #00d4ff;
   border: 1px solid #333;
@@ -120,13 +120,13 @@
   font-family: 'JetBrains Mono', monospace;
 }
 
-.toolbar {
+.admin-container .toolbar {
   margin-bottom: 20px;
   display: flex;
   justify-content: flex-end;
 }
 
-.add-tool-btn {
+.admin-container .add-tool-btn {
   background: #ff003c;
   color: #fff;
   border: none;
@@ -138,9 +138,9 @@
   gap: 8px;
 }
 
-.actions-cell { display: flex; gap: 12px; }
+.admin-container .actions-cell { display: flex; gap: 12px; }
 
-.actions-cell button {
+.admin-container .actions-cell button {
   background: #1a1a1a;
   border: 1px solid #333;
   padding: 8px;
@@ -149,7 +149,7 @@
 }
 
 /* --- MODAL --- */
-.admin-modal-overlay {
+.admin-container .admin-modal-overlay {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
   background: rgba(0, 0, 0, 0.85);
@@ -160,7 +160,7 @@
   backdrop-filter: blur(5px);
 }
 
-.admin-modal {
+.admin-container .admin-modal {
   background: #0f0f0f;
   border: 1px solid #ff003c;
   padding: 30px;
@@ -168,23 +168,23 @@
   box-shadow: 0 0 30px rgba(255, 0, 60, 0.2);
 }
 
-.modal-header {
+.admin-container .modal-header {
   display: flex;
   justify-content: space-between;
   margin-bottom: 25px;
   color: #ff003c;
 }
 
-.admin-modal form { display: flex; flex-direction: column; gap: 15px; }
+.admin-container .admin-modal form { display: flex; flex-direction: column; gap: 15px; }
 
-.admin-modal input, .admin-modal select {
+.admin-container .admin-modal input, .admin-container .admin-modal select {
   background: #1a1a1a;
   border: 1px solid #333;
   color: #fff;
   padding: 12px;
 }
 
-.save-btn {
+.admin-container .save-btn {
   background: #ff003c;
   color: #fff;
   border: none;
@@ -194,24 +194,24 @@
 }
 
 /* --- ETATS --- */
-.admin-loader { text-align: center; padding: 100px; color: #00d4ff; }
-.admin-error { border: 1px solid #ff003c; color: #ff003c; padding: 20px; }
+.admin-container .admin-loader { text-align: center; padding: 100px; color: #00d4ff; }
+.admin-container .admin-error { border: 1px solid #ff003c; color: #ff003c; padding: 20px; }
 
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
-  .admin-tabs { flex-direction: column; }
+  .admin-container .admin-tabs { flex-direction: column; }
   
   /* Header Responsive */
-  .page-header { flex-direction: column; align-items: center; text-align: center; gap: 0.5rem; }
-  .page-title { font-size: 1.1rem; }
-  .admin-status { font-size: 0.7rem; align-self: center; }
+  .admin-container .page-header { flex-direction: column; align-items: center; text-align: center; gap: 0.5rem; }
+  .admin-container .page-title { font-size: 1.1rem; }
+  .admin-container .admin-status { font-size: 0.7rem; align-self: center; }
 
   /* Transformation Table -> Cards pour Mobile */
-  .admin-data-table { display: block; width: 100%; }
-  .admin-data-table thead { display: none; }
-  .admin-data-table tbody { display: block; width: 100%; }
+  .admin-container .admin-data-table { display: block; width: 100%; }
+  .admin-container .admin-data-table thead { display: none; }
+  .admin-container .admin-data-table tbody { display: block; width: 100%; }
   
-  .admin-data-table tr { 
+  .admin-container .admin-data-table tr { 
     display: flex; 
     flex-direction: column; 
     background: rgba(20, 20, 30, 0.6); 
@@ -222,7 +222,7 @@
     overflow: hidden;
   }
   
-  .admin-data-table td { 
+  .admin-container .admin-data-table td { 
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
@@ -232,7 +232,7 @@
     width: 100%;
   }
   
-  .admin-data-table td:last-child { 
+  .admin-container .admin-data-table td:last-child { 
     border-bottom: none; 
     justify-content: flex-end; 
     gap: 10px; 
@@ -241,10 +241,10 @@
   }
 
   /* Labels contextuels via CSS (Pseudo-éléments) */
-  .arsenal-mgmt td:nth-of-type(1)::before { content: "NOM"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
-  .arsenal-mgmt td:nth-of-type(2)::before { content: "CATÉGORIE"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
+  .admin-container .arsenal-mgmt td:nth-of-type(1)::before { content: "NOM"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
+  .admin-container .arsenal-mgmt td:nth-of-type(2)::before { content: "CATÉGORIE"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
   
-  .users-mgmt td:nth-of-type(1)::before { content: "USER"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
-  .users-mgmt td:nth-of-type(2)::before { content: "EMAIL"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
-  .users-mgmt td:nth-of-type(3)::before { content: "RÔLE"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
+  .admin-container .users-mgmt td:nth-of-type(1)::before { content: "USER"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
+  .admin-container .users-mgmt td:nth-of-type(2)::before { content: "EMAIL"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
+  .admin-container .users-mgmt td:nth-of-type(3)::before { content: "RÔLE"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
 }

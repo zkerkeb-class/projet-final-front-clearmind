@@ -4,7 +4,7 @@
 }
 
 /* --- CONTROLS BAR (Recherche & Filtres) --- */
-.controls-bar {
+.boxes-container .controls-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -13,7 +13,7 @@
   flex-wrap: wrap;
 }
 
-.boxes-search-container {
+.boxes-container .boxes-search-container {
   display: flex;
   align-items: center;
   background: rgba(0, 0, 0, 0.6);
@@ -26,17 +26,17 @@
   transition: all 0.3s ease;
 }
 
-.boxes-search-container:focus-within {
+.boxes-container .boxes-search-container:focus-within {
   border-color: #ff003c;
   box-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
 }
 
-.boxes-search-icon {
+.boxes-container .boxes-search-icon {
   color: #00d4ff;
   pointer-events: none;
 }
 
-.boxes-search-input {
+.boxes-container .boxes-search-input {
   background: transparent;
   border: none;
   color: white;
@@ -48,18 +48,18 @@
   padding: 12px 0;
 }
 
-.boxes-search-input::placeholder {
+.boxes-container .boxes-search-input::placeholder {
   color: #444;
   text-transform: uppercase;
   font-size: 0.8rem;
 }
 
-.filters-wrapper {
+.boxes-container .filters-wrapper {
   display: flex;
   gap: 1rem;
 }
 
-.boxes-filter-select {
+.boxes-container .boxes-filter-select {
   background: #0a0a0a;
   border: 1px solid #333;
   color: #fff;
@@ -71,18 +71,18 @@
   transition: border-color 0.3s;
 }
 
-.boxes-filter-select:focus {
+.boxes-container .boxes-filter-select:focus {
   border-color: #00d4ff;
 }
 
 /* --- GRID LAYOUT --- */
-.boxes-grid {
+.boxes-container .boxes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
 }
 
-.box-card {
+.boxes-container .box-card {
   background: rgba(15, 15, 25, 0.8);
   border: 1px solid #333;
   padding: 1.5rem;
@@ -96,13 +96,13 @@
   overflow: hidden;
 }
 
-.box-card:hover {
+.boxes-container .box-card:hover {
   border-color: #00d4ff;
   box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
   transform: translateY(-5px);
 }
 
-.box-difficulty {
+.boxes-container .box-difficulty {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -114,14 +114,14 @@
   text-transform: uppercase;
 }
 
-.box-card h3 {
+.boxes-container .box-card h3 {
   margin: 1rem 0 0.5rem 0;
   font-family: 'Orbitron', sans-serif;
   letter-spacing: 1px;
   color: #fff;
 }
 
-.box-card p {
+.boxes-container .box-card p {
   color: #888;
   font-size: 0.8rem;
   margin-bottom: 1.5rem;
@@ -129,7 +129,7 @@
 }
 
 /* --- PROGRESS BAR --- */
-.difficulty-bar {
+.boxes-container .difficulty-bar {
   width: 100%;
   height: 4px;
   background: #333;
@@ -138,13 +138,13 @@
   overflow: hidden;
 }
 
-.difficulty-fill {
+.boxes-container .difficulty-fill {
   height: 100%;
   transition: width 0.5s ease;
 }
 
 /* --- FOOTER ACTIONS --- */
-.box-info {
+.boxes-container .box-info {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -154,7 +154,7 @@
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.status-select {
+.boxes-container .status-select {
   background: transparent;
   border: none;
   font-size: 0.75rem;
@@ -165,7 +165,7 @@
   text-align: left;
 }
 
-.delete-icon-btn {
+.boxes-container .delete-icon-btn {
   background: transparent;
   border: none;
   cursor: pointer;
@@ -176,36 +176,36 @@
   transition: 0.2s;
 }
 
-.delete-icon-btn:hover svg {
+.boxes-container .delete-icon-btn:hover svg {
   color: #ff003c !important;
   filter: drop-shadow(0 0 5px #ff003c);
 }
 
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
-  .controls-bar {
+  .boxes-container .controls-bar {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .filters-wrapper {
+  .boxes-container .filters-wrapper {
     flex-direction: column;
   }
   
-  .page-header {
+  .boxes-container .page-header {
     flex-direction: column;
     align-items: center;
     text-align: center;
     gap: 1rem;
   }
 
-  .boxes-search-container, .filters-wrapper {
+  .boxes-container .boxes-search-container, .boxes-container .filters-wrapper {
     width: 100%;
   }
 }
 
 /* --- STYLES AJOUTÉS POUR NETTOYAGE JSX --- */
-.modal-input, .modal-select {
+.boxes-container .modal-input, .boxes-container .modal-select {
   width: 100%;
   background: #0a0a0a;
   border: 1px solid #333;
@@ -219,12 +219,12 @@
   box-sizing: border-box;
 }
 
-.modal-input:focus, .modal-select:focus {
+.boxes-container .modal-input:focus, .boxes-container .modal-select:focus {
   border-color: #00d4ff;
   box-shadow: 0 0 10px rgba(0, 212, 255, 0.1);
 }
 
-.modal-submit-btn {
+.boxes-container .modal-submit-btn {
   margin-top: 1rem;
   padding: 12px;
   background: #00d4ff;
@@ -239,12 +239,12 @@
   transition: 0.3s;
 }
 
-.modal-submit-btn:hover {
+.boxes-container .modal-submit-btn:hover {
   box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
 }
 
 /* --- CLEANUP STYLES --- */
-.empty-state-msg {
+.boxes-container .empty-state-msg {
   width: 100%;
   text-align: center;
   color: #888;
@@ -252,14 +252,14 @@
   grid-column: 1 / -1;
 }
 
-.pagination-controls {
+.boxes-container .pagination-controls {
   display: flex;
   justify-content: center;
   gap: 1rem;
   margin-top: 2rem;
 }
 
-.pagination-btn {
+.boxes-container .pagination-btn {
   background: transparent;
   border: 1px solid #333;
   color: #fff;
@@ -267,18 +267,18 @@
   cursor: pointer;
 }
 
-.pagination-btn:disabled {
+.boxes-container .pagination-btn:disabled {
   color: #555;
   cursor: not-allowed;
 }
 
-.pagination-info {
+.boxes-container .pagination-info {
   color: #fff;
   align-self: center;
 }
 
 /* --- MODAL STYLES --- */
-.modal-overlay {
+.boxes-container .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0,0,0,0.8);
@@ -288,7 +288,7 @@
   z-index: 1000;
 }
 
-.modal-content {
+.boxes-container .modal-content {
   background: #0a0a0a;
   border: 1px solid #00d4ff;
   padding: 2rem;
@@ -296,7 +296,7 @@
   position: relative;
 }
 
-.modal-close-btn {
+.boxes-container .modal-close-btn {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -306,13 +306,13 @@
   cursor: pointer;
 }
 
-.modal-title {
+.boxes-container .modal-title {
   color: #fff;
   margin-bottom: 1.5rem;
   font-family: 'Orbitron', sans-serif;
 }
 
-.modal-form {
+.boxes-container .modal-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;

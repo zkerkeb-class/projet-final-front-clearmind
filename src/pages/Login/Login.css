@@ -37,7 +37,7 @@
   overflow: hidden;
   backdrop-filter: blur(12px);
   z-index: 1;
-  animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: login-slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   transform: translateY(20px);
   opacity: 0;
 }
@@ -59,7 +59,7 @@
   color: #00d4ff;
   margin: 0 auto;
   filter: drop-shadow(0 0 8px #00d4ff);
-  animation: pulseLogo 3s infinite ease-in-out;
+  animation: login-pulseLogo 3s infinite ease-in-out;
 }
 
 .login-title {
@@ -124,7 +124,7 @@
   font-size: 0.8rem;
   text-align: center;
   margin-bottom: 1rem;
-  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+  animation: login-shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
 }
 
 .login-button {
@@ -169,16 +169,16 @@
 }
 
 /* --- ANIMATIONS --- */
-@keyframes slideUpFade {
+@keyframes login-slideUpFade {
   to { transform: translateY(0); opacity: 1; }
 }
 
-@keyframes pulseLogo {
+@keyframes login-pulseLogo {
   0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px #00d4ff); }
   50% { transform: scale(1.05); filter: drop-shadow(0 0 15px #00d4ff); }
 }
 
-@keyframes shake {
+@keyframes login-shake {
   10%, 90% { transform: translate3d(-1px, 0, 0); }
   20%, 80% { transform: translate3d(2px, 0, 0); }
   30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }

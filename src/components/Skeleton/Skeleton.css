@@ -3,10 +3,10 @@
   background: linear-gradient(110deg, #1a1a1a 8%, #252525 18%, #1a1a1a 33%);
   border-radius: 4px;
   background-size: 200% 100%;
-  animation: shine 1.5s linear infinite;
+  animation: skeleton-shine 1.5s linear infinite;
 }
 
-@keyframes shine {
+@keyframes skeleton-shine {
   to {
     background-position-x: -200%;
   }

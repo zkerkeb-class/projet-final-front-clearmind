@@ -30,9 +30,9 @@ const Landing = () => {
         <div className="landing-logo">
           <Terminal size={24} />
           <span>Red<span>Sheet</span></span>
+          <Link to="/about" className="nav-link" style={{ marginLeft: '2rem', fontWeight: 'normal' }}>ABOUT</Link>
         </div>
         <div className="landing-links">
-          <Link to="/about" className="nav-link">ABOUT</Link>
           <Link to="/login" className="nav-link">LOGIN</Link>
           <Link to="/signup" className="nav-link cta">JOIN_OPERATIONS</Link>
         </div>

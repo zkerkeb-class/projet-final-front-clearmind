@@ -1,15 +1,40 @@
+.cyberchef-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Styles du titre (Dupliqués pour garantir l'indépendance du module) */
+.page-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 900;
+  color: #fff;
+  margin: 0;
+}
+
+.page-title span {
+  color: #ff003c;
+  text-shadow: 0 0 10px #ff003c;
+}
+
+.cyberchef-header {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+
 .cyberchef-container {
-  height: calc(100vh - 100px); /* Hauteur totale moins le padding du layout */
+  flex: 1;
   display: flex;
   flex-direction: column;
   border: 1px solid #333;
   border-radius: 4px;
   overflow: hidden;
   background: #000;
-}
-
-.cyberchef-header {
-  display: none; /* On cache le header si on veut juste l'outil, ou on le stylise */
+  min-height: 0; /* Important pour le scroll interne */
 }
 
 .cyberchef-frame {
@@ -17,10 +42,11 @@
   width: 100%;
   height: 100%;
   border: none;
-  background: #fff; /* CyberChef est souvent clair, ou on peut forcer le thème dark via URL si supporté */
-  filter: invert(0.9) hue-rotate(180deg); /* Astuce CSS pour forcer un mode sombre sur l'iframe si besoin */
+  background: #fff; 
+  filter: invert(0.9) hue-rotate(180deg); 
 }
 
+/* --- RESPONSIVE --- */
 @media (max-width: 768px) {
   .page-header { 
     justify-content: center; 

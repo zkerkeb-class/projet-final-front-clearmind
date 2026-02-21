@@ -164,7 +164,8 @@
   background: #0f0f0f;
   border: 1px solid #ff003c;
   padding: 30px;
-  width: 400px;
+  width: 600px;
+  max-width: 95%;
   box-shadow: 0 0 30px rgba(255, 0, 60, 0.2);
 }
 
@@ -175,7 +176,11 @@
   color: #ff003c;
 }
 
-.admin-container .admin-modal form { display: flex; flex-direction: column; gap: 15px; }
+.admin-container .admin-modal form { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 1.5rem; 
+}
 
 .admin-container .admin-modal input, .admin-container .admin-modal select {
   background: #1a1a1a;
@@ -191,6 +196,13 @@
   padding: 12px;
   font-weight: bold;
   cursor: pointer;
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 600px) {
+  .admin-container .admin-modal form {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* --- ETATS --- */

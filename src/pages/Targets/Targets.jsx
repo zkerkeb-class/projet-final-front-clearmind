@@ -270,7 +270,28 @@ const Targets = () => {
               <input type="text" placeholder="Adresse IP (ex: 192.168.1.10)" required value={newTarget.ip} onChange={e => setNewTarget({...newTarget, ip: e.target.value})} className="modal-input" />
               <input type="text" placeholder="Domaine (ex: corp.local)" value={newTarget.domain} onChange={e => setNewTarget({...newTarget, domain: e.target.value})} className="modal-input" />
               
-              {/* Gestion des Ports en Tableau */}
+              <select value={newTarget.linkedBox} onChange={e => setNewTarget({...newTarget, linkedBox: e.target.value})} className="modal-select">
+                <option value="">-- Lier à une Box (Optionnel) --</option>
+                {availableBoxes.map(box => (
+                  <option key={box._id} value={box._id}>{box.name} ({box.platform})</option>
+                ))}
+              </select>
+
+              <select value={newTarget.os} onChange={e => setNewTarget({...newTarget, os: e.target.value})} className="modal-select">
+                <option value={TARGET_OS.UNKNOWN}>OS Inconnu</option>
+                <option value={TARGET_OS.WINDOWS}>Windows</option>
+                <option value={TARGET_OS.LINUX}>Linux</option>
+                <option value={TARGET_OS.MACOS}>MacOS</option>
+              </select>
+
+              <select value={newTarget.status} onChange={e => setNewTarget({...newTarget, status: e.target.value})} className="modal-select">
+                <option value={TARGET_STATUSES.DISCOVERY}>Discovery (Découverte)</option>
+                <option value={TARGET_STATUSES.SCANNING}>Scanning (En cours)</option>
+                <option value={TARGET_STATUSES.VULNERABLE}>Vulnerable (Faille trouvée)</option>
+                <option value={TARGET_STATUSES.COMPROMISED}>Compromised (Pwned)</option>
+              </select>
+
+              {/* Gestion des Ports en Tableau (Déplacé en bas pour la grille) */}
               <div className="ports-manager">
                 <div className="ports-header">
                   <label>PORTS & SERVICES</label>
@@ -296,27 +317,6 @@ const Targets = () => {
                   </div>
                 ))}
               </div>
-              
-              <select value={newTarget.linkedBox} onChange={e => setNewTarget({...newTarget, linkedBox: e.target.value})} className="modal-select">
-                <option value="">-- Lier à une Box (Optionnel) --</option>
-                {availableBoxes.map(box => (
-                  <option key={box._id} value={box._id}>{box.name} ({box.platform})</option>
-                ))}
-              </select>
-
-              <select value={newTarget.os} onChange={e => setNewTarget({...newTarget, os: e.target.value})} className="modal-select">
-                <option value={TARGET_OS.UNKNOWN}>OS Inconnu</option>
-                <option value={TARGET_OS.WINDOWS}>Windows</option>
-                <option value={TARGET_OS.LINUX}>Linux</option>
-                <option value={TARGET_OS.MACOS}>MacOS</option>
-              </select>
-
-              <select value={newTarget.status} onChange={e => setNewTarget({...newTarget, status: e.target.value})} className="modal-select">
-                <option value={TARGET_STATUSES.DISCOVERY}>Discovery (Découverte)</option>
-                <option value={TARGET_STATUSES.SCANNING}>Scanning (En cours)</option>
-                <option value={TARGET_STATUSES.VULNERABLE}>Vulnerable (Faille trouvée)</option>
-                <option value={TARGET_STATUSES.COMPROMISED}>Compromised (Pwned)</option>
-              </select>
 
               <button type="submit" className="modal-submit-btn">{isEditMode ? 'SAUVEGARDER MODIFICATIONS' : 'AJOUTER AU SCOPE'}</button>
             </form>

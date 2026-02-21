@@ -145,10 +145,9 @@ const News = () => {
       {/* BARRE DE FILTRES AVANCÉS */}
       <div className="filters-section">
         <button 
-          className="icon-btn refresh-btn" 
+          className="icon-btn refresh-btn refresh-btn-absolute" 
           onClick={() => fetchNews(false)}
           title="Rafraîchir les flux"
-          style={{ position: 'absolute', top: '15px', right: '15px' }}
         >
           <RefreshCw size={16} />
         </button>
@@ -211,8 +210,8 @@ const News = () => {
       <div className="news-feed">
         {loading ? (
           Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="news-card" style={{ pointerEvents: 'none', border: '1px solid #333' }}>
-              <div className="card-header" style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'space-between' }}>
+            <div key={i} className="news-card skeleton-news-card">
+              <div className="card-header skeleton-header">
                 <Skeleton width={100} height={20} />
                 <Skeleton width={80} height={16} />
               </div>

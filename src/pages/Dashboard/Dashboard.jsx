@@ -149,7 +149,7 @@ const Dashboard = () => {
         <div className="stat-card">
           <div className="stat-label">Payloads Stockés</div>
           <div className="stat-value">{loadingStats ? <Skeleton width={60} height={40} /> : stats.payloads}</div>
-          <Terminal size={40} style={{position: 'absolute', right: 10, bottom: 10, opacity: 0.1, color: '#00d4ff'}} />
+          <Terminal size={40} className="stat-icon" />
         </div>
 
         {userRole !== ROLES.GUEST && (
@@ -157,19 +157,19 @@ const Dashboard = () => {
             <div className="stat-card">
               <div className="stat-label">Cibles Actives</div>
               <div className="stat-value">{loadingStats ? <Skeleton width={60} height={40} /> : stats.targets}</div>
-              <Target size={40} style={{position: 'absolute', right: 10, bottom: 10, opacity: 0.1, color: '#00d4ff'}} />
+              <Target size={40} className="stat-icon" />
             </div>
 
             <div className="stat-card critical">
               <div className="stat-label">Machines compromises</div>
               <div className="stat-value">{loadingStats ? <Skeleton width={60} height={40} /> : String(stats.compromised).padStart(2, '0')}</div>
-              <Box size={40} style={{position: 'absolute', right: 10, bottom: 10, opacity: 0.1, color: '#ff003c'}} />
+              <Box size={40} className="stat-icon" />
             </div>
 
             <div className="stat-card">
               <div className="stat-label">Opérations en cours</div>
               <div className="stat-value">{loadingStats ? <Skeleton width={60} height={40} /> : String(stats.inProgress).padStart(2, '0')}</div>
-              <Zap size={40} style={{position: 'absolute', right: 10, bottom: 10, opacity: 0.1, color: '#00d4ff'}} />
+              <Zap size={40} className="stat-icon" />
             </div>
           </>
         )}
@@ -178,7 +178,7 @@ const Dashboard = () => {
       {/* GRAPHIQUES */}
       <div className="charts-grid">
         <div className="chart-card">
-            <h3 className="chart-title"><Globe size={16} style={{marginRight:'8px'}}/> RÉPARTITION_PAR_SOURCE</h3>
+            <h3 className="chart-title"><Globe size={16} className="mr-2"/> RÉPARTITION_PAR_SOURCE</h3>
             {loadingNews ? <Skeleton width="100%" height={300} /> : (
             chartsData.sourcesData.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
@@ -201,16 +201,16 @@ const Dashboard = () => {
                 </PieChart>
             </ResponsiveContainer>
             ) : (
-              <div style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', flexDirection: 'column' }}>
-                <Globe size={48} style={{ marginBottom: 10, opacity: 0.2 }} />
-                <span style={{ fontFamily: 'monospace', letterSpacing: '1px' }}>AUCUNE SOURCE DÉTECTÉE</span>
+              <div className="chart-empty-state">
+                <Globe size={48} className="chart-empty-icon" />
+                <span className="chart-empty-text">AUCUNE SOURCE DÉTECTÉE</span>
               </div>
             )
             )}
         </div>
 
         <div className="chart-card">
-            <h3 className="chart-title"><ShieldAlert size={16} style={{marginRight:'8px'}}/> VULNÉRABILITÉS_PAR_CRITICITÉ</h3>
+            <h3 className="chart-title"><ShieldAlert size={16} className="mr-2"/> VULNÉRABILITÉS_PAR_CRITICITÉ</h3>
             {loadingNews ? <Skeleton width="100%" height={300} /> : (
             chartsData.vulnsData.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
@@ -225,9 +225,9 @@ const Dashboard = () => {
                 </PieChart>
             </ResponsiveContainer>
             ) : (
-              <div style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', flexDirection: 'column' }}>
-                <ShieldAlert size={48} style={{ marginBottom: 10, opacity: 0.2 }} />
-                <span style={{ fontFamily: 'monospace', letterSpacing: '1px' }}>AUCUNE VULNÉRABILITÉ</span>
+              <div className="chart-empty-state">
+                <ShieldAlert size={48} className="chart-empty-icon" />
+                <span className="chart-empty-text">AUCUNE VULNÉRABILITÉ</span>
               </div>
             )
             )}
@@ -238,7 +238,7 @@ const Dashboard = () => {
       {!loadingStats && userRole !== ROLES.GUEST && (
         <div className="charts-grid">
           <div className="chart-card">
-            <h3 className="chart-title"><BarChart2 size={16} style={{marginRight:'8px'}}/> DIFFICULTÉ_DES_MACHINES</h3>
+            <h3 className="chart-title"><BarChart2 size={16} className="mr-2"/> DIFFICULTÉ_DES_MACHINES</h3>
             {chartsData.boxDifficultyData.some(d => d.value > 0) ? (
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={chartsData.boxDifficultyData}>
@@ -257,15 +257,15 @@ const Dashboard = () => {
               </BarChart>
             </ResponsiveContainer>
             ) : (
-              <div style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', flexDirection: 'column' }}>
-                <BarChart2 size={48} style={{ marginBottom: 10, opacity: 0.2 }} />
-                <span style={{ fontFamily: 'monospace', letterSpacing: '1px' }}>AUCUNE MACHINE ACTIVE</span>
+              <div className="chart-empty-state">
+                <BarChart2 size={48} className="chart-empty-icon" />
+                <span className="chart-empty-text">AUCUNE MACHINE ACTIVE</span>
               </div>
             )}
           </div>
 
           <div className="chart-card">
-            <h3 className="chart-title"><Monitor size={16} style={{marginRight:'8px'}}/> RÉPARTITION_OS_CIBLES</h3>
+            <h3 className="chart-title"><Monitor size={16} className="mr-2"/> RÉPARTITION_OS_CIBLES</h3>
             {chartsData.targetOsData.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
@@ -279,9 +279,9 @@ const Dashboard = () => {
               </PieChart>
             </ResponsiveContainer>
             ) : (
-              <div style={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', flexDirection: 'column' }}>
-                <Monitor size={48} style={{ marginBottom: 10, opacity: 0.2 }} />
-                <span style={{ fontFamily: 'monospace', letterSpacing: '1px' }}>AUCUNE CIBLE DÉFINIE</span>
+              <div className="chart-empty-state">
+                <Monitor size={48} className="chart-empty-icon" />
+                <span className="chart-empty-text">AUCUNE CIBLE DÉFINIE</span>
               </div>
             )}
           </div>
@@ -290,7 +290,7 @@ const Dashboard = () => {
 
       <div className="activity-section">
          <h3 style={{color: '#ff003c', letterSpacing: '2px', marginBottom: '1rem'}}>LOGS_ACTIVITE_RECENTS</h3>
-         <div style={{fontFamily: 'monospace', color: '#00d4ff', backgroundColor: 'rgba(0,0,0,0.5)', padding: '1rem', borderRadius: '4px', border: '1px solid #333'}}>
+         <div className="activity-log-box">
             <p>{'>'} [SYSTEM] Initialisation du dashboard...</p>
             <p>{'>'} [INFO] Connexion à la base de données établie.</p>
             {!loadingStats && (

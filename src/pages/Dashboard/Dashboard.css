@@ -70,6 +70,15 @@
 .stat-card.critical::after { background: #ff003c; }
 .stat-card.critical .stat-label { color: #ff003c; }
 
+.stat-icon {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  opacity: 0.1;
+  color: #00d4ff;
+}
+.stat-card.critical .stat-icon { color: #ff003c; }
+
 /* --- GRAPHIQUES --- */
 .charts-grid {
   display: grid;
@@ -103,6 +112,34 @@
   align-items: center;
   justify-content: center;
   letter-spacing: 1px;
+}
+
+.chart-empty-state {
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  flex-direction: column;
+}
+
+.chart-empty-icon {
+  margin-bottom: 10px;
+  opacity: 0.2;
+}
+
+.chart-empty-text {
+  font-family: monospace;
+  letter-spacing: 1px;
+}
+
+.activity-log-box {
+  font-family: monospace;
+  color: #00d4ff;
+  background-color: rgba(0,0,0,0.5);
+  padding: 1rem;
+  border-radius: 4px;
+  border: 1px solid #333;
 }
 
 @media (max-width: 768px) {

@@ -37,14 +37,14 @@ const KillChain = () => {
                 <Skeleton width={40} height={40} style={{ borderRadius: '50%' }} />
                 <div className="connector-line"></div>
               </div>
-              <div className="step-card" style={{ width: '100%' }}>
-                <div className="step-icon-wrapper" style={{ background: '#1a1a1a', border: 'none' }}>
+              <div className="step-card skeleton-step-card">
+                <div className="step-icon-wrapper skeleton-icon-wrapper">
                   <Skeleton width={24} height={24} />
                 </div>
-                <div className="step-info" style={{ width: '100%' }}>
+                <div className="step-info skeleton-info">
                   <Skeleton width={150} height={24} style={{ marginBottom: '10px' }} />
                   <Skeleton width="90%" height={40} style={{ marginBottom: '15px' }} />
-                  <div className="tools-list" style={{ display: 'flex', gap: '10px' }}>
+                  <div className="tools-list skeleton-tools">
                     <Skeleton width={60} height={20} /><Skeleton width={60} height={20} /><Skeleton width={60} height={20} />
                   </div>
                 </div>

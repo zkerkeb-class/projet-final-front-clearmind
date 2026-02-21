@@ -65,23 +65,13 @@ const Sidebar = ({ isOpen, onClose }) => {
         <ShieldAlert className="sidebar-logo-icon" size={28} color="#00d4ff" />
         <h1 className="sidebar-title">Red<span>Sheet</span></h1>
         
-        <Link to="/profile" onClick={handleNavClick} style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', textDecoration: 'none' }} title="Mon Profil">
-          <div style={{ 
-            width: '35px', 
-            height: '35px', 
-            borderRadius: '50%', 
-            border: '2px solid #00d4ff',
-            overflow: 'hidden',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            background: '#000'
-          }}>
+        <Link to="/profile" onClick={handleNavClick} className="profile-link-header" title="Mon Profil">
+          <div className="profile-img-container">
             {userPhoto && !imgError ? (
               <img 
                 src={`http://localhost:5000/img/users/${userPhoto}`} 
                 alt="Profile" 
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                className="profile-img"
                 onError={() => setImgError(true)}
               />
             ) : (

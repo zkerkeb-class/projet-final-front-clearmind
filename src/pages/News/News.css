@@ -489,6 +489,23 @@
   box-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
 }
 
+.refresh-btn-absolute {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.skeleton-news-card {
+  pointer-events: none;
+  border: 1px solid #333;
+}
+
+.skeleton-header {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
   .news-feed {

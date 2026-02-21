@@ -1,13 +1,19 @@
 .edit-payload-container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 40px 20px;
   color: #fff;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .edit-payload-container .page-header {
   margin-bottom: 2rem;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.3);
   padding-bottom: 1rem;
 }
 
@@ -15,6 +21,7 @@
   font-family: 'Orbitron', sans-serif;
   font-size: 1.8rem;
   color: #fff;
+  letter-spacing: 2px;
 }
 
 .edit-payload-container .page-title span {
@@ -34,6 +41,15 @@
   border-radius: 4px;
 }
 
+.edit-payload-container .payload-form {
+  background: rgba(15, 15, 20, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 2.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
 .edit-payload-container .form-group {
   margin-bottom: 1.5rem;
 }
@@ -41,29 +57,30 @@
 .edit-payload-container .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #00d4ff;
-  font-family: 'JetBrains Mono', monospace;
+  color: #888;
+  font-family: 'Orbitron', sans-serif;
   font-size: 0.8rem;
   letter-spacing: 1px;
 }
 
 .edit-payload-container .edit-payload-input, .edit-payload-container .edit-payload-select, .edit-payload-container .edit-payload-textarea {
   width: 100%;
-  background: #0a0a0a;
-  border: 1px solid #333;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: #fff;
-  padding: 12px;
+  padding: 14px 16px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.9rem;
   box-sizing: border-box;
-  border-radius: 4px;
-  transition: border-color 0.3s;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  outline: none;
 }
 
 .edit-payload-container .edit-payload-input:focus, .edit-payload-container .edit-payload-select:focus, .edit-payload-container .edit-payload-textarea:focus {
-  outline: none;
   border-color: #00d4ff;
-  box-shadow: 0 0 10px rgba(0, 212, 255, 0.1);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15);
+  background: rgba(0, 212, 255, 0.02);
 }
 
 .edit-payload-container .edit-payload-textarea {
@@ -74,7 +91,7 @@
 .edit-payload-container .split-group {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .edit-payload-container .form-actions {
@@ -88,10 +105,11 @@
   background: transparent;
   border: 1px solid #555;
   color: #888;
-  padding: 10px 20px;
+  padding: 12px 24px;
   cursor: pointer;
   font-family: 'Orbitron', sans-serif;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  border-radius: 6px;
 }
 
 .edit-payload-container .cancel-btn:hover {
@@ -103,18 +121,21 @@
   background: #00d4ff;
   border: none;
   color: #000;
-  padding: 10px 20px;
-  font-weight: bold;
+  padding: 12px 24px;
+  font-weight: 800;
   cursor: pointer;
   font-family: 'Orbitron', sans-serif;
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+  letter-spacing: 1px;
 }
 
 .edit-payload-container .add-btn:hover {
-  box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+  background: #fff;
 }
 
 .edit-payload-container .add-btn:disabled {

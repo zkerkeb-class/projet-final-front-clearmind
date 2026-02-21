@@ -90,23 +90,26 @@ const Payloads = () => {
     <div className="payloads-container">
       <header className="page-header">
         <h2 className="page-title">DB_<span>PAYLOADS</span></h2>
-        {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
-          <button className="add-btn" onClick={() => navigate('/payloads/add')}>
-            <Plus size={18} /> Nouveau Payload
-          </button>
-        )}
-      </header>
+        
+        <div className="header-actions">
+          <div className="payload-search-container">
+            <Search className="payload-search-icon" size={20} />
+            <input 
+              type="text" 
+              placeholder="RECHERCHER UN VECTEUR D'ATTAQUE..." 
+              className="payload-search-input"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)} 
+            />
+          </div>
 
-      <div className="payload-search-container">
-        <Search className="payload-search-icon" size={20} />
-        <input 
-          type="text" 
-          placeholder="RECHERCHER UN VECTEUR D'ATTAQUE (XSS, SQLI, ETC...)" 
-          className="payload-search-input"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)} // Mise à jour de l'état
-        />
-      </div>
+          {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
+            <button className="add-btn" onClick={() => navigate('/payloads/add')}>
+              <Plus size={18} /> Nouveau Payload
+            </button>
+          )}
+        </div>
+      </header>
 
       <div className="payload-grid">
         {loading ? (
@@ -122,16 +125,6 @@ const Payloads = () => {
         ) : filteredPayloads.length > 0 ? (
           filteredPayloads.map((p) => (
             <div key={p._id} className="payload-card">
-              {isOwner(p) && (
-                <div className="payload-actions">
-                  <button onClick={() => handleEdit(p)} className="action-btn edit">
-                    <Pencil size={14} />
-                  </button>
-                  <button onClick={() => confirmDelete(p._id)} className="action-btn delete">
-                    <Trash2 size={14} />
-                  </button>
-                </div>
-              )}
               <div className="payload-badge">{p.category}</div>
               <h3 className="payload-name">{p.title}</h3>
               <div className="code-box">
@@ -147,6 +140,16 @@ const Payloads = () => {
                     {p.severity?.toUpperCase() || 'MEDIUM'}
                   </span>
                 </span>
+                {isOwner(p) && (
+                  <div className="payload-actions">
+                    <button onClick={() => handleEdit(p)} className="action-btn edit">
+                      <Pencil size={14} />
+                    </button>
+                    <button onClick={() => confirmDelete(p._id)} className="action-btn delete">
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           ))

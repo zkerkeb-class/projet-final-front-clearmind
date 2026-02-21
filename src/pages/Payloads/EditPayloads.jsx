@@ -76,7 +76,7 @@ const EditPayloads = () => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="payload-form">
         <div className="form-group">
           <label>TITRE DU PAYLOAD</label>
           <input type="text" className="edit-payload-input" required value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="Ex: Reverse Shell Python" />

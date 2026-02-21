@@ -248,14 +248,14 @@ const Boxes = () => {
 
       {/* MODALE D'AJOUT */}
       {showModal && (
-        <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
-          <div className="modal-content" style={{ background: '#0a0a0a', border: '1px solid #00d4ff', padding: '2rem', width: '400px', position: 'relative' }}>
-            <button onClick={() => setShowModal(false)} style={{ position: 'absolute', top: '10px', right: '10px', background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button onClick={() => setShowModal(false)} className="modal-close-btn">
               <X size={24} />
             </button>
-            <h3 style={{ color: '#fff', marginBottom: '1.5rem', fontFamily: 'Orbitron, sans-serif' }}>INITIALISER_NOUVELLE_MACHINE</h3>
+            <h3 className="modal-title">INITIALISER_NOUVELLE_MACHINE</h3>
             
-            <form onSubmit={handleAddBox} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <form onSubmit={handleAddBox} className="modal-form">
               <input type="text" placeholder="Nom de la machine" required value={newBox.name} onChange={e => setNewBox({...newBox, name: e.target.value})} className="modal-form-input" />
               <input type="text" placeholder="Adresse IP" value={newBox.ipAddress} onChange={e => setNewBox({...newBox, ipAddress: e.target.value})} className="modal-form-input" />
               

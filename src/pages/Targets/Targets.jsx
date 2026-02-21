@@ -258,14 +258,14 @@ const Targets = () => {
 
       {/* MODALE D'AJOUT */}
       {showModal && (
-        <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
+        <div className="modal-overlay">
           <div className="target-modal-content">
-            <button onClick={() => setShowModal(false)} style={{ position: 'absolute', top: '10px', right: '10px', background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>
+            <button onClick={() => setShowModal(false)} className="modal-close-btn">
               <X size={24} />
             </button>
-            <h3 style={{ color: '#fff', marginBottom: '1.5rem', fontFamily: 'Orbitron, sans-serif' }}>{isEditMode ? 'MODIFIER_CIBLE' : 'DÉFINIR_NOUVELLE_CIBLE'}</h3>
+            <h3 className="modal-title">{isEditMode ? 'MODIFIER_CIBLE' : 'DÉFINIR_NOUVELLE_CIBLE'}</h3>
             
-            <form onSubmit={handleSaveTarget} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <form onSubmit={handleSaveTarget} className="modal-form">
               <input type="text" placeholder="Nom de la cible (ex: SRV-AD-01)" required value={newTarget.name} onChange={e => setNewTarget({...newTarget, name: e.target.value})} className="modal-form-input" />
               <input type="text" placeholder="Adresse IP (ex: 192.168.1.10)" required value={newTarget.ip} onChange={e => setNewTarget({...newTarget, ip: e.target.value})} className="modal-form-input" />
               <input type="text" placeholder="Domaine (ex: corp.local)" value={newTarget.domain} onChange={e => setNewTarget({...newTarget, domain: e.target.value})} className="modal-form-input" />

@@ -112,11 +112,11 @@ const Payloads = () => {
         {loading ? (
           // SKELETONS
           Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="payload-card" style={{ pointerEvents: 'none' }}>
-              <Skeleton width={60} height={16} style={{ position: 'absolute', top: 0, right: 0 }} />
-              <Skeleton width="60%" height={24} style={{ margin: '1rem 0' }} />
-              <Skeleton width="100%" height={60} style={{ borderRadius: '4px' }} />
-              <Skeleton width="40%" height={16} style={{ marginTop: '1rem' }} />
+            <div key={i} className="payload-card skeleton-card">
+              <Skeleton width={60} height={16} className="skeleton-badge" />
+              <Skeleton width="60%" height={24} className="skeleton-title" />
+              <Skeleton width="100%" height={60} className="skeleton-code" />
+              <Skeleton width="40%" height={16} className="skeleton-footer" />
             </div>
           ))
         ) : filteredPayloads.length > 0 ? (

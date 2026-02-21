@@ -311,7 +311,7 @@ const BoxDetail = () => {
       {/* MODALE D'ÉDITION DES NOTES */}
       {showNotesModal && (
         <div className="modal-overlay">
-          <div className="modal-content" style={{ width: '800px', maxWidth: '95vw' }}>
+          <div className="modal-content notes-modal-content">
             <button onClick={() => setShowNotesModal(false)} className="modal-close-btn">
               <X size={24} />
             </button>
@@ -337,7 +337,7 @@ const BoxDetail = () => {
                 <textarea className="wiki-modal-textarea" value={notesFormData} onChange={e => setNotesFormData(e.target.value)} placeholder="# Vos notes ici..." />
               )}
 
-              <button type="submit" className="save-btn" style={{ marginTop: '1rem' }}>
+              <button type="submit" className="save-btn mt-1">
                 <Save size={18} /> ENREGISTRER LES NOTES
               </button>
             </form>

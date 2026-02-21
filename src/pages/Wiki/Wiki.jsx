@@ -262,17 +262,17 @@ const Wiki = () => {
 
       {/* MODALE D'AJOUT / ÉDITION */}
       {showModal && (
-        <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.85)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1200 }}>
-          <div className="modal-content" style={{ background: '#0a0a0a', border: '1px solid #00d4ff', padding: '2rem', width: '600px', maxHeight: '90vh', overflowY: 'auto', position: 'relative' }}>
-            <button onClick={() => setShowModal(false)} style={{ position: 'absolute', top: '10px', right: '10px', background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button onClick={() => setShowModal(false)} className="modal-close-btn">
               <X size={24} />
             </button>
-            <h3 style={{ color: '#fff', marginBottom: '1.5rem', fontFamily: 'Orbitron, sans-serif' }}>{isEditMode ? 'ÉDITER_FICHE' : 'NOUVELLE_MÉTHODOLOGIE'}</h3>
+            <h3 className="modal-title">{isEditMode ? 'ÉDITER_FICHE' : 'NOUVELLE_MÉTHODOLOGIE'}</h3>
             
-            <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <div style={{ display: 'flex', gap: '1rem' }}>
-                <input type="number" placeholder="Port (ex: 445)" required value={formData.port} onChange={e => setFormData({...formData, port: e.target.value})} style={{ flex: 1, padding: '10px', background: '#111', border: '1px solid #333', color: '#fff' }} />
-                <input type="text" placeholder="Service (ex: SMB)" required value={formData.service} onChange={e => setFormData({...formData, service: e.target.value})} style={{ flex: 2, padding: '10px', background: '#111', border: '1px solid #333', color: '#fff' }} />
+            <form onSubmit={handleSave} className="modal-form">
+              <div className="modal-row">
+                <input type="number" placeholder="Port (ex: 445)" required value={formData.port} onChange={e => setFormData({...formData, port: e.target.value})} className="modal-input flex-1" />
+                <input type="text" placeholder="Service (ex: SMB)" required value={formData.service} onChange={e => setFormData({...formData, service: e.target.value})} className="modal-input flex-2" />
               </div>
               
               <div className="wiki-modal-toolbar">
@@ -305,7 +305,7 @@ const Wiki = () => {
                 />
               )}
 
-              <button type="submit" style={{ marginTop: '1rem', padding: '12px', background: '#00d4ff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>ENREGISTRER</button>
+              <button type="submit" className="modal-submit-btn">ENREGISTRER</button>
             </form>
           </div>
         </div>

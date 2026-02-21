@@ -115,6 +115,25 @@
   overflow-x: auto;
 }
 
+/* Scrollbar fine pour les blocs de code */
+.code-box::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+}
+
+.code-box::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.code-box::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 2px;
+}
+
+.code-box::-webkit-scrollbar-thumb:hover {
+  background: #00d4ff;
+}
+
 .copy-btn {
   position: absolute;
   top: 5px;
@@ -177,6 +196,29 @@
 }
 
 .empty-msg { color: #ff003c; }
+
+/* --- SKELETONS --- */
+.skeleton-card {
+  pointer-events: none;
+}
+
+.skeleton-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.skeleton-title {
+  margin: 1rem 0;
+}
+
+.skeleton-code {
+  border-radius: 4px;
+}
+
+.skeleton-footer {
+  margin-top: 1rem;
+}
 
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {

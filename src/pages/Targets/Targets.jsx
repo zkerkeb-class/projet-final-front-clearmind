@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
-import { Server, ShieldCheck, Activity, Loader, Plus, Trash2, X, AlertTriangle, Pencil, Box, ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { Server, ShieldCheck, Activity, Loader, Plus, Trash2, X, Pencil, Box, ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { getUserRole } from '../../utils/auth';
 import './Targets.css';
 import { ROLES, TARGET_STATUSES, TARGET_OS } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import { useToast } from '../../components/Toast/ToastContext';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
+import ErrorModal from '../../components/ErrorModal/ErrorModal';
 
 const Targets = () => {
   const navigate = useNavigate();
@@ -159,7 +160,7 @@ const Targets = () => {
           </div>
 
         {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
-          <button className="add-btn" onClick={openAddModal} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#00d4ff', color: '#000', border: 'none', padding: '8px 16px', fontWeight: 'bold', cursor: 'pointer' }}>
+          <button className="add-target-btn" onClick={openAddModal}>
             <Plus size={18} /> AJOUTER SCOPE
           </button>
         )}
@@ -272,9 +273,9 @@ const Targets = () => {
             <h3 style={{ color: '#fff', marginBottom: '1.5rem', fontFamily: 'Orbitron, sans-serif' }}>{isEditMode ? 'MODIFIER_CIBLE' : 'DÉFINIR_NOUVELLE_CIBLE'}</h3>
             
             <form onSubmit={handleSaveTarget} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <input type="text" placeholder="Nom de la cible (ex: SRV-AD-01)" required value={newTarget.name} onChange={e => setNewTarget({...newTarget, name: e.target.value})} style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff' }} />
-              <input type="text" placeholder="Adresse IP (ex: 192.168.1.10)" required value={newTarget.ip} onChange={e => setNewTarget({...newTarget, ip: e.target.value})} style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff' }} />
-              <input type="text" placeholder="Domaine (ex: corp.local)" value={newTarget.domain} onChange={e => setNewTarget({...newTarget, domain: e.target.value})} style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff' }} />
+              <input type="text" placeholder="Nom de la cible (ex: SRV-AD-01)" required value={newTarget.name} onChange={e => setNewTarget({...newTarget, name: e.target.value})} className="modal-form-input" />
+              <input type="text" placeholder="Adresse IP (ex: 192.168.1.10)" required value={newTarget.ip} onChange={e => setNewTarget({...newTarget, ip: e.target.value})} className="modal-form-input" />
+              <input type="text" placeholder="Domaine (ex: corp.local)" value={newTarget.domain} onChange={e => setNewTarget({...newTarget, domain: e.target.value})} className="modal-form-input" />
               
               {/* Gestion des Ports en Tableau */}
               <div style={{ background: '#111', padding: '10px', border: '1px solid #333', borderRadius: '4px' }}>
@@ -303,28 +304,28 @@ const Targets = () => {
                 ))}
               </div>
               
-              <select value={newTarget.linkedBox} onChange={e => setNewTarget({...newTarget, linkedBox: e.target.value})} style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff' }}>
+              <select value={newTarget.linkedBox} onChange={e => setNewTarget({...newTarget, linkedBox: e.target.value})} className="modal-form-select">
                 <option value="">-- Lier à une Box (Optionnel) --</option>
                 {availableBoxes.map(box => (
                   <option key={box._id} value={box._id}>{box.name} ({box.platform})</option>
                 ))}
               </select>
 
-              <select value={newTarget.os} onChange={e => setNewTarget({...newTarget, os: e.target.value})} style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff' }}>
+              <select value={newTarget.os} onChange={e => setNewTarget({...newTarget, os: e.target.value})} className="modal-form-select">
                 <option value={TARGET_OS.UNKNOWN}>OS Inconnu</option>
                 <option value={TARGET_OS.WINDOWS}>Windows</option>
                 <option value={TARGET_OS.LINUX}>Linux</option>
                 <option value={TARGET_OS.MACOS}>MacOS</option>
               </select>
 
-              <select value={newTarget.status} onChange={e => setNewTarget({...newTarget, status: e.target.value})} style={{ padding: '10px', background: '#111', border: '1px solid #333', color: '#fff' }}>
+              <select value={newTarget.status} onChange={e => setNewTarget({...newTarget, status: e.target.value})} className="modal-form-select">
                 <option value={TARGET_STATUSES.DISCOVERY}>Discovery (Découverte)</option>
                 <option value={TARGET_STATUSES.SCANNING}>Scanning (En cours)</option>
                 <option value={TARGET_STATUSES.VULNERABLE}>Vulnerable (Faille trouvée)</option>
                 <option value={TARGET_STATUSES.COMPROMISED}>Compromised (Pwned)</option>
               </select>
 
-              <button type="submit" style={{ marginTop: '1rem', padding: '12px', background: '#00d4ff', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>{isEditMode ? 'SAUVEGARDER MODIFICATIONS' : 'AJOUTER AU SCOPE'}</button>
+              <button type="submit" className="modal-submit-btn">{isEditMode ? 'SAUVEGARDER MODIFICATIONS' : 'AJOUTER AU SCOPE'}</button>
             </form>
           </div>
         </div>
@@ -340,23 +341,11 @@ const Targets = () => {
       />
 
       {/* MODALE D'ERREUR */}
-      {error && (
-        <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.9)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1100 }}>
-          <div className="modal-content" style={{ background: '#0a0a0a', border: '1px solid #ff003c', padding: '2rem', width: '400px', position: 'relative', boxShadow: '0 0 30px rgba(255, 0, 60, 0.2)' }}>
-            <button onClick={() => setError(null)} style={{ position: 'absolute', top: '10px', right: '10px', background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>
-              <X size={24} />
-            </button>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1.5rem', borderBottom: '1px solid #333', paddingBottom: '10px' }}>
-              <AlertTriangle size={28} color="#ff003c" />
-              <h3 style={{ color: '#ff003c', margin: 0, fontFamily: 'Orbitron, sans-serif', letterSpacing: '1px' }}>ERREUR_SYSTÈME</h3>
-            </div>
-            
-            <p style={{ color: '#e0e0e0', fontFamily: 'monospace', marginBottom: '2rem', lineHeight: '1.5' }}>{error}</p>
-            
-            <button onClick={() => setError(null)} style={{ width: '100%', padding: '12px', background: 'transparent', border: '1px solid #ff003c', color: '#ff003c', fontWeight: 'bold', cursor: 'pointer', fontFamily: 'Orbitron, sans-serif', transition: 'all 0.3s' }} onMouseOver={(e) => {e.target.style.background = '#ff003c'; e.target.style.color = '#000'}} onMouseOut={(e) => {e.target.style.background = 'transparent'; e.target.style.color = '#ff003c'}}>ACQUITTER_ERREUR</button>
-          </div>
-        </div>
-      )}
+      <ErrorModal 
+        isOpen={!!error} 
+        onClose={() => setError(null)} 
+        message={error} 
+      />
     </div>
   );
 };

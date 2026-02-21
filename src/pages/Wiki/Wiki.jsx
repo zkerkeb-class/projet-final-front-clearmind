@@ -3,13 +3,14 @@ import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import api from '../../api/axios';
-import { Search, BookOpen, Plus, Save, X, Trash2, AlertTriangle, Edit, Eye, Copy, Check, Code } from 'lucide-react';
+import { Search, BookOpen, Plus, X, Trash2, Edit, Eye, Copy, Check, Code } from 'lucide-react';
 import { getUserRole } from '../../utils/auth';
 import './Wiki.css';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import { useToast } from '../../components/Toast/ToastContext';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import { CODE_LANGUAGES } from '../../utils/constants';
+import ErrorModal from '../../components/ErrorModal/ErrorModal';
 
 // Composant pour les blocs de code avec bouton copier
 const CodeBlock = ({ inline, className, children, ...props }) => {
@@ -320,21 +321,11 @@ const Wiki = () => {
       />
 
       {/* MODALE D'ERREUR */}
-      {error && (
-        <div className="modal-overlay" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.9)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1300 }}>
-          <div className="modal-content" style={{ background: '#0a0a0a', border: '1px solid #ff003c', padding: '2rem', width: '400px', position: 'relative', boxShadow: '0 0 30px rgba(255, 0, 60, 0.2)' }}>
-            <button onClick={() => setError(null)} style={{ position: 'absolute', top: '10px', right: '10px', background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}>
-              <X size={24} />
-            </button>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1.5rem', borderBottom: '1px solid #333', paddingBottom: '10px' }}>
-              <AlertTriangle size={28} color="#ff003c" />
-              <h3 style={{ color: '#ff003c', margin: 0, fontFamily: 'Orbitron, sans-serif', letterSpacing: '1px' }}>ERREUR_SYSTÈME</h3>
-            </div>
-            <p style={{ color: '#e0e0e0', fontFamily: 'monospace', marginBottom: '2rem', lineHeight: '1.5' }}>{error}</p>
-            <button onClick={() => setError(null)} style={{ width: '100%', padding: '12px', background: 'transparent', border: '1px solid #ff003c', color: '#ff003c', fontWeight: 'bold', cursor: 'pointer', fontFamily: 'Orbitron, sans-serif', transition: 'all 0.3s' }} onMouseOver={(e) => {e.target.style.background = '#ff003c'; e.target.style.color = '#000'}} onMouseOut={(e) => {e.target.style.background = 'transparent'; e.target.style.color = '#ff003c'}}>ACQUITTER_ERREUR</button>
-          </div>
-        </div>
-      )}
+      <ErrorModal 
+        isOpen={!!error} 
+        onClose={() => setError(null)} 
+        message={error} 
+      />
     </div>
   );
 };

@@ -218,3 +218,32 @@
     align-self: flex-end; /* Place la poubelle à droite */
   }
 }
+
+/* --- STYLES AJOUTÉS POUR NETTOYAGE JSX --- */
+.add-target-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #00d4ff;
+  color: #000;
+  border: none;
+  padding: 8px 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal-form-input, .modal-form-select {
+  padding: 10px;
+  background: #111;
+  border: 1px solid #333;
+  color: #fff;
+}
+
+.modal-submit-btn {
+  margin-top: 1rem;
+  padding: 12px;
+  background: #00d4ff;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}

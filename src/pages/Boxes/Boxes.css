@@ -203,3 +203,20 @@
     width: 100%;
   }
 }
+
+/* --- STYLES AJOUTÉS POUR NETTOYAGE JSX --- */
+.modal-form-input, .modal-form-select {
+  padding: 10px;
+  background: #111;
+  border: 1px solid #333;
+  color: #fff;
+}
+
+.modal-submit-btn {
+  margin-top: 1rem;
+  padding: 12px;
+  background: #00d4ff;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../api/axios';
-import { Lock, Mail, Terminal } from 'lucide-react';
+import { Lock, Mail, Terminal, ChevronLeft } from 'lucide-react';
 import './Login.css';
 
 const Login = () => {
@@ -23,6 +23,9 @@ const Login = () => {
 
   return (
     <div className="login-container">
+      <Link to="/" className="home-link">
+        <ChevronLeft size={16} /> RETOUR_ACCUEIL
+      </Link>
       <div className="login-card">
         <div className="login-header">
           <Terminal className="login-logo" size={48} />

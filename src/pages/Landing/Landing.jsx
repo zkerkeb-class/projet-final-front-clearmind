@@ -12,6 +12,7 @@ const Landing = () => {
           <span>Red<span>Sheet</span></span>
         </div>
         <div className="landing-links">
+          <Link to="/about" className="nav-link">ABOUT</Link>
           <Link to="/login" className="nav-link">LOGIN</Link>
           <Link to="/signup" className="nav-link cta">JOIN_OPERATIONS</Link>
         </div>

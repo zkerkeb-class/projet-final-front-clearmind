@@ -7,10 +7,11 @@
   background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #050505 100%);
   padding: 1rem;
   font-family: 'Segoe UI', Roboto, sans-serif;
+  position: relative;
 }
 
 .signup-card {
-  max-width: 450px;
+  max-width: 750px;
   width: 100%;
   padding: 2rem;
   background-color: rgba(15, 15, 25, 0.9);
@@ -54,12 +55,19 @@
   margin-top: 0.5rem;
 }
 
-.form-group {
+.signup-card .form-group {
   position: relative;
-  margin-bottom: 1.2rem;
+  margin-bottom: 0; /* Géré par le gap de la grille */
 }
 
-.form-icon {
+.signup-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.signup-card .form-icon {
   position: absolute;
   left: 12px;
   top: 50%;
@@ -68,7 +76,7 @@
   transition: 0.3s;
 }
 
-.form-input {
+.signup-card .form-input {
   width: 100%;
   background: rgba(0, 0, 0, 0.8);
   border: 1px solid #333;
@@ -81,13 +89,13 @@
   transition: 0.3s;
 }
 
-.form-input:focus {
+.signup-card .form-input:focus {
   border-color: #ff003c;
   box-shadow: 0 0 10px rgba(255, 0, 60, 0.3);
   background-color: #000;
 }
 
-.file-input-wrapper {
+.signup-card .file-input-wrapper {
   position: relative;
   margin-bottom: 1.2rem;
   display: flex;
@@ -95,7 +103,7 @@
   gap: 10px;
 }
 
-.file-input-label {
+.signup-card .file-input-label {
   background: #111;
   border: 1px solid #333;
   border-left: 3px solid #00d4ff;
@@ -110,12 +118,12 @@
   width: 100%;
 }
 
-.file-input-label:hover {
+.signup-card .file-input-label:hover {
   border-color: #ff003c;
   color: #fff;
 }
 
-.file-input-icon {
+.signup-card .file-input-icon {
   margin-left: auto;
 }
 
@@ -139,7 +147,7 @@
   box-shadow: 0 0 20px #00d4ff;
 }
 
-.error-message {
+.signup-card .error-message {
   color: #ff003c;
   font-size: 0.8rem;
   margin-bottom: 1rem;
@@ -153,36 +161,72 @@
 }
 
 /* Password Strength Indicator */
-.password-requirements {
+.signup-card .password-requirements {
   font-size: 0.7rem;
   color: #555;
   margin-bottom: 1rem;
   padding-left: 5px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 20px;
 }
-.req-item { display: inline-block; }
-.req-item.valid { color: #00ff41; text-shadow: 0 0 5px #00ff41; }
-.req-item.invalid { color: #555; }
+.signup-card .req-item { display: inline-block; }
+.signup-card .req-item.valid { color: #00ff41; text-shadow: 0 0 5px #00ff41; }
+.signup-card .req-item.invalid { color: #555; }
 
-.auth-footer {
+.signup-card .auth-footer {
   text-align: center;
   margin-top: 1.5rem;
   font-size: 0.8rem;
   color: #666;
 }
 
-.auth-link {
+.signup-card .auth-link {
   color: #00d4ff;
   text-decoration: none;
   font-weight: bold;
   margin-left: 5px;
 }
 
-@media (max-width: 480px) {
+.signup-container .home-link {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  text-decoration: none;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem;
+  transition: 0.3s;
+}
+
+.signup-container .home-link:hover {
+  color: #00d4ff;
+  text-shadow: 0 0 5px #00d4ff;
+}
+
+@media (max-width: 768px) {
+  .signup-container {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .signup-container .home-link {
+    position: static;
+    align-self: flex-start;
+    margin: 0 0 1.5rem 1rem;
+  }
+
   .signup-card {
-    width: 90% !important;
+    max-width: 450px;
     padding: 1.5rem !important;
+  }
+
+  .signup-form-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
   }
 
   .signup-title {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../../api/axios';
-import { Lock, Mail, User, Upload, Terminal, AlertTriangle, Check, Image } from 'lucide-react';
+import { Lock, Mail, User, Upload, Terminal, AlertTriangle, Check, Image, ChevronLeft } from 'lucide-react';
 import './Signup.css';
 
 const Signup = () => {
@@ -82,6 +82,9 @@ const Signup = () => {
 
   return (
     <div className="signup-container">
+      <Link to="/" className="home-link">
+        <ChevronLeft size={16} /> RETOUR_ACCUEIL
+      </Link>
       <div className="signup-card">
         <div className="signup-header">
           <Terminal className="signup-logo" size={40} />
@@ -90,40 +93,54 @@ const Signup = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <User className="form-icon" size={18} />
-            <input
-              type="text"
-              required
-              className="form-input"
-              placeholder="Nom d'utilisateur"
-              value={formData.username}
-              onChange={(e) => setFormData({...formData, username: e.target.value})}
-            />
-          </div>
+          <div className="signup-form-grid">
+            <div className="form-group">
+              <User className="form-icon" size={18} />
+              <input
+                type="text"
+                required
+                className="form-input"
+                placeholder="Nom d'utilisateur"
+                value={formData.username}
+                onChange={(e) => setFormData({...formData, username: e.target.value})}
+              />
+            </div>
 
-          <div className="form-group">
-            <Mail className="form-icon" size={18} />
-            <input
-              type="email"
-              required
-              className="form-input"
-              placeholder="Email professionnel"
-              value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
-            />
-          </div>
-          
-          <div className="form-group">
-            <Lock className="form-icon" size={18} />
-            <input
-              type="password"
-              required
-              className="form-input"
-              placeholder="Mot de passe"
-              value={formData.password}
-              onChange={(e) => setFormData({...formData, password: e.target.value})}
-            />
+            <div className="form-group">
+              <Mail className="form-icon" size={18} />
+              <input
+                type="email"
+                required
+                className="form-input"
+                placeholder="Email professionnel"
+                value={formData.email}
+                onChange={(e) => setFormData({...formData, email: e.target.value})}
+              />
+            </div>
+            
+            <div className="form-group">
+              <Lock className="form-icon" size={18} />
+              <input
+                type="password"
+                required
+                className="form-input"
+                placeholder="Mot de passe"
+                value={formData.password}
+                onChange={(e) => setFormData({...formData, password: e.target.value})}
+              />
+            </div>
+
+            <div className="form-group">
+              <Lock className="form-icon" size={18} />
+              <input
+                type="password"
+                required
+                className="form-input"
+                placeholder="Confirmer le mot de passe"
+                value={formData.confirmPassword}
+                onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+              />
+            </div>
           </div>
 
           {/* Indicateurs de force du mot de passe */}
@@ -131,18 +148,6 @@ const Signup = () => {
             <span className={`req-item ${formData.password.length >= 8 ? 'valid' : 'invalid'}`}>• 8+ Chars</span>
             <span className={`req-item ${/[A-Z]/.test(formData.password) ? 'valid' : 'invalid'}`}>• 1 Maj</span>
             <span className={`req-item ${/[!@#\$%\^&\*]/.test(formData.password) ? 'valid' : 'invalid'}`}>• 1 Spécial</span>
-          </div>
-
-          <div className="form-group">
-            <Lock className="form-icon" size={18} />
-            <input
-              type="password"
-              required
-              className="form-input"
-              placeholder="Confirmer le mot de passe"
-              value={formData.confirmPassword}
-              onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-            />
           </div>
 
           <div className="file-input-wrapper">

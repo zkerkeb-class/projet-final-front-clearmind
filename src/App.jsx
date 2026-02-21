@@ -23,6 +23,7 @@ import ReverseShell from './pages/ReverseShell/ReverseShell';
 import ScrollToTop from './components/ScrollToTop';
 import Profile from './pages/Profile';
 import Landing from './pages/Landing/Landing';
+import About from './pages/About/About';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/" element={<Landing />} />
+        <Route path="/about" element={<About />} />
 
         {/* Layout Persistant pour les routes protégées */}
         <Route element={

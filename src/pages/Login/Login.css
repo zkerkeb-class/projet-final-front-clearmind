@@ -7,6 +7,7 @@
   background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #050505 100%);
   padding: 1rem;
   font-family: 'Segoe UI', Roboto, sans-serif;
+  position: relative;
 }
 
 .login-card {
@@ -67,19 +68,19 @@
   letter-spacing: 2px;
 }
 
-.form-group {
+.login-card .form-group {
   margin-bottom: 1.5rem;
   position: relative;
 }
 
-.form-icon {
+.login-card .form-icon {
   position: absolute;
   left: 0.75rem;
   top: 0.75rem;
   color: #00d4ff;
 }
 
-.form-input {
+.login-card .form-input {
   width: 100%;
   padding: 0.75rem 0.75rem 0.75rem 2.5rem !important;
   background-color: rgba(0, 0, 0, 0.8);
@@ -90,13 +91,13 @@
   transition: all 0.3s;
 }
 
-.form-input:focus {
+.login-card .form-input:focus {
   border-color: #ff003c;
   box-shadow: 0 0 10px rgba(255, 0, 60, 0.3);
   background-color: #000;
 }
 
-.error-message {
+.login-card .error-message {
   color: #ff003c;
   background: rgba(255, 0, 60, 0.1);
   padding: 0.5rem;
@@ -131,22 +132,52 @@
 }
 
 @media (max-width: 480px) {
+  .login-container {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .login-container .home-link {
+    position: static;
+    align-self: flex-start;
+    margin: 0 0 1.5rem 1rem;
+  }
+
   .login-card { 
     width: 90% !important; 
     padding: 1.5rem !important; 
   }
 }
 
-.auth-footer {
+.login-card .auth-footer {
   text-align: center;
   margin-top: 1.5rem;
   font-size: 0.8rem;
   color: #666;
 }
 
-.auth-link {
+.login-card .auth-link {
   color: #00d4ff;
   text-decoration: none;
   font-weight: bold;
   margin-left: 5px;
+}
+
+.login-container .home-link {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  text-decoration: none;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem;
+  transition: 0.3s;
+}
+
+.login-container .home-link:hover {
+  color: #00d4ff;
+  text-shadow: 0 0 5px #00d4ff;
 }

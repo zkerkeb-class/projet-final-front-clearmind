@@ -20,3 +20,10 @@
   background: #fff; /* CyberChef est souvent clair, ou on peut forcer le thème dark via URL si supporté */
   filter: invert(0.9) hue-rotate(180deg); /* Astuce CSS pour forcer un mode sombre sur l'iframe si besoin */
 }
+
+@media (max-width: 768px) {
+  .page-header { 
+    justify-content: center; 
+    text-align: center; 
+  }
+}

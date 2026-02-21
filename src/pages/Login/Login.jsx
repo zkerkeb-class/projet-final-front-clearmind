@@ -23,11 +23,6 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <style>{`
-        @media (max-width: 480px) {
-          .login-card { width: 90% !important; padding: 1.5rem !important; }
-        }
-      `}</style>
       <div className="login-card">
         <div className="login-header">
           <Terminal className="login-logo" size={48} />

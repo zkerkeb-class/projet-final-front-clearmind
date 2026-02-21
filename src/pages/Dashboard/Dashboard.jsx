@@ -141,12 +141,6 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      <style>{`
-        @media (max-width: 768px) {
-          .stats-grid { grid-template-columns: 1fr !important; }
-          .page-header { flex-direction: column; align-items: center; text-align: center; gap: 0.5rem; }
-        }
-      `}</style>
       <header className="page-header">
         <h2 className="page-title">SYSTEM_<span>DASHBOARD</span></h2>
       </header>

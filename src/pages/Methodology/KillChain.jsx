@@ -25,16 +25,6 @@ const KillChain = () => {
 
   return (
     <div className="killchain-container">
-      <style>{`
-        @media (max-width: 768px) {
-          .kill-step { flex-direction: column; }
-          .step-aside { display: none; } /* On cache la ligne de temps sur mobile pour simplifier */
-          
-          /* Responsive Header */
-          .page-header { flex-direction: column; align-items: center; text-align: center; gap: 0.5rem; }
-          .page-title { font-size: 1.2rem; display: flex; justify-content: center; flex-wrap: wrap; gap: 5px; }
-        }
-      `}</style>
       <header className="page-header">
         <h2 className="page-title">LOCKHEED_MARTIN_<span>KILL_CHAIN</span></h2>
       </header>

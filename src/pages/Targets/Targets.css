@@ -94,6 +94,13 @@
 
 /* --- RESPONSIVE CARD VIEW (Mobile Optimization) --- */
 @media (max-width: 768px) {
+  .page-header { 
+    flex-direction: column; 
+    align-items: center; 
+    text-align: center; 
+    gap: 1rem; 
+  }
+
   .targets-table {
     display: flex;
     flex-direction: column;

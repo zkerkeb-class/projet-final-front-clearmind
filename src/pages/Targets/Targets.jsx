@@ -143,12 +143,6 @@ const Targets = () => {
 
   return (
     <div className="targets-container">
-      <style>{`
-        @media (max-width: 768px) {
-          .targets-table { display: block; overflow-x: auto; white-space: nowrap; }
-          .page-header { flex-direction: column; align-items: center; text-align: center; gap: 1rem; }
-        }
-      `}</style>
       <header className="page-header">
         <h2 className="page-title">SYSTEM_<span>TARGETS</span></h2>
         

@@ -60,19 +60,6 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   return (
     <>
-    <style>{`
-      @media (max-width: 992px) {
-        .sidebar {
-          transform: translateX(-100%);
-          transition: transform 0.3s ease-in-out;
-          position: fixed !important;
-          z-index: 1500;
-          height: 100vh;
-          overflow-y: auto;
-        }
-        .sidebar.open { transform: translateX(0); }
-      }
-    `}</style>
     <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-header">
         <ShieldAlert className="sidebar-logo-icon" size={28} color="#00d4ff" />

@@ -494,7 +494,12 @@
   .news-feed {
     grid-template-columns: 1fr;
   }
-  .news-search-container {
-    max-width: 100%;
+  .page-header { 
+    flex-direction: column; 
+    align-items: center; 
+    text-align: center; 
+    gap: 1rem; 
   }
+  .news-search-container { max-width: 100%; width: 100%; }
+  .search-bar-container { width: 100%; }
 }

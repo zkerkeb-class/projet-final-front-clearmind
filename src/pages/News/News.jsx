@@ -108,12 +108,6 @@ const News = () => {
 
   return (
     <div className="news-container">
-      <style>{`
-        @media (max-width: 768px) {
-          .page-header { flex-direction: column; align-items: center; text-align: center; gap: 1rem; }
-          .search-bar-container { width: 100%; }
-        }
-      `}</style>
       <header className="page-header">
         <div className="header-left">
             <h2 className="page-title">THREAT_<span>INTELLIGENCE</span></h2>

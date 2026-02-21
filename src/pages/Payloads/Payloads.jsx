@@ -88,13 +88,6 @@ const Payloads = () => {
 
   return (
     <div className="payloads-container">
-      <style>{`
-        @media (max-width: 768px) {
-          .payload-grid { grid-template-columns: 1fr !important; }
-          .page-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
-          .search-bar-container { width: 100%; }
-        }
-      `}</style>
       <header className="page-header">
         <h2 className="page-title">DB_<span>PAYLOADS</span></h2>
         {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (

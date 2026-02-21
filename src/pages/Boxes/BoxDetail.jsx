@@ -181,23 +181,6 @@ const BoxDetail = () => {
 
   return (
     <div className="box-detail-container">
-      <style>{`
-        .preview-toggle-btn.source-btn {
-          border: 1px solid #00d4ff;
-          color: #00d4ff;
-        }
-        .preview-toggle-btn.source-btn:hover {
-          background: rgba(0, 212, 255, 0.1);
-          box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
-        }
-        @media (max-width: 768px) {
-          .box-header-detail { flex-direction: column; align-items: flex-start; gap: 1rem; }
-          .box-meta { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-          .editor-toolbar { flex-direction: column; align-items: flex-start; gap: 1rem; }
-          .editor-toolbar > div { width: 100%; }
-          .btn-text { display: none; }
-        }
-      `}</style>
       <button onClick={() => navigate('/boxes')} className="back-btn">
         <ChevronLeft size={16} /> RETOUR_LISTE
       </button>

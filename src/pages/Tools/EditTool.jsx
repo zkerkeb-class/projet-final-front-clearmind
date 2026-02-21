@@ -77,12 +77,6 @@ const EditTool = () => {
 
   return (
     <div className="edit-tool-container">
-      <style>{`
-        @media (max-width: 768px) {
-          .input-group { grid-template-columns: 1fr !important; }
-          .command-input-row { flex-direction: column; }
-        }
-      `}</style>
       <button onClick={() => navigate(-1)} className="back-btn">
         <ChevronLeft size={16} /> ANNULER
       </button>

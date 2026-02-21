@@ -147,6 +147,7 @@
   .payload-grid {
     grid-template-columns: 1fr; /* Une seule colonne sur mobile */
   }
+  .payload-search-container { width: 100%; }
 
   .payload-card {
     padding: 1rem;

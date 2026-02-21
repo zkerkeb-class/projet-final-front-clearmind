@@ -22,6 +22,7 @@ import { ROLES } from './utils/constants';
 import ReverseShell from './pages/ReverseShell/ReverseShell';
 import ScrollToTop from './components/ScrollToTop';
 import Profile from './pages/Profile';
+import Landing from './pages/Landing/Landing';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         {/* Route Publique */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/" element={<Landing />} />
 
         {/* Layout Persistant pour les routes protégées */}
         <Route element={
@@ -82,9 +84,6 @@ function App() {
           } />
         </Route>
         
-        {/* Redirection par défaut */}
-        <Route path="/" element={<Navigate to="/login" />} />
-
         {/* Page 404 - Doit être la dernière route */}
         <Route path="*" element={<NotFound />} />
       </Routes>

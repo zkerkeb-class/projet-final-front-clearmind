@@ -170,23 +170,16 @@ const Wiki = () => {
   );
 
   return (
-    <div className="wiki-container">
-      <style>{`
-        @media (max-width: 768px) {
-          .wiki-container { flex-direction: column; }
-          .wiki-sidebar { width: 100% !important; border-right: none; border-bottom: 1px solid #333; max-height: 200px; overflow-y: auto; }
-          
-          /* Responsive Header & Actions */
-          .wiki-content-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-          .wiki-actions { width: 100%; display: flex; gap: 10px; }
-          .btn-text { display: none; }
-        }
-      `}</style>
-      
+    <div className="wiki-wrapper">
+      <div className="page-header">
+        <h1 className="page-title">KNOWLEDGE_<span>BASE</span></h1>
+      </div>
+
+      <div className="wiki-container">
       {/* Sidebar de navigation des ports */}
       <div className="wiki-sidebar">
         <div className="wiki-sidebar-header">
-          <h3 className="wiki-nav-title"><BookOpen size={18}/> KNOWLEDGE_BASE</h3>
+          <h3 className="wiki-nav-title">Protocols</h3>
           {canEdit && (
             <button onClick={openAddModal} className="wiki-add-btn" title="Ajouter une fiche"><Plus size={16}/></button>
           )}
@@ -263,6 +256,7 @@ const Wiki = () => {
             SÉLECTIONNEZ UN PORT POUR AFFICHER LA MÉTHODOLOGIE_
           </div>
         )}
+      </div>
       </div>
 
       {/* MODALE D'AJOUT / ÉDITION */}

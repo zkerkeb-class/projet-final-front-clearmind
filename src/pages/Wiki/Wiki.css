@@ -1,7 +1,30 @@
 .wiki-container {
   display: flex;
-  height: calc(100vh - 100px); /* Ajuster selon le header */
+  height: calc(100vh - 190px); /* Ajusté pour prendre en compte le nouveau titre */
   gap: 20px;
+}
+
+/* --- PAGE HEADER (Harmonisé) --- */
+.page-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+  padding-bottom: 1rem;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 900;
+  color: #fff;
+  margin: 0;
+}
+
+.page-title span {
+  color: #ff003c;
+  text-shadow: 0 0 10px #ff003c;
 }
 
 /* --- SIDEBAR --- */
@@ -313,4 +336,32 @@
 .wiki-action-btn.small {
   padding: 4px 8px;
   font-size: 0.7rem;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .wiki-container {
+    flex-direction: column;
+  }
+
+  .page-header {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .wiki-sidebar {
+    width: 100% !important;
+    max-height: 200px;
+    overflow-y: auto;
+    /* On garde la bordure définie par défaut (1px solid #333) sur tous les côtés */
+  }
+  
+  .wiki-content-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .wiki-actions { width: 100%; }
+  .btn-text { display: none; }
 }

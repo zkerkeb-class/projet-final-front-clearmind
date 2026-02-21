@@ -148,6 +148,11 @@ const ReverseShell = () => {
 
   return (
     <div className="revshell-container">
+      <style>{`
+        @media (max-width: 768px) {
+          .page-header { flex-direction: column; align-items: center; text-align: center; gap: 1rem; }
+        }
+      `}</style>
       <header className="page-header">
         <h2 className="page-title">REVERSE_<span>SHELL_GEN</span></h2>
         {isAdmin && (

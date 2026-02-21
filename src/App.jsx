@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-
 import Login from './pages/Login';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
+import Signup from './pages/Signup/Signup';
 import Payloads from './pages/Payloads';
 import Targets from './pages/Targets';
 import Boxes from './pages/Boxes';
@@ -20,6 +21,7 @@ import { ToastProvider } from './components/Toast/ToastContext';
 import { ROLES } from './utils/constants';
 import ReverseShell from './pages/ReverseShell/ReverseShell';
 import ScrollToTop from './components/ScrollToTop';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -29,6 +31,7 @@ function App() {
       <Routes>
         {/* Route Publique */}
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
 
         {/* Layout Persistant pour les routes protégées */}
         <Route element={
@@ -39,6 +42,7 @@ function App() {
           </ProtectedRoute>
         }>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/payloads" element={<Payloads />} />
           
           {/* Routes Payloads Protégées (Pentester & Admin) */}

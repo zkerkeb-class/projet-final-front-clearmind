@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../../api/axios';
 import { Lock, Mail, Terminal } from 'lucide-react';
 import './Login.css';
@@ -64,6 +65,10 @@ const Login = () => {
           <button type="submit" className="login-button">
             Initialiser la session
           </button>
+
+          <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.8rem', color: '#666' }}>
+            Pas de compte ? <Link to="/signup" style={{ color: '#00d4ff', textDecoration: 'none', fontWeight: 'bold', marginLeft: '5px' }}>Créer un accès</Link>
+          </div>
         </form>
       </div>
     </div>

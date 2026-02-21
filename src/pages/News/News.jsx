@@ -110,7 +110,7 @@ const News = () => {
     <div className="news-container">
       <style>{`
         @media (max-width: 768px) {
-          .page-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+          .page-header { flex-direction: column; align-items: center; text-align: center; gap: 1rem; }
           .search-bar-container { width: 100%; }
         }
       `}</style>

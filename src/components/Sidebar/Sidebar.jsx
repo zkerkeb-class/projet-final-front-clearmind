@@ -1,5 +1,6 @@
-import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { NavLink, useNavigate, Link } from 'react-router-dom';
+import api from '../../api/axios';
 import { 
   Terminal, 
   ShieldAlert, 
@@ -12,7 +13,8 @@ import {
   BookOpen,
   ShieldCheck, // Ajout de l'icône Admin
   Binary, // Pour CyberChef
-  Cpu // Pour RevShell
+  Cpu, // Pour RevShell
+  User
 } from 'lucide-react';
 import './Sidebar.css';
 import { ROLES } from '../../utils/constants';
@@ -20,9 +22,30 @@ import { getUserRole } from '../../utils/auth';
 
 const Sidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
+  const [userPhoto, setUserPhoto] = useState(null);
+  const [imgError, setImgError] = useState(false);
+
+  // Récupération de la photo de profil
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await api.get('/users/me');
+        if (res.data.data.user.photo) {
+          setUserPhoto(res.data.data.user.photo);
+          setImgError(false); // Réinitialiser l'erreur si une nouvelle image est chargée
+        }
+      } catch (e) {
+        // Ignorer les erreurs silencieusement pour la sidebar
+      }
+    };
+    fetchUser();
+
+    window.addEventListener('user-updated', fetchUser);
+    return () => window.removeEventListener('user-updated', fetchUser);
+  }, []);
   
   // Récupération du rôle pour l'affichage conditionnel
-  const userRole = getUserRole();
+  const userRole = getUserRole() || ROLES.GUEST;
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -54,6 +77,31 @@ const Sidebar = ({ isOpen, onClose }) => {
       <div className="sidebar-header">
         <ShieldAlert className="sidebar-logo-icon" size={28} color="#00d4ff" />
         <h1 className="sidebar-title">Red<span>Sheet</span></h1>
+        
+        <Link to="/profile" onClick={handleNavClick} style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', textDecoration: 'none' }} title="Mon Profil">
+          <div style={{ 
+            width: '35px', 
+            height: '35px', 
+            borderRadius: '50%', 
+            border: '2px solid #00d4ff',
+            overflow: 'hidden',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: '#000'
+          }}>
+            {userPhoto && !imgError ? (
+              <img 
+                src={`http://localhost:5000/img/users/${userPhoto}`} 
+                alt="Profile" 
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                onError={() => setImgError(true)}
+              />
+            ) : (
+              <User size={20} color="#00d4ff" />
+            )}
+          </div>
+        </Link>
       </div>
 
       <nav className="nav-links">

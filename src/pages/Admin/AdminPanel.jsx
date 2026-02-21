@@ -86,7 +86,7 @@ const AdminPanel = () => {
     setLoading(true);
     try {
       const res = await api.get('/users');
-      setUsers(res.data.data || []);
+      setUsers(res.data.data?.users || []);
       setError(null);
     } catch (err) {
       setError("Erreur de récupération des opérateurs");
@@ -144,9 +144,9 @@ const AdminPanel = () => {
           .admin-tabs { flex-direction: column; }
           
           /* Header Responsive */
-          .admin-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-          .admin-title { font-size: 1.1rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-          .admin-status { font-size: 0.7rem; align-self: flex-start; }
+          .page-header { flex-direction: column; align-items: center; text-align: center; gap: 0.5rem; }
+          .page-title { font-size: 1.1rem; display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; }
+          .admin-status { font-size: 0.7rem; align-self: center; }
 
           /* Transformation Table -> Cards pour Mobile */
           .admin-data-table { display: block; width: 100%; }
@@ -191,11 +191,8 @@ const AdminPanel = () => {
           .users-mgmt td:nth-of-type(3)::before { content: "RÔLE"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
         }
       `}</style>
-      <header className="admin-header">
-        <h2 className="admin-title">
-          <ShieldCheck size={32} color="#ff003c" />
-          <span><span style={{ color: '#ffffff' }}>CONSOLE_</span><span>ADMINISTRATION</span></span>
-        </h2>
+      <header className="page-header">
+        <h2 className="page-title">ADMIN_<span>PANEL</span></h2>
         <div className="admin-status">MODE_ROOT_ACTIF</div>
       </header>
 

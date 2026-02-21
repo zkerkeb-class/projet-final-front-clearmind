@@ -3,6 +3,7 @@ import api from '../../api/axios';
 import { User, Mail, Lock, Save, Camera, Shield, AlertTriangle, CheckCircle, Trash2 } from 'lucide-react';
 import { useToast } from '../../components/Toast/ToastContext';
 import './Profile.css';
+import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 
 const Profile = () => {
   const { addToast } = useToast();
@@ -12,6 +13,7 @@ const Profile = () => {
   const [photoPreview, setPhotoPreview] = useState(null);
   const [imgError, setImgError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // Charger les infos utilisateur
   useEffect(() => {
@@ -67,9 +69,11 @@ const Profile = () => {
   };
 
   // Suppression de la photo
-  const handleDeletePhoto = async () => {
-    if (!window.confirm("Voulez-vous vraiment supprimer votre photo de profil ?")) return;
-    
+  const handleDeletePhoto = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const executeDeletePhoto = async () => {
     setLoading(true);
     try {
       const formData = new FormData();
@@ -87,6 +91,7 @@ const Profile = () => {
       addToast('Erreur lors de la suppression', 'error');
     } finally {
       setLoading(false);
+      setShowDeleteConfirm(false);
     }
   };
 
@@ -236,6 +241,14 @@ const Profile = () => {
           </form>
         </div>
       </div>
+
+      <ConfirmationModal 
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={executeDeletePhoto}
+        title="SUPPRESSION_PHOTO"
+        message="Voulez-vous vraiment supprimer votre photo de profil ?"
+      />
     </div>
   );
 };

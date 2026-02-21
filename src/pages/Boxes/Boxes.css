@@ -205,20 +205,42 @@
 }
 
 /* --- STYLES AJOUTÉS POUR NETTOYAGE JSX --- */
-.modal-form-input, .modal-form-select {
-  padding: 10px;
-  background: #111;
+.modal-input, .modal-select {
+  width: 100%;
+  background: #0a0a0a;
   border: 1px solid #333;
   color: #fff;
+  padding: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.modal-input:focus, .modal-select:focus {
+  border-color: #00d4ff;
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.1);
 }
 
 .modal-submit-btn {
   margin-top: 1rem;
   padding: 12px;
   background: #00d4ff;
+  color: #000;
   border: none;
   font-weight: bold;
   cursor: pointer;
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 4px;
+  transition: 0.3s;
+}
+
+.modal-submit-btn:hover {
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
 }
 
 /* --- CLEANUP STYLES --- */

@@ -39,19 +39,20 @@
 }
 
 .add-tool-container input, .add-tool-container textarea, .add-tool-container select {
-  background: #111;
-  border: 1px solid #222;
+  background: #0a0a0a;
+  border: 1px solid #333;
   color: #fff;
   padding: 12px;
   border-radius: 4px;
   font-family: 'JetBrains Mono', monospace;
   width: 100%;
+  transition: all 0.3s ease;
 }
 
 .add-tool-container input:focus, .add-tool-container textarea:focus, .add-tool-container select:focus {
   border-color: #00d4ff;
   outline: none;
-  box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.1);
 }
 
 select option {

@@ -256,10 +256,10 @@ const Boxes = () => {
             <h3 className="modal-title">INITIALISER_NOUVELLE_MACHINE</h3>
             
             <form onSubmit={handleAddBox} className="modal-form">
-              <input type="text" placeholder="Nom de la machine" required value={newBox.name} onChange={e => setNewBox({...newBox, name: e.target.value})} className="modal-form-input" />
-              <input type="text" placeholder="Adresse IP" value={newBox.ipAddress} onChange={e => setNewBox({...newBox, ipAddress: e.target.value})} className="modal-form-input" />
+              <input type="text" placeholder="Nom de la machine" required value={newBox.name} onChange={e => setNewBox({...newBox, name: e.target.value})} className="modal-input" />
+              <input type="text" placeholder="Adresse IP" value={newBox.ipAddress} onChange={e => setNewBox({...newBox, ipAddress: e.target.value})} className="modal-input" />
               
-              <select value={newBox.platform} onChange={e => setNewBox({...newBox, platform: e.target.value})} className="modal-form-select">
+              <select value={newBox.platform} onChange={e => setNewBox({...newBox, platform: e.target.value})} className="modal-select">
                 <option value={BOX_PLATFORMS.HTB}>HackTheBox</option>
                 <option value={BOX_PLATFORMS.THM}>TryHackMe</option>
                 <option value={BOX_PLATFORMS.ROOT_ME}>Root-Me</option>
@@ -267,7 +267,7 @@ const Boxes = () => {
                 <option value={BOX_PLATFORMS.OTHER}>Autre</option>
               </select>
 
-              <select value={newBox.difficulty} onChange={e => setNewBox({...newBox, difficulty: e.target.value})} className="modal-form-select">
+              <select value={newBox.difficulty} onChange={e => setNewBox({...newBox, difficulty: e.target.value})} className="modal-select">
                 <option value={BOX_DIFFICULTIES.EASY}>Easy</option>
                 <option value={BOX_DIFFICULTIES.MEDIUM}>Medium</option>
                 <option value={BOX_DIFFICULTIES.HARD}>Hard</option>

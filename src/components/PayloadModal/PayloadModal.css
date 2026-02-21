@@ -56,6 +56,7 @@
 
 .modal-title span {
   color: #ff003c;
+  text-shadow: 0 0 10px #ff003c;
 }
 
 .close-btn {

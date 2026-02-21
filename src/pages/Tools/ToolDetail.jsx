@@ -36,7 +36,7 @@ const ToolDetail = () => {
   if (loading) {
     return (
       <div className="tool-detail-container">
-        <button className="back-btn" style={{ pointerEvents: 'none' }}><ChevronLeft size={16} /> RETOUR</button>
+        <button className="back-btn disabled"><ChevronLeft size={16} /> RETOUR</button>
         <header className="tool-header">
           <div className="tool-title-section">
             <Skeleton width={250} height={40} />
@@ -47,10 +47,10 @@ const ToolDetail = () => {
           <Skeleton width="100%" height={80} />
         </section>
         <section className="cheatsheet-section">
-          <Skeleton width={200} height={24} style={{ marginBottom: '20px' }} />
+          <Skeleton width={200} height={24} className="mb-20" />
           <div className="commands-grid">
             {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="command-card" style={{ height: '100px' }}>
+              <div key={i} className="command-card skeleton-card">
                 <Skeleton width="100%" height="100%" />
               </div>
             ))}
@@ -64,30 +64,9 @@ const ToolDetail = () => {
   if (error) {
     return (
       <div className="tool-error-container">
-        <style>{`
-          .btn-deploy {
-            margin-top: 1.5rem;
-            background: transparent;
-            border: 1px solid #00d4ff;
-            color: #00d4ff;
-            padding: 1rem 2rem;
-            font-family: 'JetBrains Mono', monospace
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-          }
-          .btn-deploy:hover {
-            background: rgba(0, 212, 255, 0.1);
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
-            text-shadow: 0 0 5px #00d4ff;
-          }
-        `}</style>
         <button 
           onClick={() => navigate(-1)} 
-          className="back-btn"
-          style={{ position: 'absolute', top: '30px', left: '30px' }}
+          className="back-btn back-btn-absolute"
         >
           <ChevronLeft size={16} /> RETOUR
         </button>
@@ -111,34 +90,6 @@ const ToolDetail = () => {
 
   return (
     <div className="tool-detail-container">
-      <style>{`
-        @media (max-width: 768px) {
-          .tool-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
-          .commands-grid { grid-template-columns: 1fr !important; }
-          .btn-text { display: none; }
-        }
-        .edit-tool-btn {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          background: transparent;
-          border: 1px solid #ffa500;
-          color: #888;
-          padding: 5px 10px;
-          cursor: pointer;
-          font-weight: bold;
-          font-size: 0.7rem;
-          font-family: 'JetBrains Mono', monospace;
-          transition: all 0.3s ease;
-          border-radius: 2px;
-        }
-        .edit-tool-btn svg { color: #ffa500; }
-        .edit-tool-btn:hover {
-          background: rgba(255, 165, 0, 0.1);
-          box-shadow: 0 0 10px rgba(255, 165, 0, 0.2);
-          color: #fff;
-        }
-      `}</style>
       <button onClick={() => navigate(-1)} className="back-btn">
         <ChevronLeft size={16} /> RETOUR
       </button>
@@ -148,7 +99,7 @@ const ToolDetail = () => {
           <h1>{tool.name.toUpperCase()}</h1>
           <span className="tool-category-badge">{tool.category}</span>
         </div>
-        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <div className="tool-actions">
           {userRole === ROLES.ADMIN && (
             <button 
               onClick={() => navigate(`/tools/edit/${tool.name}`)} 

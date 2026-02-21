@@ -65,18 +65,12 @@ const EditPayloads = () => {
 
   return (
     <div className="edit-payload-container">
-      <style>{`
-        .split-group { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        @media (max-width: 768px) {
-          .split-group { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
       <header className="page-header">
         <h2 className="page-title">{isEditMode ? 'EDIT_' : 'NEW_'}<span>PAYLOAD</span></h2>
       </header>
 
       {error && (
-        <div className="error-banner" style={{ background: 'rgba(255, 0, 60, 0.1)', border: '1px solid #ff003c', color: '#ff003c', padding: '1rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div className="error-banner">
           <AlertTriangle size={20} />
           {error}
         </div>

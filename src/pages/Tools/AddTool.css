@@ -10,7 +10,7 @@
   margin-bottom: 5px;
 }
 
-.form-header span { color: #00d4ff; }
+.form-header span { color: #ff003c; text-shadow: 0 0 10px #ff003c; }
 
 .tool-form {
   background: rgba(10, 10, 10, 0.8);

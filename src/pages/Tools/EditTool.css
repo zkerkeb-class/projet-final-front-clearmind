@@ -17,7 +17,7 @@
   letter-spacing: 2px;
 }
 
-.form-header span { color: #00d4ff; text-shadow: 0 0 10px rgba(0, 212, 255, 0.4); }
+.form-header span { color: #ff003c; text-shadow: 0 0 10px #ff003c; }
 
 .tool-form {
   background: rgba(10, 10, 15, 0.8);

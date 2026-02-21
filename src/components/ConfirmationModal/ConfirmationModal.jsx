@@ -15,10 +15,10 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message }) => {
         <p className="confirm-modal-message">{message || "Êtes-vous sûr de vouloir effectuer cette action ? Cette opération est irréversible."}</p>
         
         <div className="confirm-modal-actions">
-          <button onClick={onClose} className="confirm-btn cancel" style={{ background: 'transparent', border: '1px solid #555', color: '#888', padding: '10px 20px', cursor: 'pointer', fontFamily: 'Orbitron' }}>
+          <button onClick={onClose} className="confirm-btn cancel">
             ANNULER
           </button>
-          <button onClick={() => { onConfirm(); onClose(); }} className="confirm-btn confirm" style={{ background: '#ff003c', border: '1px solid #ff003c', color: '#000', padding: '10px 20px', cursor: 'pointer', fontWeight: 'bold', fontFamily: 'Orbitron' }}>
+          <button onClick={() => { onConfirm(); onClose(); }} className="confirm-btn confirm">
             CONFIRMER
           </button>
         </div>

@@ -184,6 +184,18 @@
 .req-item.valid { color: #00ff41; text-shadow: 0 0 5px #00ff41; }
 .req-item.invalid { color: #555; }
 
+.page-title {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 900;
+}
+
+.page-title span {
+  color: #ff003c;
+  text-shadow: 0 0 10px #ff003c;
+}
+
 @media (max-width: 768px) {
   .page-header {
     flex-direction: column;

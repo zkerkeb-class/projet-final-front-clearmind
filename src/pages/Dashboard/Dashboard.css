@@ -8,15 +8,16 @@
   padding-bottom: 1rem;
 }
 
-.dashboard-title {
+.page-title {
   font-size: 1.5rem;
   text-transform: uppercase;
   letter-spacing: 3px;
   font-weight: 900;
 }
 
-.dashboard-title span {
+.page-title span {
   color: #ff003c;
+  text-shadow: 0 0 10px #ff003c;
 }
 
 /* Grille de statistiques */

@@ -10,22 +10,19 @@
 }
 
 .confirm-modal-content {
-  background: #0a0a0a;
-  border: 1px solid #ff003c; /* Rouge pour le danger */
+  background: #0f0f0f;
+  border: 1px solid #ff003c;
   padding: 2rem;
   width: 400px;
   max-width: 90%;
-  position: relative;
-  box-shadow: 0 0 30px rgba(255, 0, 60, 0.2);
   text-align: center;
-  animation: fadeIn 0.2s ease-out;
+  box-shadow: 0 0 40px rgba(255, 0, 60, 0.2);
+  position: relative;
 }
 
 .confirm-modal-icon {
-  margin-bottom: 1rem;
   color: #ff003c;
-  display: flex;
-  justify-content: center;
+  margin-bottom: 1rem;
 }
 
 .confirm-modal-title {
@@ -33,37 +30,51 @@
   font-family: 'Orbitron', sans-serif;
   margin-bottom: 1rem;
   font-size: 1.2rem;
+  letter-spacing: 1px;
 }
 
 .confirm-modal-message {
-  color: #e0e0e0;
+  color: #aaa;
   font-family: 'JetBrains Mono', monospace;
-  margin-bottom: 2rem;
   font-size: 0.9rem;
+  margin-bottom: 2rem;
   line-height: 1.5;
 }
 
 .confirm-modal-actions {
   display: flex;
-  gap: 1rem;
   justify-content: center;
+  gap: 1rem;
 }
 
 .confirm-btn {
-  transition: all 0.3s ease;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-family: 'Orbitron', sans-serif;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+}
+
+.confirm-btn.cancel {
+  background: transparent;
+  border: 1px solid #555;
+  color: #888;
 }
 
 .confirm-btn.cancel:hover {
-  border-color: #fff !important;
-  color: #fff !important;
+  border-color: #fff;
+  color: #fff;
+}
+
+.confirm-btn.confirm {
+  background: #ff003c;
+  border: 1px solid #ff003c;
+  color: #000;
+  font-weight: bold;
 }
 
 .confirm-btn.confirm:hover {
-  box-shadow: 0 0 15px #ff003c;
-  filter: brightness(1.1);
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  background: #ff3360;
+  box-shadow: 0 0 15px rgba(255, 0, 60, 0.4);
 }

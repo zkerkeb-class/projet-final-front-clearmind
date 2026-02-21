@@ -281,7 +281,7 @@ const BoxDetail = () => {
             </button>
             <h3 className="modal-title">CONFIGURATION_CIBLE</h3>
             
-            <form onSubmit={handleEditSubmit} className="edit-form">
+            <form onSubmit={handleEditSubmit} className="edit-form config-form">
               <input className="edit-input" type="text" placeholder="Nom de la machine" required value={editData.name} onChange={e => setEditData({...editData, name: e.target.value})} />
               <input className="edit-input" type="text" placeholder="Adresse IP" value={editData.ipAddress} onChange={e => setEditData({...editData, ipAddress: e.target.value})} />
               
@@ -300,7 +300,7 @@ const BoxDetail = () => {
                 <option value={BOX_DIFFICULTIES.INSANE}>Insane</option>
               </select>
 
-              <button type="submit" className="save-btn" style={{ marginTop: '1rem' }}>
+              <button type="submit" className="save-btn">
                 <Save size={18} /> ENREGISTRER LES MODIFICATIONS
               </button>
             </form>
@@ -337,7 +337,7 @@ const BoxDetail = () => {
                 <textarea className="wiki-modal-textarea" value={notesFormData} onChange={e => setNotesFormData(e.target.value)} placeholder="# Vos notes ici..." />
               )}
 
-              <button type="submit" className="save-btn mt-1">
+              <button type="submit" className="save-btn">
                 <Save size={18} /> ENREGISTRER LES NOTES
               </button>
             </form>

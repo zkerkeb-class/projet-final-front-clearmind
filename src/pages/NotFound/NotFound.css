@@ -88,3 +88,22 @@
   box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
   text-shadow: 0 0 5px #00d4ff;
 }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .not-found-content {
+    width: 90%;
+    padding: 2rem;
+  }
+
+  .error-code {
+    font-size: 4rem;
+    letter-spacing: 2px;
+  }
+
+  .error-title {
+    font-size: 1.2rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

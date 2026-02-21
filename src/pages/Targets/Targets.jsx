@@ -221,14 +221,7 @@ const Targets = () => {
                   : "N/A"}
               </td>
               <td data-label="STATUT">
-                <span className="status-badge" style={{
-                  backgroundColor: t.status === TARGET_STATUSES.COMPROMISED ? 'rgba(255, 0, 60, 0.2)' : 'rgba(0, 212, 255, 0.1)',
-                  color: t.status === TARGET_STATUSES.COMPROMISED ? '#ff003c' : '#00d4ff',
-                  border: `1px solid ${t.status === TARGET_STATUSES.COMPROMISED ? '#ff003c' : '#00d4ff'}`,
-                  padding: '2px 8px',
-                  borderRadius: '4px',
-                  fontSize: '0.8rem'
-                }}>
+                <span className={`status-badge ${t.status === TARGET_STATUSES.COMPROMISED ? 'compromised' : 'active'}`}>
                   {t.status.toUpperCase()}
                 </span>
               </td>

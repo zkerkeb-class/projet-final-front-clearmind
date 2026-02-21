@@ -123,11 +123,11 @@ const Payloads = () => {
           filteredPayloads.map((p) => (
             <div key={p._id} className="payload-card">
               {isOwner(p) && (
-                <div className="payload-actions" style={{ position: 'absolute', top: '10px', right: '10px', display: 'flex', gap: '8px' }}>
-                  <button onClick={() => handleEdit(p)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#ffa500' }}>
+                <div className="payload-actions">
+                  <button onClick={() => handleEdit(p)} className="action-btn edit">
                     <Pencil size={14} />
                   </button>
-                  <button onClick={() => confirmDelete(p._id)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: '#555' }} className="hover-red">
+                  <button onClick={() => confirmDelete(p._id)} className="action-btn delete">
                     <Trash2 size={14} />
                   </button>
                 </div>
@@ -143,18 +143,7 @@ const Payloads = () => {
               <div className="payload-footer">
                 <span>
                   SEVERITY: 
-                  <span style={{
-                    marginLeft: '5px',
-                    fontWeight: '900',
-                    color: 
-                      p.severity === PAYLOAD_SEVERITIES.CRITICAL ? '#ff003c' : // Rose Néon
-                      p.severity === PAYLOAD_SEVERITIES.HIGH     ? '#ff8000' : // Orange Électrique
-                      p.severity === PAYLOAD_SEVERITIES.MEDIUM   ? '#00d4ff' : // Bleu Cyan
-                                                  '#00ff41',  // Vert Matrix pour 'Low'
-                    textShadow: (p.severity === PAYLOAD_SEVERITIES.CRITICAL || p.severity === PAYLOAD_SEVERITIES.HIGH) 
-                      ? `0 0 8px ${p.severity === PAYLOAD_SEVERITIES.CRITICAL ? '#ff003c' : '#ff8000'}` 
-                      : 'none'
-                  }}>
+                  <span className={`severity-badge ${p.severity?.toLowerCase() || 'medium'}`}>
                     {p.severity?.toUpperCase() || 'MEDIUM'}
                   </span>
                 </span>
@@ -162,7 +151,7 @@ const Payloads = () => {
             </div>
           ))
         ) : (
-          <p className="loading-text" style={{color: '#ff003c'}}>AUCUN RÉSULTAT CORRESPONDANT DANS LA BASE.</p>
+          <p className="loading-text empty-msg">AUCUN RÉSULTAT CORRESPONDANT DANS LA BASE.</p>
         )}
       </div>
 

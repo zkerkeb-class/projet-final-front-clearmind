@@ -141,7 +141,7 @@ const Profile = () => {
                     onError={() => setImgError(true)}
                   />
                 ) : (
-                  <div style={{width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000'}}><User size={64} color="#00d4ff" /></div>
+                  <div className="photo-placeholder"><User size={64} color="#00d4ff" /></div>
                 )}
                 <label htmlFor="photo-upload" className="photo-edit-btn">
                   <Camera size={16} />

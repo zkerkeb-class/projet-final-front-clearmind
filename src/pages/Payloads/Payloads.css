@@ -135,6 +135,49 @@
   font-size: 0.8rem;
 }
 
+.payload-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.action-btn.edit { color: #ffa500; }
+.action-btn.delete { color: #555; }
+.action-btn.delete:hover { color: #ff003c; }
+
+.severity-badge {
+  margin-left: 5px;
+  font-weight: 900;
+}
+
+.severity-badge.critical {
+  color: #ff003c;
+  text-shadow: 0 0 8px #ff003c;
+}
+
+.severity-badge.high {
+  color: #ff8000;
+  text-shadow: 0 0 8px #ff8000;
+}
+
+.severity-badge.medium {
+  color: #00d4ff;
+}
+
+.severity-badge.low {
+  color: #00ff41;
+}
+
+.empty-msg { color: #ff003c; }
+
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
   .page-header {

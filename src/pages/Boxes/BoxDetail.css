@@ -115,7 +115,10 @@
 }
 
 .box-detail-container .markdown-editor::placeholder {
-  color: #333;
+  color: #666;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 1px;
 }
 
 /* Focus state pour l'éditeur */
@@ -338,6 +341,14 @@
   box-sizing: border-box;
 }
 
+.box-detail-container .edit-input::placeholder {
+  color: #666;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
 .box-detail-container .edit-input:focus, .box-detail-container .edit-select:focus {
   border-color: #00d4ff;
   box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15);
@@ -462,6 +473,14 @@
   width: 100%;
   box-sizing: border-box;
   outline: none;
+}
+
+.box-detail-container .wiki-modal-textarea::placeholder {
+  color: #666;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
 }
 
 .box-detail-container .wiki-raw-source {

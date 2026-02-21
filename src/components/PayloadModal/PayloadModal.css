@@ -110,6 +110,15 @@
   transition: all 0.2s;
 }
 
+.payload-modal-input::placeholder, 
+.payload-modal-textarea::placeholder {
+  color: #666;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
 .payload-modal-input:focus, 
 .payload-modal-textarea:focus, 
 .payload-modal-select:focus {

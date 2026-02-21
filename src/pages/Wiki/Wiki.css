@@ -130,6 +130,14 @@
   padding: 10px 0;
 }
 
+.wiki-wrapper .wiki-search input::placeholder {
+  color: #666;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
 .wiki-wrapper .wiki-search input:focus { border-color: #00d4ff; }
 
 .wiki-wrapper .wiki-search-icon {
@@ -476,6 +484,15 @@
   outline: none;
   transition: all 0.2s ease;
   box-sizing: border-box;
+}
+
+.wiki-wrapper .modal-input::placeholder,
+.wiki-wrapper .wiki-modal-textarea::placeholder {
+  color: #666;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
 }
 
 .wiki-wrapper .modal-input:focus {

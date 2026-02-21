@@ -104,10 +104,12 @@
   padding: 14px 0; /* On retire le padding gauche artificiel */
 }
 
-.payloads-container .search-input::placeholder {
-  color: #444;
+.payloads-container .payload-search-input::placeholder {
+  color: #666;
   text-transform: uppercase;
   font-size: 0.8rem;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 1px;
 }
 
 /* Grille de Payloads */

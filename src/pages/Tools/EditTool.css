@@ -82,6 +82,15 @@
   box-sizing: border-box;
 }
 
+.edit-tool-container .tool-form input::placeholder, 
+.edit-tool-container .tool-form textarea::placeholder {
+  color: #666;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
 .edit-tool-container .tool-form input:focus, 
 .edit-tool-container .tool-form textarea:focus, 
 .edit-tool-container .tool-form select:focus {

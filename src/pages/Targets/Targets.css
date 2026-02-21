@@ -82,9 +82,11 @@
 }
 
 .targets-container .targets-search-input::placeholder {
-  color: #444;
+  color: #666;
   text-transform: uppercase;
   font-size: 0.8rem;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 1px;
 }
 
 /* --- ADD BUTTON --- */
@@ -361,6 +363,14 @@
   box-sizing: border-box;
 }
 
+.targets-container .modal-input::placeholder {
+  color: #666;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 1px;
+}
+
 .targets-container .modal-input:hover, .targets-container .modal-select:hover {
   background: rgba(255, 255, 255, 0.05);
   border-color: rgba(255, 255, 255, 0.2);
@@ -556,6 +566,14 @@
   border-radius: 4px;
   outline: none;
   transition: 0.2s;
+}
+
+.targets-container .port-input::placeholder {
+  color: #666;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 1px;
 }
 
 .targets-container .port-input:focus {

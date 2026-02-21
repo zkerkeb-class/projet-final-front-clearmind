@@ -92,6 +92,14 @@
   outline: none;
 }
 
+.revshell-container .config-group input::placeholder {
+  color: #666;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
 .revshell-container .config-group input:focus {
   border-color: #00d4ff;
   box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15);
@@ -157,6 +165,14 @@
   font-size: 0.85rem;
   letter-spacing: 1px;
   padding: 10px 0;
+}
+
+.revshell-container .sidebar-search input::placeholder {
+  color: #666;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
 }
 
 .revshell-container .clear-search-btn {
@@ -474,6 +490,15 @@
   outline: none;
   transition: all 0.2s ease;
   font-size: 0.9rem;
+}
+
+.revshell-container .shell-form input::placeholder, 
+.revshell-container .shell-form textarea::placeholder {
+  color: #666;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
 }
 
 .revshell-container .shell-form input:focus, 

@@ -105,9 +105,11 @@
 }
 
 .news-container .news-search-input::placeholder {
-  color: #444;
+  color: #666;
   text-transform: uppercase;
   font-size: 0.8rem;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 1px;
 }
 
 .news-container .live-indicator {

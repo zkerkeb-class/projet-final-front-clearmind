@@ -77,6 +77,15 @@
   outline: none;
 }
 
+.edit-payload-container .edit-payload-input::placeholder, 
+.edit-payload-container .edit-payload-textarea::placeholder {
+  color: #666;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
 .edit-payload-container .edit-payload-input:focus, .edit-payload-container .edit-payload-select:focus, .edit-payload-container .edit-payload-textarea:focus {
   border-color: #00d4ff;
   box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15);

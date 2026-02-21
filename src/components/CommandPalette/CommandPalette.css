@@ -51,6 +51,14 @@
   outline: none;
 }
 
+.palette-modal .palette-search input::placeholder {
+  color: #666;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
 .palette-modal .palette-hint {
   font-size: 0.7rem;
   color: #444;

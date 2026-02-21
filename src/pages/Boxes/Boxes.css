@@ -113,9 +113,11 @@
 }
 
 .boxes-container .boxes-search-input::placeholder {
-  color: #444;
+  color: #666;
   text-transform: uppercase;
   font-size: 0.8rem;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 1px;
 }
 
 .boxes-container .filters-wrapper {
@@ -306,6 +308,14 @@
   outline: none;
   transition: all 0.2s ease;
   box-sizing: border-box;
+}
+
+.boxes-container .modal-input::placeholder {
+  color: #666;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 1px;
 }
 
 .boxes-container .modal-input:hover, .boxes-container .modal-select:hover {

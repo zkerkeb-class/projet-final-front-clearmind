@@ -118,6 +118,14 @@
   font-size: 0.9rem;
 }
 
+.signup-card .form-input::placeholder {
+  color: #666;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
 .signup-card .form-input:focus {
   border-color: #00d4ff;
   background-color: rgba(0, 212, 255, 0.05);

@@ -205,6 +205,38 @@ const AdminPanel = () => {
     return matchesSearch && matchesLevel;
   });
 
+  const handleExportLogs = () => {
+    if (filteredLogs.length === 0) {
+      info("AUCUNE DONNÉE À EXPORTER");
+      return;
+    }
+
+    const headers = ["TIMESTAMP", "NIVEAU", "ACTEUR", "ACTION", "DETAILS"];
+    const csvRows = [headers.join(',')];
+
+    filteredLogs.forEach(log => {
+      const row = [
+        `"${new Date(log.timestamp).toLocaleString()}"`,
+        `"${log.level.toUpperCase()}"`,
+        `"${log.actor}"`,
+        `"${log.action}"`,
+        `"${(log.details || '').replace(/"/g, '""')}"`
+      ];
+      csvRows.push(row.join(','));
+    });
+
+    const csvContent = csvRows.join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `logs_export_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    success("EXPORT CSV GÉNÉRÉ");
+  };
+
   return (
     <div className="admin-container">
       <header className="page-header">
@@ -426,7 +458,7 @@ const AdminPanel = () => {
                   <option value="warning">WARNING</option>
                   <option value="error">ERROR</option>
                 </select>
-                <button className="add-tool-btn" onClick={() => info("EXPORT CSV NON DISPONIBLE")}>
+                <button className="add-tool-btn" onClick={handleExportLogs}>
                     <Download size={16} /> EXPORT_CSV
                 </button>
               </div>

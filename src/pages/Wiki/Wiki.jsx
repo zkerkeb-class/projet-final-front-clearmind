@@ -235,7 +235,7 @@ const Wiki = () => {
                 {canEdit && (
                   <>
                   <button onClick={openEditModal} className="wiki-action-btn edit"><Edit size={14}/> <span className="btn-text">ÉDITER</span></button>
-                  <button onClick={() => setShowDeleteConfirm(true)} className="wiki-action-btn delete"><Trash2 size={14}/></button>
+                  <button onClick={() => setShowDeleteConfirm(true)} className="wiki-action-btn delete"><Trash2 size={14}/><span className="btn-text">SUPPRIMER</span></button>
                   </>
                 )}
               </div>

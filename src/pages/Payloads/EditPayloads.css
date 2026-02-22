@@ -77,9 +77,16 @@
   outline: none;
 }
 
+.edit-payload-container .edit-payload-select optgroup {
+  background: #050505;
+  color: #00d4ff;
+  font-weight: 900;
+  font-style: normal;
+}
+
 .edit-payload-container .edit-payload-select option {
-  background: #111;
-  color: #fff;
+  background: #1a1a1a;
+  color: #e0e0e0;
 }
 
 .edit-payload-container .edit-payload-input::placeholder, 

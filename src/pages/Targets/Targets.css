@@ -52,7 +52,7 @@
   border-left: 3px solid #00d4ff;
   padding: 0 15px;
   gap: 12px;
-  min-width: 300px;
+  min-width: 250px;
   transition: all 0.3s ease;
   position: relative;
   border-radius: 4px;
@@ -194,127 +194,16 @@
   border-color: rgba(0, 212, 255, 0.3);
 }
 
-/* --- RESPONSIVE CARD VIEW (Mobile Optimization) --- */
-@media (max-width: 768px) {
-  .targets-container {
-    padding: 20px 10px;
-  }
-
-  .targets-container .page-header { 
-    flex-direction: column; 
-    align-items: flex-start; 
-    gap: 1rem; 
-  }
-
-  .targets-container .header-actions {
-    width: 100%;
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .targets-container .targets-search-container {
-    width: 100%;
-  }
-
-  .targets-container .add-target-btn {
-    justify-content: center;
-  }
-
-  .targets-container .targets-table {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    border: none;
-  }
-
-  .targets-container .targets-table thead {
-    display: none; /* On cache l'en-tête du tableau */
-  }
-
-  .targets-container .targets-table tbody {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .targets-container .target-row {
-    display: flex;
-    flex-direction: column;
-    background: rgba(15, 15, 25, 0.8);
-    border: 1px solid #333;
-    border-radius: 8px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    position: relative;
-  }
-
-  .targets-container .target-row td {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.8rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    width: 100%;
-    text-align: right;
-  }
-
-  /* On utilise data-label pour afficher le titre de la ligne */
-  .targets-container .target-row td::before {
-    content: attr(data-label);
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.75rem;
-    color: #00d4ff;
-    font-weight: bold;
-    text-transform: uppercase;
-    margin-right: 1rem;
-  }
-
-  /* Style spécial pour le NOM (Titre de la carte) */
-  .targets-container .target-row td[data-label="HOST"] {
-    font-size: 1.2rem;
-    color: #fff;
-    border-bottom: 2px solid #00d4ff;
-    margin-bottom: 1rem;
-    padding-top: 0;
-    justify-content: flex-start;
-  }
-  
-  .targets-container .target-row td[data-label="HOST"]::before {
-    display: none; /* Pas de label pour le titre */
-  }
-
-  /* Style pour les actions en bas de carte */
-  .targets-container .target-row td[data-label="ACTIONS"] {
-    border-bottom: none;
-    justify-content: flex-end;
-    padding-top: 1rem;
-    gap: 15px;
-  }
-
-  /* Reset des bordures arrondies du mode tableau */
-  .targets-container .target-row td:first-child, .targets-container .target-row td:last-child {
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-  }
-
-  .targets-container .target-modal-content {
-    padding: 1.5rem;
-    width: 95%;
-  }
-}
-
 /* --- MODAL RESPONSIVE --- */
 .targets-container .target-modal-content {
   background: rgba(10, 10, 15, 0.95);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 2.5rem;
-  width: 100%;
-  max-width: 800px; /* Élargissement pour la grille */
+  padding: 2rem;
+  width: fit-content;
+  min-width: 300px;
+  width: fit-content;
+  min-width: 300px;
   position: relative;
   max-height: 90vh;
   overflow-y: auto;
@@ -328,24 +217,11 @@
   margin-bottom: 8px;
 }
 
-@media (max-width: 480px) {
-  .targets-container .port-row {
-    flex-direction: column; /* Empile les inputs verticalement */
-    background: rgba(255, 255, 255, 0.05);
-    padding: 10px;
-    border-radius: 4px;
-  }
-  
-  .targets-container .port-row button {
-    align-self: flex-end; /* Place la poubelle à droite */
-  }
-}
-
 /* --- GRID LAYOUT FOR FORM --- */
 .targets-container .modal-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  gap: 1rem; /* Réduction de l'espace entre les éléments */
 }
 
 .targets-container .ports-manager,
@@ -358,9 +234,9 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #fff;
-  padding: 14px 16px;
+  padding: 10px 12px; /* Inputs plus compacts */
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   border-radius: 6px;
   outline: none;
   transition: all 0.2s ease;
@@ -393,7 +269,7 @@
 
 .targets-container .modal-submit-btn {
   margin-top: 0.5rem;
-  padding: 16px;
+  padding: 12px; /* Bouton moins haut */
   background: #00d4ff;
   color: #000;
   border: none;
@@ -475,13 +351,17 @@
 }
 
 .targets-container .action-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
 }
 
 .targets-container .action-btn:last-child {
   margin-right: 0;
 }
+
+.targets-container .action-btn.edit-btn { color: #ffa500; }
+
+.targets-container .action-btn.delete-btn { color: #555; }
+.targets-container .action-btn.delete-btn:hover { color: #ff003c; }
 
 .targets-container .empty-state-row {
   text-align: center;
@@ -531,7 +411,7 @@
 /* --- PORTS MANAGER (MODAL) --- */
 .targets-container .ports-manager {
   background: rgba(0, 0, 0, 0.2);
-  padding: 1.2rem;
+  padding: 1rem;
   border: 1px dashed rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   margin-top: 0.5rem;
@@ -636,16 +516,129 @@
 
 .targets-container .modal-title {
   color: #fff;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   font-family: 'Orbitron', sans-serif;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding-bottom: 10px;
 }
 
-/* Responsive Grid Fallback */
+/* --- RESPONSIVE (Consolidated) --- */
 @media (max-width: 768px) {
+  .targets-container {
+    padding: 20px 10px;
+  }
+
+  /* Header & Actions */
+  .targets-container .page-header { 
+    flex-direction: column; 
+    align-items: flex-start; 
+    gap: 1rem; 
+  }
+
+  .targets-container .header-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .targets-container .targets-search-container {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .targets-container .add-target-btn {
+    justify-content: center;
+  }
+
+  /* Table to Cards Transformation */
+  .targets-container .targets-table,
+  .targets-container .targets-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    border: none;
+  }
+
+  .targets-container .targets-table thead {
+    display: none;
+  }
+
+  .targets-container .target-row {
+    display: flex;
+    flex-direction: column;
+    background: rgba(15, 15, 25, 0.8);
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    position: relative;
+  }
+
+  .targets-container .target-row td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    width: 100%;
+    text-align: right;
+  }
+
+  .targets-container .target-row td::before {
+    content: attr(data-label);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    color: #00d4ff;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-right: 1rem;
+  }
+
+  .targets-container .target-row td[data-label="HOST"] {
+    font-size: 1.2rem;
+    color: #fff;
+    border-bottom: 2px solid #00d4ff;
+    margin-bottom: 1rem;
+    padding-top: 0;
+    justify-content: flex-start;
+  }
+  
+  .targets-container .target-row td[data-label="HOST"]::before { display: none; }
+
+  .targets-container .target-row td[data-label="ACTIONS"] {
+    border-bottom: none;
+    justify-content: flex-end;
+    padding-top: 1rem;
+    gap: 15px;
+  }
+
+  .targets-container .target-row td:first-child, 
+  .targets-container .target-row td:last-child {
+    border-radius: 0;
+  }
+
+  /* Modal Responsive */
+  .targets-container .target-modal-content {
+    padding: 1.5rem;
+    width: 95%;
+  }
+
   .targets-container .modal-form {
     grid-template-columns: 1fr;
+  }
+
+  .targets-container .port-row {
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 4px;
+  }
+  
+  .targets-container .port-row button {
+    align-self: flex-end;
   }
 }

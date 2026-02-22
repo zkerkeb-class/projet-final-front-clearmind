@@ -10,6 +10,49 @@ import { useToast } from '../../components/Toast/ToastContext';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import ErrorModal from '../../components/ErrorModal/ErrorModal';
 
+const getDifficultyColor = (difficulty) => {
+  switch (difficulty) {
+    case BOX_DIFFICULTIES.EASY: return '#00ff41';
+    case BOX_DIFFICULTIES.MEDIUM: return '#ff8000';
+    case BOX_DIFFICULTIES.HARD: return '#ff003c';
+    case BOX_DIFFICULTIES.INSANE: return '#b026ff';
+    default: return '#00d4ff';
+  }
+};
+
+const DifficultyBar = ({ difficulty }) => {
+  const [width, setWidth] = useState('0%');
+
+  useEffect(() => {
+    // Petit délai pour déclencher l'animation CSS après le montage
+    const timer = setTimeout(() => {
+      switch (difficulty) {
+        case BOX_DIFFICULTIES.EASY: setWidth('25%'); break;
+        case BOX_DIFFICULTIES.MEDIUM: setWidth('50%'); break;
+        case BOX_DIFFICULTIES.HARD: setWidth('75%'); break;
+        case BOX_DIFFICULTIES.INSANE: setWidth('100%'); break;
+        default: setWidth('0%');
+      }
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [difficulty]);
+
+  const color = getDifficultyColor(difficulty);
+
+  return (
+    <div className="difficulty-bar">
+      <div 
+        className="difficulty-fill" 
+        style={{ 
+          width: width, 
+          backgroundColor: color,
+          boxShadow: `0 0 10px ${color}`
+        }} 
+      />
+    </div>
+  );
+};
+
 const Boxes = () => {
   const navigate = useNavigate();
   const [boxes, setBoxes] = useState([]);
@@ -35,16 +78,6 @@ const Boxes = () => {
   const [platformFilter, setPlatformFilter] = useState("All");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
-  const getDifficultyColor = (difficulty) => {
-    switch (difficulty) {
-      case BOX_DIFFICULTIES.EASY: return '#00ff41';
-      case BOX_DIFFICULTIES.MEDIUM: return '#ff8000';
-      case BOX_DIFFICULTIES.HARD: return '#ff003c';
-      case BOX_DIFFICULTIES.INSANE: return '#b026ff';
-      default: return '#00d4ff';
-    }
-  };
 
   useEffect(() => {
     // Debounce pour la recherche
@@ -195,16 +228,7 @@ const Boxes = () => {
             <h3>{box.name}</h3>
             <p>{box.ipAddress} @ {box.platform}</p>
 
-            <div className="difficulty-bar">
-              <div 
-                className="difficulty-fill" 
-                style={{ 
-                  // Logique de progression basée sur ton enum status
-                  width: box.status === BOX_STATUSES.ROOT_FLAG ? '100%' : box.status === BOX_STATUSES.USER_FLAG ? '50%' : '10%', 
-                  backgroundColor: box.status === BOX_STATUSES.ROOT_FLAG ? '#ff003c' : '#00d4ff' 
-                }} 
-              />
-            </div>
+            <DifficultyBar difficulty={box.difficulty} />
 
             <div className="box-info">
               <div className="status-control">
@@ -225,9 +249,9 @@ const Boxes = () => {
               {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
                 <button 
                   onClick={(e) => { e.stopPropagation(); confirmDeleteBox(box._id); }} 
-                  className="delete-icon-btn" 
+                  className="action-btn delete-btn" 
                 >
-                  <Trash2 size={16} color="#555" className="hover-red" />
+                  <Trash2 size={16} />
                 </button>
               )}
             </div>

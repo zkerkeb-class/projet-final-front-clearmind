@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
-import { Terminal, ChevronLeft, ExternalLink, Copy, AlertTriangle, Search, Pencil } from 'lucide-react';
+import { Terminal, ChevronLeft, ExternalLink, Copy, Edit, Check } from 'lucide-react';
 import './ToolDetail.css';
 import { ROLES } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import { getUserRole } from '../../utils/auth';
+import { useToast } from '../../components/Toast/ToastContext';
 
 const ToolDetail = () => {
   const { name } = useParams();
@@ -13,6 +14,8 @@ const ToolDetail = () => {
   const [tool, setTool] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const { success } = useToast();
+  const [copiedId, setCopiedId] = useState(null);
 
   const userRole = getUserRole();
 
@@ -32,6 +35,13 @@ const ToolDetail = () => {
     };
     fetchTool();
   }, [name]);
+
+  const handleCopy = (text, index) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(index);
+    success("COMMANDE COPIÉE");
+    setTimeout(() => setCopiedId(null), 2000);
+  };
 
   if (loading) {
     return (
@@ -63,7 +73,8 @@ const ToolDetail = () => {
   // --- PAGE D'ERREUR SI L'OUTIL N'EXISTE PAS ---
   if (error) {
     return (
-      <div className="tool-error-container">
+      <div className="tool-detail-container">
+        <div className="tool-error-container">
         <button 
           onClick={() => navigate(-1)} 
           className="back-btn back-btn-absolute"
@@ -84,6 +95,7 @@ const ToolDetail = () => {
         ) : (
           <p className="notice">Contactez un administrateur pour ajouter cet outil.</p>
         )}
+        </div>
       </div>
     );
   }
@@ -105,7 +117,7 @@ const ToolDetail = () => {
               onClick={() => navigate(`/tools/edit/${tool.name}`)} 
               className="edit-tool-btn"
             >
-              <Pencil size={14} /> <span className="btn-text">ÉDITER</span>
+              <Edit size={14} /> <span className="btn-text">ÉDITER</span>
             </button>
           )}
           {tool.link && (
@@ -128,14 +140,9 @@ const ToolDetail = () => {
               <div key={i} className="command-card">
                 <div className="command-header">
                   <code>{item.command}</code>
-                  <Copy 
-                    size={14} 
-                    className="copy-icon" 
-                    onClick={() => {
-                        navigator.clipboard.writeText(item.command);
-                        // Optionnel: ajouter un petit feedback ici
-                    }} 
-                  />
+                  <button onClick={() => handleCopy(item.command, i)} className={`copy-btn ${copiedId === i ? 'copied' : ''}`}>
+                    {copiedId === i ? <Check size={16} /> : <Copy size={16} />}
+                  </button>
                 </div>
                 <p className="command-explanation">{item.explanation}</p>
               </div>

@@ -190,10 +190,6 @@ const BoxDetail = () => {
           <h1>{box.name.toUpperCase()}</h1>
           <div className="box-meta">
             <span><Hash size={14} /> {box.ipAddress}</span>
-            <span><Monitor size={14} /> {box.platform}</span>
-            <span style={{ color: getDifficultyColor(box.difficulty) }}>
-              <Activity size={14} /> {box.difficulty}
-            </span>
             
             {/* Bouton d'édition pour l'auteur/admin */}
             {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
@@ -201,6 +197,10 @@ const BoxDetail = () => {
                 <Settings size={14} /> CONFIG
               </button>
             )}
+            <span style={{ color: getDifficultyColor(box.difficulty) }}>
+              <Activity size={14} /> {box.difficulty}
+            </span>
+            <span><Monitor size={14} /> {box.platform}</span>
           </div>
         </div>
 
@@ -246,13 +246,13 @@ const BoxDetail = () => {
           <span style={{ fontSize: '0.9rem', color: '#fff', fontFamily: 'Orbitron' }}>NOTES_DE_MISSION.md</span>
           <div style={{ display: 'flex', gap: '10px' }}>
             <button onClick={() => setIsMainPreview(!isMainPreview)} className="preview-toggle-btn source-btn">
-              {isMainPreview ? <><Code size={14}/> <span className="btn-text">SOURCE</span></> : <><Eye size={14}/> <span className="btn-text">APERÇU</span></>}
+              {isMainPreview ? <><Code size={14}/><span className="btn-text">SOURCE</span></> : <><Eye size={14}/> <span className="btn-text">APERÇU</span></>}
             </button>
             <button onClick={openNotesModal} className="preview-toggle-btn edit-btn">
-              <Edit size={14}/> <span className="btn-text">ÉDITER</span>
+              <Edit size={14}/><span className="btn-text">ÉDITER</span>
             </button>
             <button onClick={() => setShowClearConfirm(true)} className="preview-toggle-btn delete-btn">
-              <Trash2 size={14}/>
+              <Trash2 size={14}/><span className="btn-text">SUPPRIMER</span>
             </button>
           </div>
         </div>

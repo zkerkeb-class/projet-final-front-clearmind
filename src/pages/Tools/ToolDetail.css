@@ -161,18 +161,25 @@
   word-break: break-all;
 }
 
-.tool-detail-container .copy-icon {
+.tool-detail-container .copy-btn {
+  background: transparent;
+  border: none;
   color: #555;
   cursor: pointer;
   flex-shrink: 0;
   transition: all 0.2s;
   margin-left: 10px;
+  padding: 0;
+  display: flex;
+  align-items: center;
 }
 
-.tool-detail-container .copy-icon:hover {
+.tool-detail-container .copy-btn:hover {
   color: #00d4ff;
   transform: scale(1.1);
 }
+
+.tool-detail-container .copy-btn.copied { color: #00ff41; }
 
 .tool-detail-container .command-explanation {
   color: #aaa;
@@ -246,7 +253,7 @@
   cursor: pointer;
   font-weight: bold;
   font-size: 0.75rem;
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'JetBrains Mono', monospace;
   transition: all 0.3s ease;
   border-radius: 4px;
   letter-spacing: 1px;

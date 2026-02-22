@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
-import { Server, ShieldCheck, Activity, Loader, Plus, Trash2, X, Pencil, Box, ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { Server, ShieldCheck, Activity, Loader, Plus, Trash2, X, Pencil, Box, ChevronLeft, ChevronRight, Search, Edit } from 'lucide-react';
 import { getUserRole } from '../../utils/auth';
 import './Targets.css';
 import { ROLES, TARGET_STATUSES, TARGET_OS } from '../../utils/constants';
@@ -227,11 +227,11 @@ const Targets = () => {
               </td>
               {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
                 <td data-label="ACTIONS" className="actions-cell">
-                  <button onClick={() => openEditModal(t)} className="action-btn">
-                    <Pencil size={16} color="#ffa500" />
+                  <button onClick={() => openEditModal(t)} className="action-btn edit-btn">
+                    <Edit size={16} />
                   </button>
-                  <button onClick={() => confirmDeleteTarget(t._id)} className="action-btn">
-                    <Trash2 size={16} color="#555" className="hover-red" />
+                  <button onClick={() => confirmDeleteTarget(t._id)} className="action-btn delete-btn">
+                    <Trash2 size={16} />
                   </button>
                 </td>
               )}

@@ -115,6 +115,8 @@
 .news-container .live-indicator {
   display: flex;
   align-items: center;
+  margin-left: 0.6rem;
+  margin-bottom: 0.3rem;
   gap: 8px;
   color: #888;
   font-family: 'JetBrains Mono', monospace;

@@ -214,17 +214,32 @@
 /* --- PROGRESS BAR --- */
 .boxes-container .difficulty-bar {
   width: 100%;
-  height: 6px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 3px;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
   margin-bottom: 1.5rem;
-  overflow: hidden;
+  position: relative;
+  margin-top: 12px;
+}
+
+.boxes-container .difficulty-bar::before {
+  content: 'DIFFICULTY';
+  position: absolute;
+  top: -16px;
+  left: 0;
+  font-size: 0.6rem;
+  color: #666;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 1px;
+  font-weight: bold;
 }
 
 .boxes-container .difficulty-fill {
   height: 100%;
+  border-radius: 2px;
   transition: width 0.5s ease;
-  box-shadow: 0 0 10px currentColor;
+  box-shadow: 0 0 12px currentColor;
 }
 
 /* --- FOOTER ACTIONS --- */
@@ -239,42 +254,66 @@
 }
 
 .boxes-container .status-select {
-  background: transparent;
-  border: none;
-  font-size: 0.75rem;
-  font-weight: 900;
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 6px 28px 6px 12px;
+  border-radius: 4px;
   cursor: pointer;
   outline: none;
+  transition: all 0.3s ease;
   text-transform: uppercase;
-  text-align: left;
-  padding: 4px 0;
-  transition: color 0.3s;
+  letter-spacing: 1px;
+  
+  /* Custom Chevron */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2300d4ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 14px;
+}
+
+.boxes-container .status-select:hover {
+  border-color: #00d4ff;
+  background-color: rgba(0, 212, 255, 0.05);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+}
+
+.boxes-container .status-select:focus {
+  border-color: #00d4ff;
+  background-color: rgba(0, 212, 255, 0.1);
 }
 
 .boxes-container .status-select option {
-  background: #111;
+  background-color: #1a1a1a;
   color: #fff;
+  padding: 12px;
+  font-family: 'JetBrains Mono', monospace;
 }
 
-.boxes-container .delete-icon-btn {
+.boxes-container .action-btn {
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: 0.2s;
-  border-radius: 4px;
+  padding: 4px;
+  transition: transform 0.2s;
 }
 
-.boxes-container .delete-icon-btn:hover {
-  background: rgba(255, 0, 60, 0.1);
+.boxes-container .action-btn:hover {
+  transform: scale(1.1);
 }
 
-.boxes-container .delete-icon-btn:hover svg {
-  color: #ff003c !important;
-  filter: drop-shadow(0 0 5px #ff003c);
+.boxes-container .action-btn.delete-btn {
+  color: #555;
+}
+
+.boxes-container .action-btn.delete-btn:hover {
+  color: #ff003c;
 }
 
 /* --- RESPONSIVE --- */
@@ -353,7 +392,7 @@
   border: none;
   font-weight: bold;
   cursor: pointer;
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'JetBrains Mono', monospace;
   text-transform: uppercase;
   letter-spacing: 1px;
   border-radius: 6px;
@@ -444,7 +483,7 @@
 .boxes-container .modal-title {
   color: #fff;
   margin-bottom: 2rem;
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 1.3rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding-bottom: 10px;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
-import { Copy, Search, Plus, Pencil, Trash2 } from 'lucide-react';
+import { Copy, Search, Plus, Pencil, Trash2, Check, Edit } from 'lucide-react';
 import './Payloads.css';
 import { PAYLOAD_SEVERITIES, ROLES } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
@@ -17,6 +17,7 @@ const Payloads = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [payloadToDelete, setPayloadToDelete] = useState(null);
+  const [copiedId, setCopiedId] = useState(null);
   const userRole = getUserRole();
   const { success, info } = useToast();
 
@@ -57,9 +58,11 @@ const Payloads = () => {
     );
   });
 
-  const copyToClipboard = (text) => {
+  const copyToClipboard = (text, id) => {
     navigator.clipboard.writeText(text);
-    // Tu pourrais ajouter un petit toast "Copied!" ici
+    setCopiedId(id);
+    success("PAYLOAD COPIÉ");
+    setTimeout(() => setCopiedId(null), 2000);
   };
 
   const handleEdit = (payload) => {
@@ -129,8 +132,8 @@ const Payloads = () => {
               <h3 className="payload-name">{p.title}</h3>
               <div className="code-box">
                 <code>{p.code}</code>
-                <button onClick={() => copyToClipboard(p.code)} className="copy-btn">
-                  <Copy size={16} />
+                <button onClick={() => copyToClipboard(p.code, p._id)} className={`copy-btn ${copiedId === p._id ? 'copied' : ''}`}>
+                  {copiedId === p._id ? <Check size={16} /> : <Copy size={16} />}
                 </button>
               </div>
               <div className="payload-footer">
@@ -143,7 +146,7 @@ const Payloads = () => {
                 {isOwner(p) && (
                   <div className="payload-actions">
                     <button onClick={() => handleEdit(p)} className="action-btn edit">
-                      <Pencil size={14} />
+                      <Edit size={14} />
                     </button>
                     <button onClick={() => confirmDelete(p._id)} className="action-btn delete">
                       <Trash2 size={14} />

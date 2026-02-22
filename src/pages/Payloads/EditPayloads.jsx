@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../../api/axios';
 import { Save, X, AlertTriangle } from 'lucide-react';
-import { PAYLOAD_SEVERITIES } from '../../utils/constants';
+import { PAYLOAD_SEVERITIES, PAYLOAD_CATEGORIES } from '../../utils/constants';
 import { useToast } from '../../components/Toast/ToastContext';
 import './EditPayloads.css';
 
@@ -14,7 +14,7 @@ const EditPayloads = () => {
 
   const [formData, setFormData] = useState({
     title: '',
-    category: 'General',
+    category: 'XSS',
     severity: PAYLOAD_SEVERITIES.MEDIUM,
     code: ''
   });
@@ -85,7 +85,22 @@ const EditPayloads = () => {
         <div className="form-group split-group">
           <div>
             <label>CATÉGORIE</label>
-            <input type="text" className="edit-payload-input" required value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} placeholder="Ex: RCE, XSS, SQLi" />
+            <select 
+              className="edit-payload-select" 
+              value={formData.category} 
+              onChange={(e) => setFormData({...formData, category: e.target.value})}
+            >
+              <optgroup label="Web">
+                {PAYLOAD_CATEGORIES.WEB.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+              </optgroup>
+              <optgroup label="Système">
+                {PAYLOAD_CATEGORIES.SYSTEM.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+              </optgroup>
+              <optgroup label="API">
+                {PAYLOAD_CATEGORIES.API.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+              </optgroup>
+              <option value="Other">Autre</option>
+            </select>
           </div>
           <div>
             <label>SÉVÉRITÉ</label>

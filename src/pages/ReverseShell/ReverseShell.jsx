@@ -88,7 +88,7 @@ const ReverseShell = () => {
   const handleCopy = (code, index) => {
     navigator.clipboard.writeText(formatCode(code));
     setCopiedIndex(index);
-    success("PAYLOAD COPIÉ");
+    success("REV SHELL COPIÉ");
     setTimeout(() => setCopiedIndex(null), 2000);
   };
 

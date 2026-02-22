@@ -244,13 +244,41 @@
   border-color: #00d4ff;
 }
 
-.wiki-wrapper .wiki-action-btn.edit { border-color: #ffa500; color: #ffa500; }
+.wiki-wrapper .wiki-action-btn.edit { 
+  border: 1px solid #ffa500;
+  color: #ffa500;
+  gap: 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 1px;
+}
 .wiki-wrapper .wiki-action-btn.edit:hover { background: rgba(255, 165, 0, 0.1); }
 
-.wiki-wrapper .wiki-action-btn.delete { border-color: #ff003c; color: #ff003c; }
+.wiki-wrapper .wiki-action-btn.delete { 
+  border-color: #ff003c;
+  color: #ff003c;
+  font-weight: bold;
+  font-size: 0.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
 .wiki-wrapper .wiki-action-btn.delete:hover { background: rgba(255, 0, 60, 0.1); }
 
-.wiki-wrapper .wiki-action-btn.preview-toggle { border-color: #00d4ff; color: #00d4ff; }
+.wiki-wrapper .wiki-action-btn.preview-toggle {
+  border: 1px solid#00d4ff;
+  color: #00d4ff;
+  font-weight: bold;
+  font-size: 0.75rem;
+  font-family: 'JetBrains Mono', monospace;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
 .wiki-wrapper .wiki-action-btn.preview-toggle:hover {
   background: rgba(0, 212, 255, 0.1);
   box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
@@ -336,6 +364,29 @@
   padding: 0 !important;
   color: #e0e0e0 !important;
   border: none !important;
+}
+
+/* Scrollbar fine pour les blocs de code */
+.wiki-wrapper .code-highlighter::-webkit-scrollbar,
+.wiki-wrapper .wiki-raw-source::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+}
+
+.wiki-wrapper .code-highlighter::-webkit-scrollbar-track,
+.wiki-wrapper .wiki-raw-source::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.wiki-wrapper .code-highlighter::-webkit-scrollbar-thumb,
+.wiki-wrapper .wiki-raw-source::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 2px;
+}
+
+.wiki-wrapper .code-highlighter::-webkit-scrollbar-thumb:hover,
+.wiki-wrapper .wiki-raw-source::-webkit-scrollbar-thumb:hover {
+  background: #00d4ff;
 }
 
 /* --- RAW SOURCE VIEW --- */

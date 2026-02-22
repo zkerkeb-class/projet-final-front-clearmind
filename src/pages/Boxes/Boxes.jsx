@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { getUserRole } from '../../utils/auth';
-import { Monitor, Search, Plus, Trash2, X, ChevronLeft, ChevronRight, Terminal, Command, Smartphone, HelpCircle } from 'lucide-react';
+import { Monitor, Search, Plus, Trash2, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import './Boxes.css';
 import { ROLES, BOX_STATUSES, BOX_DIFFICULTIES, BOX_PLATFORMS, TARGET_OS, BOX_CATEGORIES } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
@@ -10,7 +10,10 @@ import { useToast } from '../../components/Toast/ToastContext';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import ErrorModal from '../../components/ErrorModal/ErrorModal';
 import { getDifficultyColor } from '../../utils/helpers';
-import { useAccessControl } from '../../utils/useAccessControl';
+import { useAccessControl } from '../../hooks/useAccessControl';
+import { useErrorModal } from '../../hooks/useErrorModal';
+import { useConfirmationModal } from '../../hooks/useConfirmationModal';
+import OsIcon from '../../components/OsIcon/OsIcon';
 
 const DifficultyBar = ({ difficulty }) => {
   const [width, setWidth] = useState('0%');
@@ -49,10 +52,10 @@ const Boxes = () => {
   const navigate = useNavigate();
   const [boxes, setBoxes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const userRole = getUserRole(); // Récupération du rôle
   const { success, info } = useToast();
-  const [boxToDelete, setBoxToDelete] = useState(null);
+  const { error, showError, clearError } = useErrorModal();
+  const { modalConfig, askConfirmation, closeConfirmation } = useConfirmationModal();
   
   // État pour la modale d'ajout
   const [showModal, setShowModal] = useState(false);
@@ -113,7 +116,7 @@ const Boxes = () => {
       setNewBox({ name: '', ipAddress: '', platform: BOX_PLATFORMS.HTB, difficulty: BOX_DIFFICULTIES.EASY, category: BOX_CATEGORIES.RED, os: TARGET_OS.LINUX, status: BOX_STATUSES.TODO });
       success("NOUVELLE CIBLE INITIALISÉE");
     } catch (err) {
-      setError("ERREUR D'AJOUT : " + (err.response?.data?.message || err.message));
+      showError("ERREUR D'AJOUT : " + (err.response?.data?.message || err.message));
     }
   };
 
@@ -126,31 +129,22 @@ const Boxes = () => {
     }
   };
 
-  const getOsIcon = (os) => {
-    const color = '#fff'; // Icône blanche pour les boxes
-    switch (os) {
-      case TARGET_OS.WINDOWS: return <Monitor size={48} color={color} strokeWidth={1.5} />;
-      case TARGET_OS.LINUX: return <Terminal size={48} color={color} strokeWidth={1.5} />;
-      case TARGET_OS.MACOS: return <Command size={48} color={color} strokeWidth={1.5} />;
-      case TARGET_OS.ANDROID: return <Smartphone size={48} color={color} strokeWidth={1.5} />;
-      case TARGET_OS.IOS: return <Smartphone size={48} color={color} strokeWidth={1.5} />;
-      default: return <HelpCircle size={48} color={color} strokeWidth={1.5} />;
-    }
-  };
-
   const confirmDeleteBox = (id) => {
-    setBoxToDelete(id);
+    askConfirmation(
+      "SUPPRESSION_MACHINE",
+      "Attention : Supprimer cette machine effacera également toutes les notes et cibles associées.",
+      () => executeDeleteBox(id)
+    );
   };
 
-  const executeDeleteBox = async () => {
+  const executeDeleteBox = async (id) => {
     try {
-      await api.delete(`/boxes/${boxToDelete}`);
-      setBoxes(boxes.filter(b => b._id !== boxToDelete));
+      await api.delete(`/boxes/${id}`);
+      setBoxes(boxes.filter(b => b._id !== id));
       info("CIBLE SUPPRIMÉE");
     } catch (err) {
-      setError("IMPOSSIBLE DE SUPPRIMER LA MACHINE.");
+      showError("IMPOSSIBLE DE SUPPRIMER LA MACHINE.");
     }
-    setBoxToDelete(null);
   };
 
   // Si Guest, on n'affiche rien le temps de la redirection
@@ -264,7 +258,7 @@ const Boxes = () => {
             </div>
             
             <div className="box-visual">
-              {getOsIcon(box.os)}
+              <OsIcon os={box.os} size={48} color="#fff" strokeWidth={1.5} />
             </div>
             
             <div className="box-content">
@@ -367,17 +361,17 @@ const Boxes = () => {
 
       {/* MODALE DE CONFIRMATION */}
       <ConfirmationModal 
-        isOpen={!!boxToDelete}
-        onClose={() => setBoxToDelete(null)}
-        onConfirm={executeDeleteBox}
-        title="SUPPRESSION_MACHINE"
-        message="Attention : Supprimer cette machine effacera également toutes les notes et cibles associées."
+        isOpen={modalConfig.isOpen}
+        onClose={closeConfirmation}
+        onConfirm={modalConfig.onConfirm}
+        title={modalConfig.title}
+        message={modalConfig.message}
       />
 
       {/* MODALE D'ERREUR */}
       <ErrorModal 
         isOpen={!!error} 
-        onClose={() => setError(null)} 
+        onClose={clearError} 
         message={error} 
       />
     </div>

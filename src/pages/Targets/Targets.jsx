@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
-import { Server, ShieldCheck, Activity, Loader, Plus, Trash2, X, Pencil, Box, ChevronLeft, ChevronRight, Search, Edit, Monitor, Smartphone, Terminal, Command, HelpCircle, Download } from 'lucide-react';
+import { Server, Plus, Trash2, X, Box, ChevronLeft, ChevronRight, Search, Edit, Download } from 'lucide-react';
 import { getUserRole } from '../../utils/auth';
 import './Targets.css';
-import { ROLES, TARGET_STATUSES, TARGET_OS, OS_COLORS } from '../../utils/constants';
+import { ROLES, TARGET_STATUSES, TARGET_OS } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import { useToast } from '../../components/Toast/ToastContext';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import ErrorModal from '../../components/ErrorModal/ErrorModal';
-import { useAccessControl } from '../../utils/useAccessControl';
+import { useAccessControl } from '../../hooks/useAccessControl';
 import { downloadBlob, logExport } from '../../utils/exportUtils';
+import { useErrorModal } from '../../hooks/useErrorModal';
+import { useConfirmationModal } from '../../hooks/useConfirmationModal';
+import OsIcon from '../../components/OsIcon/OsIcon';
 
 const Targets = () => {
   const navigate = useNavigate();
@@ -18,7 +21,6 @@ const Targets = () => {
   const [availableBoxes, setAvailableBoxes] = useState([]); // Liste des boxes pour le lien
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [error, setError] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const userRole = getUserRole();
@@ -26,9 +28,10 @@ const Targets = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const { success, info } = useToast();
-  const [targetToDelete, setTargetToDelete] = useState(null);
   const [osFilter, setOsFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
+  const { error, showError, clearError } = useErrorModal();
+  const { modalConfig, askConfirmation, closeConfirmation } = useConfirmationModal();
   
   const isRestricted = useAccessControl(userRole !== ROLES.GUEST, '/targets?resource=/targets');
 
@@ -90,23 +93,26 @@ const Targets = () => {
       setShowModal(false);
       resetForm();
     } catch (err) {
-      setError("ERREUR D'ENREGISTREMENT: " + (err.response?.data?.message || err.message));
+      showError("ERREUR D'ENREGISTREMENT: " + (err.response?.data?.message || err.message));
     }
   };
 
   const confirmDeleteTarget = (id) => {
-    setTargetToDelete(id);
+    askConfirmation(
+      "SUPPRESSION_CIBLE",
+      "Voulez-vous vraiment retirer cette cible du scope ? Toutes les données associées seront perdues.",
+      () => executeDeleteTarget(id)
+    );
   };
 
-  const executeDeleteTarget = async () => {
+  const executeDeleteTarget = async (id) => {
     try {
-      await api.delete(`/targets/${targetToDelete}`);
-      setTargets(targets.filter(t => t._id !== targetToDelete));
+      await api.delete(`/targets/${id}`);
+      setTargets(targets.filter(t => t._id !== id));
       info("CIBLE RETIRÉE DU SCOPE");
     } catch (err) {
-      setError("IMPOSSIBLE DE SUPPRIMER LA CIBLE.");
+      showError("IMPOSSIBLE DE SUPPRIMER LA CIBLE.");
     }
-    setTargetToDelete(null);
   };
 
   const handleExportScope = () => {
@@ -169,18 +175,6 @@ const Targets = () => {
     const newPorts = [...newTarget.ports];
     newPorts[index][field] = value;
     setNewTarget({ ...newTarget, ports: newPorts });
-  };
-
-  const getOsIcon = (os) => {
-    const color = OS_COLORS[os] || '#555';
-    switch (os) {
-      case TARGET_OS.WINDOWS: return <Monitor size={14} color={color} />;
-      case TARGET_OS.LINUX: return <Terminal size={14} color={color} />;
-      case TARGET_OS.MACOS: return <Command size={14} color={color} />;
-      case TARGET_OS.ANDROID: return <Smartphone size={14} color={color} />;
-      case TARGET_OS.IOS: return <Smartphone size={14} color={color} />;
-      default: return <HelpCircle size={14} color={color} />;
-    }
   };
 
   // Si Guest, on n'affiche rien le temps de la redirection
@@ -275,7 +269,7 @@ const Targets = () => {
               </td>
               <td data-label="OS">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  {getOsIcon(t.os)}
+                  <OsIcon os={t.os} size={14} />
                   <span>{t.os}</span>
                 </div>
                 {/* Indicateur de lien vers une Box */}
@@ -418,17 +412,17 @@ const Targets = () => {
 
       {/* MODALE DE CONFIRMATION */}
       <ConfirmationModal 
-        isOpen={!!targetToDelete}
-        onClose={() => setTargetToDelete(null)}
-        onConfirm={executeDeleteTarget}
-        title="SUPPRESSION_CIBLE"
-        message="Voulez-vous vraiment retirer cette cible du scope ? Toutes les données associées seront perdues."
+        isOpen={modalConfig.isOpen}
+        onClose={closeConfirmation}
+        onConfirm={modalConfig.onConfirm}
+        title={modalConfig.title}
+        message={modalConfig.message}
       />
 
       {/* MODALE D'ERREUR */}
       <ErrorModal 
         isOpen={!!error} 
-        onClose={() => setError(null)} 
+        onClose={clearError} 
         message={error} 
       />
     </div>

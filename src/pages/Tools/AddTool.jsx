@@ -6,12 +6,13 @@ import './AddTool.css';
 import { TOOL_CATEGORIES } from '../../utils/constants';
 import { useToast } from '../../components/Toast/ToastContext';
 import ErrorModal from '../../components/ErrorModal/ErrorModal';
+import { useErrorModal } from '../../hooks/useErrorModal';
 
 const AddTool = () => {
   const navigate = useNavigate();
   const { name } = useParams();
-  const [error, setError] = useState(null);
   const { success } = useToast();
+  const { error, showError, clearError } = useErrorModal();
 
   const [formData, setFormData] = useState({
     name: name || '',
@@ -52,7 +53,7 @@ const AddTool = () => {
     const cleanedCheatsheet = formData.cheatsheet.filter(item => item.command.trim() !== '');
 
     if (cleanedCheatsheet.length === 0) {
-      setError("Veuillez ajouter au moins une commande valide dans la cheatsheet.");
+      showError("Veuillez ajouter au moins une commande valide dans la cheatsheet.");
       return;
     }
 
@@ -61,7 +62,7 @@ const AddTool = () => {
       success("OUTIL AJOUTÉ À L'ARSENAL");
       navigate(`/tools/${formData.name.toLowerCase()}`);
     } catch (err) {
-      setError("ERREUR D'ENREGISTREMENT : " + (err.response?.data?.message || err.message));
+      showError("ERREUR D'ENREGISTREMENT : " + (err.response?.data?.message || err.message));
     }
   };
 
@@ -132,7 +133,7 @@ const AddTool = () => {
       {/* MODALE D'ERREUR */}
       <ErrorModal 
         isOpen={!!error} 
-        onClose={() => setError(null)} 
+        onClose={clearError} 
         message={error} 
       />
     </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import api from '../../api/axios';
-import { ChevronLeft, Save, Monitor, Hash, Activity, Eye, Edit, Settings, X, Target, Code, Trash2, Terminal, Command, Smartphone, HelpCircle } from 'lucide-react';
+import { ChevronLeft, Save, Hash, Eye, Edit, Settings, X, Target, Code, Trash2 } from 'lucide-react';
 import { getUserRole } from '../../utils/auth';
 import './BoxDetail.css';
 import { ROLES, BOX_DIFFICULTIES, BOX_PLATFORMS, IPV4_REGEX, BOX_CATEGORIES, TARGET_OS, BOX_STATUSES } from '../../utils/constants';
@@ -11,6 +11,7 @@ import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationMo
 import ErrorModal from '../../components/ErrorModal/ErrorModal';
 import { getDifficultyColor } from '../../utils/helpers';
 import CodeBlock from '../../components/CodeBlock/CodeBlock';
+import OsIcon from '../../components/OsIcon/OsIcon';
 
 
 const BoxDetail = () => {
@@ -131,18 +132,6 @@ const BoxDetail = () => {
     }
   };
 
-  const getOsIcon = (os) => {
-    const color = '#fff';
-    switch (os) {
-      case TARGET_OS.WINDOWS: return <Monitor size={14} color={color} />;
-      case TARGET_OS.LINUX: return <Terminal size={14} color={color} />;
-      case TARGET_OS.MACOS: return <Command size={14} color={color} />;
-      case TARGET_OS.ANDROID: return <Smartphone size={14} color={color} />;
-      case TARGET_OS.IOS: return <Smartphone size={14} color={color} />;
-      default: return <HelpCircle size={14} color={color} />;
-    }
-  };
-
   if (!box) return <div className="loading-text">CHARGEMENT DU DOSSIER...</div>;
 
   return (
@@ -164,7 +153,7 @@ const BoxDetail = () => {
           {/* CARTE IDENTITÉ */}
           <div className="info-card">
             <div className="info-header">
-              {getOsIcon(box.os)}
+              <OsIcon os={box.os} size={14} color="#fff" />
               <h2>{box.name}</h2>
             </div>
             

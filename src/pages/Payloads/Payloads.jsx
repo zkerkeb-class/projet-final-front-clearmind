@@ -10,7 +10,9 @@ import { useToast } from '../../components/Toast/ToastContext';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import ErrorModal from '../../components/ErrorModal/ErrorModal';
 import { downloadBlob, logExport } from '../../utils/exportUtils';
-import { useClipboard } from '../../utils/useClipboard';
+import { useClipboard } from '../../hooks/useClipboard';
+import { useErrorModal } from '../../hooks/useErrorModal';
+import { useConfirmationModal } from '../../hooks/useConfirmationModal';
 
 const Payloads = () => {
   const navigate = useNavigate();
@@ -19,11 +21,11 @@ const Payloads = () => {
   const [severityFilter, setSeverityFilter] = useState("All");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [payloadToDelete, setPayloadToDelete] = useState(null);
   const userRole = getUserRole();
   const { info } = useToast();
   const { copiedId, copyToClipboard } = useClipboard();
+  const { error, showError, clearError } = useErrorModal();
+  const { modalConfig, askConfirmation, closeConfirmation } = useConfirmationModal();
 
   // Récupération de l'ID utilisateur depuis le token pour vérifier la propriété
   const getUserId = () => {
@@ -45,7 +47,7 @@ const Payloads = () => {
         setPayloads(res.data.data.payloads);
         setLoading(false);
       } catch (err) {
-        setError("IMPOSSIBLE DE RÉCUPÉRER LA BASE DE DONNÉES PAYLOADS.");
+        showError("IMPOSSIBLE DE RÉCUPÉRER LA BASE DE DONNÉES PAYLOADS.");
         setLoading(false);
       }
     };
@@ -74,18 +76,21 @@ const Payloads = () => {
   };
 
   const confirmDelete = (id) => {
-    setPayloadToDelete(id);
+    askConfirmation(
+      "SUPPRESSION_PAYLOAD",
+      "Voulez-vous vraiment supprimer ce vecteur d'attaque de la base ?",
+      () => executeDeletePayload(id)
+    );
   };
 
-  const executeDeletePayload = async () => {
+  const executeDeletePayload = async (id) => {
     try {
-      await api.delete(`/payloads/${payloadToDelete}`);
-      setPayloads(payloads.filter(p => p._id !== payloadToDelete));
+      await api.delete(`/payloads/${id}`);
+      setPayloads(payloads.filter(p => p._id !== id));
       info("PAYLOAD SUPPRIMÉ");
     } catch (err) {
-      setError("IMPOSSIBLE DE SUPPRIMER LE PAYLOAD.");
+      showError("IMPOSSIBLE DE SUPPRIMER LE PAYLOAD.");
     }
-    setPayloadToDelete(null);
   };
 
   const handleExportPayloads = () => {
@@ -194,17 +199,17 @@ const Payloads = () => {
       </div>
 
       <ConfirmationModal 
-        isOpen={!!payloadToDelete}
-        onClose={() => setPayloadToDelete(null)}
-        onConfirm={executeDeletePayload}
-        title="SUPPRESSION_PAYLOAD"
-        message="Voulez-vous vraiment supprimer ce vecteur d'attaque de la base ?"
+        isOpen={modalConfig.isOpen}
+        onClose={closeConfirmation}
+        onConfirm={modalConfig.onConfirm}
+        title={modalConfig.title}
+        message={modalConfig.message}
       />
 
       {/* MODALE D'ERREUR */}
       <ErrorModal 
         isOpen={!!error} 
-        onClose={() => setError(null)} 
+        onClose={clearError} 
         message={error} 
       />
     </div>

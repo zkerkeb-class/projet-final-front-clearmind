@@ -33,9 +33,11 @@ import { useToast } from '../../components/Toast/ToastContext';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import ErrorModal from '../../components/ErrorModal/ErrorModal';
 import { getUserRole } from '../../utils/auth';
-import { useAccessControl } from '../../utils/useAccessControl';
+import { useAccessControl } from '../../hooks/useAccessControl';
 import { downloadBlob, logExport } from '../../utils/exportUtils';
-import { useClipboard } from '../../utils/useClipboard';
+import { useClipboard } from '../../hooks/useClipboard';
+import { useErrorModal } from '../../hooks/useErrorModal';
+import { useConfirmationModal } from '../../hooks/useConfirmationModal';
 
 const AdminPanel = () => {
   const navigate = useNavigate();
@@ -43,7 +45,7 @@ const AdminPanel = () => {
   const [tools, setTools] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { error, showError, clearError } = useErrorModal();
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [roleFilter, setRoleFilter] = useState("All");
@@ -60,12 +62,7 @@ const AdminPanel = () => {
   const itemsPerPage = 25;
   const { success, info } = useToast();
   const userRole = getUserRole();
-  const [confirmModal, setConfirmModal] = useState({
-    isOpen: false,
-    title: '',
-    message: '',
-    onConfirm: null
-  });
+  const { modalConfig, askConfirmation, closeConfirmation } = useConfirmationModal();
   
   const levelColors = {
     info: '#00d4ff',
@@ -133,21 +130,20 @@ const AdminPanel = () => {
     try {
       const res = await api.get('/logs');
       setSystemLogs(res.data.data.logs || []);
-      setError(null);
+      clearError();
     } catch (err) {
-      if (!isBackground) setError("Impossible de récupérer les logs système.");
+      if (!isBackground) showError("Impossible de récupérer les logs système.");
     } finally {
       if (!isBackground) setLoading(false);
     }
   };
 
   const confirmPurgeLogs = () => {
-    setConfirmModal({
-      isOpen: true,
-      title: "PURGE_SYSTÈME",
-      message: "ATTENTION : Vous allez supprimer l'intégralité des logs système. Cette action est irréversible. Continuer ?",
-      onConfirm: executePurgeLogs
-    });
+    askConfirmation(
+      "PURGE_SYSTÈME",
+      "ATTENTION : Vous allez supprimer l'intégralité des logs système. Cette action est irréversible. Continuer ?",
+      executePurgeLogs
+    );
   };
 
   const executePurgeLogs = async () => {
@@ -156,7 +152,7 @@ const AdminPanel = () => {
       setSystemLogs([]);
       success("BASE DE LOGS PURGÉE AVEC SUCCÈS");
     } catch (err) {
-      setError("ÉCHEC DE LA PURGE DES LOGS");
+      showError("ÉCHEC DE LA PURGE DES LOGS");
     }
   };
 
@@ -166,21 +162,20 @@ const AdminPanel = () => {
     try {
       const res = await api.get('/tools');
       setTools(res.data.data || []);
-      setError(null);
+      clearError();
     } catch (err) {
-      setError("Erreur de synchronisation de l'arsenal");
+      showError("Erreur de synchronisation de l'arsenal");
     } finally {
       setLoading(false);
     }
   };
 
   const confirmDeleteTool = (toolName) => {
-    setConfirmModal({
-      isOpen: true,
-      title: "SUPPRESSION_OUTIL",
-      message: `Voulez-vous vraiment supprimer l'outil ${toolName.toUpperCase()} de l'arsenal ?`,
-      onConfirm: () => executeDeleteTool(toolName)
-    });
+    askConfirmation(
+      "SUPPRESSION_OUTIL",
+      `Voulez-vous vraiment supprimer l'outil ${toolName.toUpperCase()} de l'arsenal ?`,
+      () => executeDeleteTool(toolName)
+    );
   };
 
   const executeDeleteTool = async (toolName) => {
@@ -189,7 +184,7 @@ const AdminPanel = () => {
       setTools(tools.filter(t => t.name !== toolName));
       info("OUTIL SUPPRIMÉ DE L'ARSENAL");
     } catch (err) {
-      setError("ERREUR LORS DE LA SUPPRESSION DE L'OUTIL.");
+      showError("ERREUR LORS DE LA SUPPRESSION DE L'OUTIL.");
     }
   };
 
@@ -206,9 +201,9 @@ const AdminPanel = () => {
     try {
       const res = await api.get('/users');
       setUsers(res.data.data?.users || []);
-      setError(null);
+      clearError();
     } catch (err) {
-      setError("Erreur de récupération des opérateurs");
+      showError("Erreur de récupération des opérateurs");
     } finally {
       setLoading(false);
     }
@@ -223,7 +218,7 @@ const AdminPanel = () => {
       fetchUsers();
       success("NOUVEL OPÉRATEUR ENREGISTRÉ");
     } catch (err) {
-      setError("ERREUR_CRÉATION : " + (err.response?.data?.message || "Données invalides"));
+      showError("ERREUR_CRÉATION : " + (err.response?.data?.message || "Données invalides"));
     }
   };
 
@@ -233,17 +228,16 @@ const AdminPanel = () => {
       setUsers(users.map(u => u._id === userId ? { ...u, role: newRole } : u));
       success("ACCRÉDITATION MISE À JOUR");
     } catch (err) {
-      setError("MODIFICATION DU RÔLE REFUSÉE PAR LE SYSTÈME.");
+      showError("MODIFICATION DU RÔLE REFUSÉE PAR LE SYSTÈME.");
     }
   };
 
   const confirmDeleteUser = (userId, username) => {
-    setConfirmModal({
-      isOpen: true,
-      title: "RÉVOCATION_ACCÈS",
-      message: `Confirmez-vous la suppression du compte opérateur : ${username} ?`,
-      onConfirm: () => executeDeleteUser(userId)
-    });
+    askConfirmation(
+      "RÉVOCATION_ACCÈS",
+      `Confirmez-vous la suppression du compte opérateur : ${username} ?`,
+      () => executeDeleteUser(userId)
+    );
   };
 
   const executeDeleteUser = async (userId) => {
@@ -252,7 +246,7 @@ const AdminPanel = () => {
       setUsers(users.filter(u => u._id !== userId));
       info("ACCÈS RÉVOQUÉ");
     } catch (err) {
-      setError("ERREUR LORS DE LA RÉVOCATION DE L'UTILISATEUR.");
+      showError("ERREUR LORS DE LA RÉVOCATION DE L'UTILISATEUR.");
     }
   };
 
@@ -774,17 +768,17 @@ const AdminPanel = () => {
 
       {/* MODALE DE CONFIRMATION GÉNÉRIQUE */}
       <ConfirmationModal 
-        isOpen={confirmModal.isOpen}
-        onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
-        onConfirm={confirmModal.onConfirm}
-        title={confirmModal.title}
-        message={confirmModal.message}
+        isOpen={modalConfig.isOpen}
+        onClose={closeConfirmation}
+        onConfirm={modalConfig.onConfirm}
+        title={modalConfig.title}
+        message={modalConfig.message}
       />
 
       {/* MODALE D'ERREUR */}
       <ErrorModal 
         isOpen={!!error} 
-        onClose={() => setError(null)} 
+        onClose={clearError} 
         message={error} 
       />
     </div>

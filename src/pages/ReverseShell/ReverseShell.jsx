@@ -9,7 +9,7 @@ import { getUserRole } from '../../utils/auth';
 import { ROLES } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
-import { useClipboard } from '../../utils/useClipboard';
+import { useClipboard } from '../../hooks/useClipboard';
 
 const STANDARD_CATEGORIES = [
   'Awk', 'Bash', 'C', 'Golang', 'Java', 'Lua', 'Netcat', 

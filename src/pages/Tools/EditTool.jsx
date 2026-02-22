@@ -6,11 +6,12 @@ import './EditTool.css';
 import { TOOL_CATEGORIES } from '../../utils/constants';
 import { useToast } from '../../components/Toast/ToastContext';
 import ErrorModal from '../../components/ErrorModal/ErrorModal';
+import { useErrorModal } from '../../hooks/useErrorModal';
 
 const EditTool = () => {
   const { name } = useParams();
   const navigate = useNavigate();
-  const [error, setError] = useState(null);
+  const { error, showError, clearError } = useErrorModal();
   const { success } = useToast();
 
   const [formData, setFormData] = useState({
@@ -35,7 +36,7 @@ const EditTool = () => {
           cheatsheet: (tool.cheatsheet && tool.cheatsheet.length > 0) ? tool.cheatsheet : [{ command: '', explanation: '' }]
         });
       } catch (err) {
-        setError("IMPOSSIBLE DE CHARGER L'OUTIL À MODIFIER.");
+        showError("IMPOSSIBLE DE CHARGER L'OUTIL À MODIFIER.");
         navigate('/admin');
       }
     };
@@ -71,7 +72,7 @@ const EditTool = () => {
     const cleanedCheatsheet = formData.cheatsheet.filter(item => item.command.trim() !== '');
 
     if (cleanedCheatsheet.length === 0) {
-      setError("La fiche doit contenir au moins une commande valide.");
+      showError("La fiche doit contenir au moins une commande valide.");
       return;
     }
 
@@ -80,7 +81,7 @@ const EditTool = () => {
       success("FICHE TECHNIQUE MISE À JOUR");
       navigate(`/tools/${formData.name.toLowerCase()}`);
     } catch (err) {
-      setError("ERREUR DE MODIFICATION : " + (err.response?.data?.message || err.message));
+      showError("ERREUR DE MODIFICATION : " + (err.response?.data?.message || err.message));
     }
   };
 
@@ -151,7 +152,7 @@ const EditTool = () => {
       {/* MODALE D'ERREUR */}
       <ErrorModal 
         isOpen={!!error} 
-        onClose={() => setError(null)} 
+        onClose={clearError} 
         message={error} 
       />
     </div>

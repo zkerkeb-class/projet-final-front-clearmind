@@ -7,7 +7,7 @@ import { ROLES } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import { getUserRole } from '../../utils/auth';
 import { useToast } from '../../components/Toast/ToastContext';
-import { useClipboard } from '../../utils/useClipboard';
+import { useClipboard } from '../../hooks/useClipboard';
 
 const ToolDetail = () => {
   const { name } = useParams();

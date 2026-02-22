@@ -9,6 +9,7 @@ import { getUserRole } from '../../utils/auth';
 import { ROLES } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
+import { useClipboard } from '../../utils/useClipboard';
 
 const STANDARD_CATEGORIES = [
   'Awk', 'Bash', 'C', 'Golang', 'Java', 'Lua', 'Netcat', 
@@ -19,8 +20,8 @@ const STANDARD_CATEGORIES = [
 const ReverseShell = () => {
   const [ip, setIp] = useState('10.10.14.x');
   const [port, setPort] = useState('4444');
-  const { success, error: toastError } = useToast();
-  const [copiedIndex, setCopiedIndex] = useState(null);
+  const { success, error: toastError } = useToast(); // Keep success for other actions
+  const { copiedId, copyToClipboard } = useClipboard();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [categorySearch, setCategorySearch] = useState('');
   
@@ -83,13 +84,6 @@ const ReverseShell = () => {
     if (cat.includes('node') || cat.includes('js')) return 'javascript';
     if (cat === 'c' || cat.includes('gcc')) return 'c';
     return 'bash'; // Fallback par défaut
-  };
-
-  const handleCopy = (code, index) => {
-    navigator.clipboard.writeText(formatCode(code));
-    setCopiedIndex(index);
-    success("REV SHELL COPIÉ");
-    setTimeout(() => setCopiedIndex(null), 2000);
   };
 
   // --- ADMIN ACTIONS ---
@@ -229,8 +223,8 @@ const ReverseShell = () => {
                         <div className="separator"></div>
                       </>
                     )}
-                    <button className={`copy-shell-btn ${copiedIndex === index ? 'copied' : ''}`} onClick={() => handleCopy(shell.code, index)}>
-                      {copiedIndex === index ? <Check size={16} /> : <Copy size={16} />}
+                    <button className={`copy-shell-btn ${copiedId === index ? 'copied' : ''}`} onClick={() => copyToClipboard(formatCode(shell.code), index, "REV SHELL COPIÉ")}>
+                      {copiedId === index ? <Check size={16} /> : <Copy size={16} />}
                     </button>
                   </div>
                 </div>

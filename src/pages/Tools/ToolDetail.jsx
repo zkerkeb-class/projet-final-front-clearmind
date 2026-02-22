@@ -7,6 +7,7 @@ import { ROLES } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import { getUserRole } from '../../utils/auth';
 import { useToast } from '../../components/Toast/ToastContext';
+import { useClipboard } from '../../utils/useClipboard';
 
 const ToolDetail = () => {
   const { name } = useParams();
@@ -14,8 +15,7 @@ const ToolDetail = () => {
   const [tool, setTool] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const { success } = useToast();
-  const [copiedId, setCopiedId] = useState(null);
+  const { copiedId, copyToClipboard } = useClipboard();
 
   const userRole = getUserRole();
 
@@ -35,13 +35,6 @@ const ToolDetail = () => {
     };
     fetchTool();
   }, [name]);
-
-  const handleCopy = (text, index) => {
-    navigator.clipboard.writeText(text);
-    setCopiedId(index);
-    success("COMMANDE COPIÉE");
-    setTimeout(() => setCopiedId(null), 2000);
-  };
 
   if (loading) {
     return (
@@ -140,7 +133,7 @@ const ToolDetail = () => {
               <div key={i} className="command-card">
                 <div className="command-header">
                   <code>{item.command}</code>
-                  <button onClick={() => handleCopy(item.command, i)} className={`copy-btn ${copiedId === i ? 'copied' : ''}`}>
+                  <button onClick={() => copyToClipboard(item.command, i, "COMMANDE COPIÉE")} className={`copy-btn ${copiedId === i ? 'copied' : ''}`}>
                     {copiedId === i ? <Check size={16} /> : <Copy size={16} />}
                   </button>
                 </div>

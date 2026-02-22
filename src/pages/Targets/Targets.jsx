@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { Server, ShieldCheck, Activity, Loader, Plus, Trash2, X, Pencil, Box, ChevronLeft, ChevronRight, Search, Edit, Monitor, Smartphone, Terminal, Command, HelpCircle, Download } from 'lucide-react';
@@ -9,6 +9,8 @@ import Skeleton from '../../components/Skeleton/Skeleton';
 import { useToast } from '../../components/Toast/ToastContext';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import ErrorModal from '../../components/ErrorModal/ErrorModal';
+import { useAccessControl } from '../../utils/useAccessControl';
+import { downloadBlob, logExport } from '../../utils/exportUtils';
 
 const Targets = () => {
   const navigate = useNavigate();
@@ -27,7 +29,8 @@ const Targets = () => {
   const [targetToDelete, setTargetToDelete] = useState(null);
   const [osFilter, setOsFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
-  const hasLoggedAccess = useRef(false);
+  
+  const isRestricted = useAccessControl(userRole !== ROLES.GUEST, '/targets?resource=/targets');
 
   const [newTarget, setNewTarget] = useState({
     name: '',
@@ -40,19 +43,10 @@ const Targets = () => {
   });
 
   useEffect(() => {
-    // Sécurité : Si Guest, on tente l'accès (pour le log backend) puis on redirige
-    if (userRole === ROLES.GUEST) {
-      if (!hasLoggedAccess.current) {
-        api.get('/targets?resource=/targets').catch(() => {}); // Le backend renverra 403 + Log ACCESS_DENIED
-        hasLoggedAccess.current = true;
-      }
-      navigate('/dashboard');
-      return;
-    }
-
+    if (isRestricted) return;
     const timer = setTimeout(() => fetchData(), 300);
     return () => clearTimeout(timer);
-  }, [page, searchTerm, osFilter, statusFilter, userRole, navigate]);
+  }, [page, searchTerm, osFilter, statusFilter, isRestricted]);
 
     const fetchData = async () => {
       setLoading(true);
@@ -132,22 +126,9 @@ const Targets = () => {
       csvRows.push(row.join(','));
     });
 
-    const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `scope_export_${new Date().toISOString().slice(0, 10)}.csv`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    downloadBlob(csvRows.join('\n'), `scope_export_${new Date().toISOString().slice(0, 10)}.csv`, 'text/csv;charset=utf-8;');
     success("SCOPE EXPORTÉ EN CSV");
-
-    // Log de l'action
-    api.post('/logs', {
-      action: 'DATA_EXPORT',
-      details: `Export CSV du scope (${targets.length} cibles)`,
-      level: 'info'
-    }).catch(console.error);
+    logExport(`Export CSV du scope (${targets.length} cibles)`);
   };
 
   const openAddModal = () => {
@@ -203,7 +184,7 @@ const Targets = () => {
   };
 
   // Si Guest, on n'affiche rien le temps de la redirection
-  if (userRole === ROLES.GUEST) return null;
+  if (isRestricted) return null;
 
   return (
     <div className="targets-container">

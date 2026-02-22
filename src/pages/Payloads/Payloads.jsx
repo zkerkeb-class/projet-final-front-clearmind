@@ -9,6 +9,8 @@ import { getUserRole } from '../../utils/auth';
 import { useToast } from '../../components/Toast/ToastContext';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import ErrorModal from '../../components/ErrorModal/ErrorModal';
+import { downloadBlob, logExport } from '../../utils/exportUtils';
+import { useClipboard } from '../../utils/useClipboard';
 
 const Payloads = () => {
   const navigate = useNavigate();
@@ -19,9 +21,9 @@ const Payloads = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [payloadToDelete, setPayloadToDelete] = useState(null);
-  const [copiedId, setCopiedId] = useState(null);
   const userRole = getUserRole();
-  const { success, info } = useToast();
+  const { info } = useToast();
+  const { copiedId, copyToClipboard } = useClipboard();
 
   // Récupération de l'ID utilisateur depuis le token pour vérifier la propriété
   const getUserId = () => {
@@ -67,13 +69,6 @@ const Payloads = () => {
     return matchesSearch && matchesSeverity && matchesCategory;
   });
 
-  const copyToClipboard = (text, id) => {
-    navigator.clipboard.writeText(text);
-    setCopiedId(id);
-    success("PAYLOAD COPIÉ");
-    setTimeout(() => setCopiedId(null), 2000);
-  };
-
   const handleEdit = (payload) => {
     navigate(`/payloads/edit/${payload._id}`);
   };
@@ -95,22 +90,9 @@ const Payloads = () => {
 
   const handleExportPayloads = () => {
     const dataStr = JSON.stringify(payloads, null, 2);
-    const blob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `payloads_backup_${new Date().toISOString().slice(0, 10)}.json`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    downloadBlob(dataStr, `payloads_backup_${new Date().toISOString().slice(0, 10)}.json`, 'application/json');
     success("BASE PAYLOADS EXPORTÉE");
-
-    // Log de l'action
-    api.post('/logs', {
-      action: 'DATA_EXPORT',
-      details: `Backup JSON des payloads (${payloads.length} items)`,
-      level: 'info'
-    }).catch(console.error);
+    logExport(`Backup JSON des payloads (${payloads.length} items)`);
   };
 
   const isOwner = (payload) => {
@@ -179,7 +161,7 @@ const Payloads = () => {
               <h3 className="payload-name">{p.title}</h3>
               <div className="code-box">
                 <code>{p.code}</code>
-                <button onClick={() => copyToClipboard(p.code, p._id)} className={`copy-btn ${copiedId === p._id ? 'copied' : ''}`}>
+                <button onClick={() => copyToClipboard(p.code, p._id, "PAYLOAD COPIÉ")} className={`copy-btn ${copiedId === p._id ? 'copied' : ''}`}>
                   {copiedId === p._id ? <Check size={16} /> : <Copy size={16} />}
                 </button>
               </div>

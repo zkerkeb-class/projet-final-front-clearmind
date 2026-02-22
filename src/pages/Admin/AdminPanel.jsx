@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { 
@@ -33,6 +33,9 @@ import { useToast } from '../../components/Toast/ToastContext';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import ErrorModal from '../../components/ErrorModal/ErrorModal';
 import { getUserRole } from '../../utils/auth';
+import { useAccessControl } from '../../utils/useAccessControl';
+import { downloadBlob, logExport } from '../../utils/exportUtils';
+import { useClipboard } from '../../utils/useClipboard';
 
 const AdminPanel = () => {
   const navigate = useNavigate();
@@ -52,7 +55,7 @@ const AdminPanel = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [selectedLog, setSelectedLog] = useState(null);
-  const [jsonCopied, setJsonCopied] = useState(false);
+  const { copiedId, copyToClipboard } = useClipboard();
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
   const itemsPerPage = 25;
   const { success, info } = useToast();
@@ -81,7 +84,8 @@ const AdminPanel = () => {
   });
 
   const [systemLogs, setSystemLogs] = useState([]);
-  const hasLoggedAccess = useRef(false);
+  
+  const isRestricted = useAccessControl(userRole === ROLES.ADMIN, '/logs?resource=/admin');
 
   useEffect(() => {
     // Chargement initial de TOUTES les données pour les compteurs (Badges)
@@ -94,15 +98,7 @@ const AdminPanel = () => {
 
   useEffect(() => {
     // Sécurité & Reset Filtres
-    if (userRole !== ROLES.ADMIN) {
-      // "Honeypot" : On envoie une seule fois la requête pour logger le 403
-      if (!hasLoggedAccess.current) {
-        api.get('/logs?resource=/admin').catch(() => {}); 
-        hasLoggedAccess.current = true;
-      }
-      navigate('/dashboard');
-      return;
-    }
+    if (isRestricted) return;
 
     setSearchTerm("");
     setCategoryFilter("All");
@@ -112,12 +108,7 @@ const AdminPanel = () => {
     setSelectedAction("All");
     setDateStart("");
     setDateEnd("");
-  }, [activeTab, userRole, navigate]);
-
-  // Reset de l'état de copie quand on change de log ou qu'on ferme la modale
-  useEffect(() => {
-    if (!selectedLog) setJsonCopied(false);
-  }, [selectedLog]);
+  }, [activeTab, isRestricted]);
 
   // Reset de la pagination quand on change les filtres
   useEffect(() => {
@@ -125,7 +116,7 @@ const AdminPanel = () => {
   }, [searchTerm, activeLogLevels, selectedActor, selectedAction, dateStart, dateEnd]);
 
   // Protection visuelle : Si pas admin, on n'affiche rien le temps que la redirection se fasse
-  if (userRole !== ROLES.ADMIN) return null;
+  if (isRestricted) return null;
 
   // --- AUTO REFRESH LOGIC ---
   useEffect(() => {
@@ -204,22 +195,9 @@ const AdminPanel = () => {
 
   const handleExportTools = () => {
     const dataStr = JSON.stringify(tools, null, 2);
-    const blob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `arsenal_backup_${new Date().toISOString().slice(0, 10)}.json`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    downloadBlob(dataStr, `arsenal_backup_${new Date().toISOString().slice(0, 10)}.json`, 'application/json');
     success("SAUVEGARDE ARSENAL GÉNÉRÉE");
-
-    // Log de l'action
-    api.post('/logs', {
-      action: 'DATA_EXPORT',
-      details: `Backup JSON de l'arsenal (${tools.length} outils)`,
-      level: 'info'
-    }).catch(console.error);
+    logExport(`Backup JSON de l'arsenal (${tools.length} outils)`);
   };
 
   // --- LOGIQUE UTILISATEURS ---
@@ -402,31 +380,9 @@ const AdminPanel = () => {
       csvRows.push(row.join(','));
     });
 
-    const csvContent = csvRows.join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `logs_export_${new Date().toISOString().slice(0, 10)}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    downloadBlob(csvRows.join('\n'), `logs_export_${new Date().toISOString().slice(0, 10)}.csv`, 'text/csv;charset=utf-8;');
     success("EXPORT CSV GÉNÉRÉ");
-
-    // Log de l'action (Warning car export de données sensibles)
-    api.post('/logs', {
-      action: 'DATA_EXPORT',
-      details: `Export CSV des logs (${filteredLogs.length} entrées)`,
-      level: 'warning'
-    }).catch(console.error);
-  };
-
-  const handleCopyLogJSON = () => {
-    if (!selectedLog) return;
-    navigator.clipboard.writeText(JSON.stringify(selectedLog, null, 2));
-    setJsonCopied(true);
-    success("JSON COPIÉ DANS LE PRESSE-PAPIER");
-    setTimeout(() => setJsonCopied(false), 2000);
+    logExport(`Export CSV des logs (${filteredLogs.length} entrées)`, 'warning');
   };
 
   return (
@@ -777,8 +733,8 @@ const AdminPanel = () => {
               <div className="modal-header">
                 <h3>DÉTAILS_LOG</h3>
                 <div className="modal-actions">
-                  <button onClick={handleCopyLogJSON} className={`icon-action ${jsonCopied ? 'copied' : ''}`} title="Copier JSON brut">
-                      {jsonCopied ? <Check size={18} /> : <Copy size={18} />}
+                  <button onClick={() => copyToClipboard(JSON.stringify(selectedLog, null, 2), 'log-json', "JSON COPIÉ")} className={`icon-action ${copiedId === 'log-json' ? 'copied' : ''}`} title="Copier JSON brut">
+                      {copiedId === 'log-json' ? <Check size={18} /> : <Copy size={18} />}
                   </button>
                   <X className="close-icon" onClick={() => setSelectedLog(null)} />
                 </div>

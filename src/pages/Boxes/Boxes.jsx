@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { getUserRole } from '../../utils/auth';
@@ -10,6 +10,7 @@ import { useToast } from '../../components/Toast/ToastContext';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import ErrorModal from '../../components/ErrorModal/ErrorModal';
 import { getDifficultyColor } from '../../utils/helpers';
+import { useAccessControl } from '../../utils/useAccessControl';
 
 const DifficultyBar = ({ difficulty }) => {
   const [width, setWidth] = useState('0%');
@@ -73,25 +74,17 @@ const Boxes = () => {
   const [osFilter, setOsFilter] = useState("All");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const hasLoggedAccess = useRef(false);
+  
+  const isRestricted = useAccessControl(userRole !== ROLES.GUEST, '/boxes?resource=/boxes');
 
   useEffect(() => {
-    // Sécurité : Si Guest, on tente l'accès (pour le log backend) puis on redirige
-    if (userRole === ROLES.GUEST) {
-      if (!hasLoggedAccess.current) {
-        api.get('/boxes?resource=/boxes').catch(() => {}); // Le backend renverra 403 + Log ACCESS_DENIED
-        hasLoggedAccess.current = true;
-      }
-      navigate('/dashboard');
-      return;
-    }
-
+    if (isRestricted) return;
     // Debounce pour la recherche
     const timer = setTimeout(() => {
       fetchBoxes();
     }, 300);
     return () => clearTimeout(timer);
-  }, [page, searchTerm, difficultyFilter, platformFilter, categoryFilter, osFilter, userRole, navigate]);
+  }, [page, searchTerm, difficultyFilter, platformFilter, categoryFilter, osFilter, isRestricted]);
 
     const fetchBoxes = async () => {
       setLoading(true);
@@ -161,7 +154,7 @@ const Boxes = () => {
   };
 
   // Si Guest, on n'affiche rien le temps de la redirection
-  if (userRole === ROLES.GUEST) return null;
+  if (isRestricted) return null;
 
   return (
     <div className="boxes-container">

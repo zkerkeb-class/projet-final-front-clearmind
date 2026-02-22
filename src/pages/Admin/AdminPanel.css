@@ -177,6 +177,27 @@
   font-weight: bold;
 }
 
+/* --- LOG BADGES --- */
+.admin-container .log-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 1px solid;
+}
+
+.admin-container .log-badge.info { color: #00d4ff; border-color: rgba(0, 212, 255, 0.3); background: rgba(0, 212, 255, 0.1); }
+.admin-container .log-badge.success { color: #00ff41; border-color: rgba(0, 255, 65, 0.3); background: rgba(0, 255, 65, 0.1); }
+.admin-container .log-badge.warning { color: #ffa500; border-color: rgba(255, 165, 0, 0.3); background: rgba(255, 165, 0, 0.1); }
+.admin-container .log-badge.error { color: #ff003c; border-color: rgba(255, 0, 60, 0.3); background: rgba(255, 0, 60, 0.1); }
+
+/* Ajustement pour la table des logs */
+.admin-container .logs-mgmt td {
+  vertical-align: middle;
+}
+
 /* --- INPUTS & ACTIONS --- */
 .admin-container .role-select {
   background: rgba(0, 0, 0, 0.3);
@@ -557,4 +578,8 @@
   .admin-container .users-mgmt td:nth-of-type(1)::before { content: "USER"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
   .admin-container .users-mgmt td:nth-of-type(2)::before { content: "EMAIL"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
   .admin-container .users-mgmt td:nth-of-type(3)::before { content: "RÔLE"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
+
+  .admin-container .logs-mgmt td:nth-of-type(2)::before { content: "NIVEAU"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
+  .admin-container .logs-mgmt td:nth-of-type(3)::before { content: "ACTEUR"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
+  .admin-container .logs-mgmt td:nth-of-type(4)::before { content: "ACTION"; color: #00d4ff; font-weight: bold; font-size: 0.7rem; }
 }

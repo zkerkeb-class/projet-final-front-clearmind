@@ -13,13 +13,16 @@ import {
   X,
   Edit,
   Search,
-  Database
+  Database,
+  FileText,
+  Download
 } from 'lucide-react';
 import './AdminPanel.css';
 import { ROLES, TOOL_CATEGORIES } from '../../utils/constants';
 import { useToast } from '../../components/Toast/ToastContext';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import ErrorModal from '../../components/ErrorModal/ErrorModal';
+import { getUserRole } from '../../utils/auth';
 
 const AdminPanel = () => {
   const navigate = useNavigate();
@@ -31,7 +34,9 @@ const AdminPanel = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [roleFilter, setRoleFilter] = useState("All");
+  const [logLevelFilter, setLogLevelFilter] = useState("All");
   const { success, info } = useToast();
+  const userRole = getUserRole();
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
     title: '',
@@ -48,13 +53,40 @@ const AdminPanel = () => {
     role: ROLES.GUEST 
   });
 
+  const [systemLogs, setSystemLogs] = useState([]);
+
   useEffect(() => {
+    if (userRole !== ROLES.ADMIN) {
+      navigate('/dashboard');
+      return;
+    }
+
     setSearchTerm("");
     setCategoryFilter("All");
     setRoleFilter("All");
-    if (activeTab === 'arsenal') fetchTools();
-    if (activeTab === 'users') fetchUsers();
-  }, [activeTab]);
+    setLogLevelFilter("All");
+    
+    // On ne lance les fetch que si on est admin (pour éviter les requêtes inutiles avant la redirection)
+    if (userRole === ROLES.ADMIN) {
+      if (activeTab === 'arsenal') fetchTools();
+      if (activeTab === 'users') fetchUsers();
+      if (activeTab === 'logs') fetchLogs();
+    }
+  }, [activeTab, userRole, navigate]);
+
+  // --- LOGIQUE LOGS ---
+  const fetchLogs = async () => {
+    setLoading(true);
+    try {
+      const res = await api.get('/logs');
+      setSystemLogs(res.data.data.logs || []);
+      setError(null);
+    } catch (err) {
+      setError("Impossible de récupérer les logs système.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // --- LOGIQUE ARSENAL ---
   const fetchTools = async () => {
@@ -158,6 +190,12 @@ const AdminPanel = () => {
     return matchesSearch && matchesRole;
   });
 
+  const filteredLogs = systemLogs.filter(l => {
+    const matchesSearch = l.action.toLowerCase().includes(searchTerm.toLowerCase()) || l.details.toLowerCase().includes(searchTerm.toLowerCase()) || l.actor.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesLevel = logLevelFilter === 'All' || l.level === logLevelFilter;
+    return matchesSearch && matchesLevel;
+  });
+
   return (
     <div className="admin-container">
       <header className="page-header">
@@ -177,6 +215,12 @@ const AdminPanel = () => {
           onClick={() => setActiveTab('users')}
         >
           <Users size={18} /> UTILISATEURS
+        </button>
+        <button 
+          className={activeTab === 'logs' ? 'tab active' : 'tab'} 
+          onClick={() => setActiveTab('logs')}
+        >
+          <FileText size={18} /> LOGS_SYSTÈME
         </button>
       </nav>
 
@@ -349,6 +393,58 @@ const AdminPanel = () => {
                 <span>AUCUN UTILISATEUR TROUVÉ</span>
               </div>
             )}
+          </div>
+        )}
+
+        {activeTab === 'logs' && (
+          <div className="logs-mgmt">
+            <div className="controls-bar">
+              <div className="admin-search-container">
+                <Search size={20} className="admin-search-icon" />
+                <input 
+                  type="text" 
+                  placeholder="RECHERCHER DANS LES LOGS..." 
+                  className="admin-search-input"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              <div className="filters-wrapper">
+                <select value={logLevelFilter} onChange={(e) => setLogLevelFilter(e.target.value)} className="admin-filter-select">
+                  <option value="All">NIVEAU (TOUS)</option>
+                  <option value="info">INFO</option>
+                  <option value="success">SUCCESS</option>
+                  <option value="warning">WARNING</option>
+                  <option value="error">ERROR</option>
+                </select>
+                <button className="add-tool-btn" onClick={() => info("EXPORT CSV NON DISPONIBLE")}>
+                    <Download size={16} /> EXPORT_CSV
+                </button>
+              </div>
+            </div>
+
+            <table className="admin-data-table">
+              <thead>
+                <tr>
+                  <th>TIMESTAMP</th>
+                  <th>NIVEAU</th>
+                  <th>ACTEUR</th>
+                  <th>ACTION</th>
+                  <th>DÉTAILS</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredLogs.map((log) => (
+                  <tr key={log._id}>
+                    <td style={{color: '#666', fontSize: '0.8rem'}}>{new Date(log.timestamp).toLocaleString()}</td>
+                    <td><span className={`log-badge ${log.level}`}>{log.level.toUpperCase()}</span></td>
+                    <td style={{fontWeight: 'bold', color: '#fff'}}>{log.actor}</td>
+                    <td style={{color: '#00d4ff'}}>{log.action}</td>
+                    <td style={{color: '#aaa', fontSize: '0.85rem'}}>{log.details}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </main>

@@ -4,6 +4,8 @@ import { Radio, ExternalLink, Clock, Search, ShieldAlert, Filter, ArrowUpDown, C
 import './News.css';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import ErrorModal from '../../components/ErrorModal/ErrorModal';
+import { getCriticality } from '../../utils/helpers';
+import { CVE_REGEX } from '../../utils/constants';
 
 const News = () => {
   const [articles, setArticles] = useState([]);
@@ -37,28 +39,13 @@ const News = () => {
     fetchNews(true);
   }, []);
 
-  // --- LOGIQUE DE DÉTECTION DE CRITICITÉ ---
-  const getCriticality = (title) => {
-    const t = title.toLowerCase();
-    if (t.includes('critical') || t.includes('rce') || t.includes('zero-day') || t.includes('0-day') || t.includes('pre-auth')) {
-      return 'critical';
-    }
-    if (t.includes('high') || t.includes('exploit') || t.includes('vulnerability') || t.includes('bypass') || t.includes('cve')) {
-      return 'high';
-    }
-    if (t.includes('malware') || t.includes('ransomware') || t.includes('backdoor') || t.includes('trojan') || t.includes('campaign') || t.includes('attack') || t.includes('breach') || t.includes('hack')) {
-      return 'medium';
-    }
-    return 'low';
-  };
-
   // --- LOGIQUE DE SURLIGNAGE DES CVE ---
   const highlightContent = (text) => {
     if (!text) return "";
     // Regex pour détecter les formats CVE-XXXX-XXXXX
-    const parts = text.split(/(CVE-\d{4}-\d{4,})/g);
+    const parts = text.split(new RegExp(`(${CVE_REGEX.source})`, 'g'));
     return parts.map((part, i) => 
-      part.match(/CVE-\d{4}-\d{4,}/) ? 
+      part.match(CVE_REGEX) ? 
       <span key={i} className="cve-highlight">{part}</span> : part
     );
   };
@@ -110,26 +97,36 @@ const News = () => {
   return (
     <div className="news-container">
       <header className="page-header">
-        <div className="header-left">
-            <h2 className="page-title">THREAT_<span>INTELLIGENCE</span></h2>
-        </div>
-        
-        <div className="news-search-container">
-            <Search size={18} className="news-search-icon" />
-            <input 
-            type="text" 
-            placeholder="Filtrer par mot-clé (CVE, OS, Source)..." 
-            className="news-search-input"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            />
-        </div>
+        <h2 className="page-title">THREAT_<span>INTELLIGENCE</span></h2>
 
         <div className="header-right">
             <div className="live-indicator">
               <Radio size={16} className="pulse-icon" /> 
               <span>{filteredArticles.length} ALERTES</span>
             </div>
+            <button 
+              className="icon-btn refresh-btn" 
+              onClick={() => fetchNews(false)}
+              title="Rafraîchir les flux"
+            >
+              <RefreshCw size={16} />
+            </button>
+        </div>
+       </header>
+
+      <div className="controls-bar">
+        <div className="news-search-container">
+            <Search size={20} className="news-search-icon" />
+            <input 
+            type="text" 
+            placeholder="RECHERCHER (CVE, OS, SOURCE)..." 
+            className="news-search-input"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            />
+        </div>
+
+        <div className="filters-wrapper">
             <button 
               className="sort-btn" 
               onClick={() => setSortDesc(!sortDesc)}
@@ -139,18 +136,14 @@ const News = () => {
               {sortDesc ? "RÉCENT" : "ANCIEN"}
               <ArrowUpDown size={14} />
             </button>
+            <button className="reset-filters-btn" onClick={resetFilters}>
+              <RotateCcw size={12} /> RESET
+            </button>
         </div>
-       </header>
+      </div>
 
       {/* BARRE DE FILTRES AVANCÉS */}
       <div className="filters-section">
-        <button 
-          className="icon-btn refresh-btn refresh-btn-absolute" 
-          onClick={() => fetchNews(false)}
-          title="Rafraîchir les flux"
-        >
-          <RefreshCw size={16} />
-        </button>
         <div className="filter-group sources">
           <div className="filter-header">
             <span className="filter-label"><Filter size={12} /> SOURCES :</span>
@@ -198,12 +191,6 @@ const News = () => {
               </div>
             ))}
           </div>
-        </div>
-
-        <div className="filter-actions-right">
-          <button className="reset-filters-btn" onClick={resetFilters}>
-            <RotateCcw size={12} /> RÉINITIALISER
-          </button>
         </div>
       </div>
 
@@ -269,7 +256,10 @@ const News = () => {
             );
           })
         ) : (
-          <div className="no-results">AUCUNE_MENACE_CORRESPONDANTE_À_LA_RECHERCHE</div>
+          <div className="no-results">
+            <ShieldAlert size={48} style={{ opacity: 0.3, marginBottom: '1rem' }} />
+            <span>AUCUNE_MENACE_CORRESPONDANTE_À_LA_RECHERCHE</span>
+          </div>
         )}
       </div>
 

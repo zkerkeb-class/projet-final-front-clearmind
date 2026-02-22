@@ -70,10 +70,13 @@ const CodeBlock = ({ inline, className, children, ...props }) => {
   );
 };
 
+const WIKI_CATEGORIES = ['General', 'Web', 'Database', 'Remote Access', 'File Transfer', 'Mail', 'Network', 'Active Directory'];
+
 const Wiki = () => {
   const [methodologies, setMethodologies] = useState([]);
   const [selectedTopic, setSelectedTopic] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isPreview, setIsPreview] = useState(false);
@@ -82,11 +85,11 @@ const Wiki = () => {
   // États pour l'édition/ajout
   const [showModal, setShowModal] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [formData, setFormData] = useState({ port: '', service: '', content: '' });
+  const [formData, setFormData] = useState({ port: '', service: '', category: 'General', content: '' });
   
   const userRole = getUserRole();
   const canEdit = userRole === 'admin' || userRole === 'pentester';
-  const { success, info } = useToast();
+  const { success, info, error: toastError } = useToast();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // Charger la liste des méthodes (sidebar)
@@ -127,10 +130,15 @@ const Wiki = () => {
         fetchMethods();
       }
       setShowModal(false);
-      setFormData({ port: '', service: '', content: '' });
+      setFormData({ port: '', service: '', category: 'General', content: '' });
       success(isEditMode ? "FICHE MISE À JOUR" : "NOUVELLE FICHE CRÉÉE");
     } catch (err) {
-      setError("ERREUR D'ENREGISTREMENT : " + (err.response?.data?.message || err.message));
+      const msg = err.response?.data?.message || err.message;
+      if (msg && (msg.includes('duplicate') || msg.includes('11000'))) {
+        toastError("ERREUR : UNE FICHE EXISTE DÉJÀ POUR CE PORT.");
+      } else {
+        setError("ERREUR D'ENREGISTREMENT : " + msg);
+      }
     }
   };
 
@@ -147,7 +155,7 @@ const Wiki = () => {
   };
 
   const openAddModal = () => {
-    setFormData({ port: '', service: '', content: '# Enumeration\n\n# Exploitation\n' });
+    setFormData({ port: '', service: '', category: 'General', content: '# Enumeration\n\n# Exploitation\n' });
     setIsEditMode(false);
     setIsPreview(false);
     setShowModal(true);
@@ -158,6 +166,7 @@ const Wiki = () => {
     setFormData({
       port: selectedTopic.port,
       service: selectedTopic.service,
+      category: selectedTopic.category || 'General',
       content: selectedTopic.content
     });
     setIsEditMode(true);
@@ -165,10 +174,12 @@ const Wiki = () => {
     setShowModal(true);
   };
 
-  const filteredMethods = methodologies.filter(m => 
-    m.service.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    m.port.toString().includes(searchTerm)
-  );
+  const filteredMethods = methodologies.filter(m => {
+    const matchesSearch = m.service.toLowerCase().includes(searchTerm.toLowerCase()) || m.port.toString().includes(searchTerm);
+    const matchesCategory = categoryFilter === "All" || (m.category && m.category === categoryFilter);
+    
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <div className="wiki-wrapper">
@@ -194,6 +205,17 @@ const Wiki = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+        </div>
+
+        <div className="wiki-filter">
+          <select 
+            value={categoryFilter} 
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="wiki-filter-select"
+          >
+            <option value="All">CATÉGORIE (TOUTES)</option>
+            {WIKI_CATEGORIES.map(cat => <option key={cat} value={cat}>{cat.toUpperCase()}</option>)}
+          </select>
         </div>
 
         <div className="wiki-list">
@@ -222,20 +244,23 @@ const Wiki = () => {
         {selectedTopic ? (
           <div className="markdown-body">
             <div className="wiki-content-header">
-              <h1>{selectedTopic.port} - {selectedTopic.service}</h1>
+              <div className="wiki-header-left">
+                <h1>{selectedTopic.port} - {selectedTopic.service}</h1>
+                <span className="wiki-category-tag">{selectedTopic.category || 'GENERAL'}</span>
+              </div>
               <div className="wiki-actions">
                 {/* Bouton de bascule Source / Aperçu pour tout le monde */}
                 <button 
                   onClick={() => setIsMainPreview(!isMainPreview)} 
                   className="wiki-action-btn preview-toggle"
                 >
-                  {isMainPreview ? <><Code size={14}/> <span className="btn-text">SOURCE</span></> : <><Eye size={14}/> <span className="btn-text">APERÇU</span></>}
+                  {isMainPreview ? <Code size={14}/> : <Eye size={14}/>}
                 </button>
 
                 {canEdit && (
                   <>
-                  <button onClick={openEditModal} className="wiki-action-btn edit"><Edit size={14}/> <span className="btn-text">ÉDITER</span></button>
-                  <button onClick={() => setShowDeleteConfirm(true)} className="wiki-action-btn delete"><Trash2 size={14}/><span className="btn-text">SUPPRIMER</span></button>
+                  <button onClick={openEditModal} className="wiki-action-btn edit"><Edit size={14}/></button>
+                  <button onClick={() => setShowDeleteConfirm(true)} className="wiki-action-btn delete"><Trash2 size={14}/></button>
                   </>
                 )}
               </div>
@@ -271,8 +296,35 @@ const Wiki = () => {
             
             <form onSubmit={handleSave} className="modal-form">
               <div className="modal-row">
-                <input type="number" placeholder="Port (ex: 445)" required value={formData.port} onChange={e => setFormData({...formData, port: e.target.value})} className="modal-input flex-1" />
-                <input type="text" placeholder="Service (ex: SMB)" required value={formData.service} onChange={e => setFormData({...formData, service: e.target.value})} className="modal-input flex-2" />
+                <input 
+                  type="number" 
+                  placeholder="Port (ex: 445)" 
+                  required 
+                  min="1" 
+                  max="65535"
+                  value={formData.port} 
+                  onChange={e => setFormData({...formData, port: e.target.value})} 
+                  className="modal-input flex-1" 
+                />
+                <select 
+                  value={formData.category} 
+                  onChange={e => setFormData({...formData, category: e.target.value})} 
+                  className="modal-select flex-1"
+                >
+                  {WIKI_CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                </select>
+              </div>
+              
+              <div className="modal-row">
+                <input 
+                  type="text" 
+                  placeholder="Service (ex: SMB, HTTP, SSH...)" 
+                  required 
+                  value={formData.service} 
+                  onChange={e => setFormData({...formData, service: e.target.value})} 
+                  className="modal-input" 
+                  style={{ width: '100%' }}
+                />
               </div>
               
               <div className="wiki-modal-toolbar">

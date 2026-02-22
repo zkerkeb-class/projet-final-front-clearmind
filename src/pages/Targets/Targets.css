@@ -37,10 +37,17 @@
   text-shadow: 0 0 15px rgba(255, 0, 60, 0.6);
 }
 
-.targets-container .header-actions {
+.targets-container .controls-bar {
   display: flex;
-  gap: 1rem;
+  justify-content: space-between;
   align-items: center;
+  margin-bottom: 2.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 /* --- SEARCH BAR --- */
@@ -53,6 +60,7 @@
   padding: 0 15px;
   gap: 12px;
   min-width: 250px;
+  flex: 1;
   transition: all 0.3s ease;
   position: relative;
   border-radius: 4px;
@@ -87,6 +95,51 @@
   font-size: 0.8rem;
   font-family: 'JetBrains Mono', monospace;
   letter-spacing: 1px;
+}
+
+/* --- FILTERS --- */
+.targets-container .filters-wrapper {
+  display: flex;
+  gap: 1rem;
+}
+
+.targets-container .targets-filter-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 10px 35px 10px 15px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2300d4ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+}
+
+.targets-container .targets-filter-select option {
+  background: #111;
+  color: #fff;
+}
+
+.targets-container .targets-filter-select:hover {
+  background-color: rgba(0, 212, 255, 0.05);
+  border-color: rgba(0, 212, 255, 0.3);
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.1);
+}
+
+.targets-container .targets-filter-select:focus {
+  border-color: #00d4ff;
+  background-color: rgba(0, 212, 255, 0.1);
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
 }
 
 /* --- ADD BUTTON --- */
@@ -188,10 +241,28 @@
   box-shadow: 0 0 10px rgba(255, 0, 60, 0.1);
 }
 
-.targets-container .status-badge.active {
-  background-color: rgba(0, 212, 255, 0.05);
+.targets-container .status-badge.vulnerable {
+  background-color: rgba(255, 128, 0, 0.1);
+  color: #ff8000;
+  border-color: rgba(255, 128, 0, 0.3);
+}
+
+.targets-container .status-badge.scanning {
+  background-color: rgba(255, 215, 0, 0.1);
+  color: #ffd700;
+  border-color: rgba(255, 215, 0, 0.3);
+}
+
+.targets-container .status-badge.discovery {
+  background-color: rgba(0, 212, 255, 0.1);
   color: #00d4ff;
   border-color: rgba(0, 212, 255, 0.3);
+}
+
+.targets-container .status-badge.patched {
+  background-color: rgba(0, 255, 65, 0.1);
+  color: #00ff41;
+  border-color: rgba(0, 255, 65, 0.3);
 }
 
 /* --- MODAL RESPONSIVE --- */
@@ -536,10 +607,13 @@
     gap: 1rem; 
   }
 
-  .targets-container .header-actions {
-    width: 100%;
+  .targets-container .controls-bar {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .targets-container .filters-wrapper {
+    flex-direction: column;
   }
 
   .targets-container .targets-search-container {

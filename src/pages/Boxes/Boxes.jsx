@@ -2,23 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { getUserRole } from '../../utils/auth';
-import { Monitor, Search, Plus, Trash2, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Monitor, Search, Plus, Trash2, X, ChevronLeft, ChevronRight, Terminal, Command, Smartphone, HelpCircle } from 'lucide-react';
 import './Boxes.css';
-import { ROLES, BOX_STATUSES, BOX_DIFFICULTIES, BOX_PLATFORMS, TARGET_OS } from '../../utils/constants';
+import { ROLES, BOX_STATUSES, BOX_DIFFICULTIES, BOX_PLATFORMS, TARGET_OS, BOX_CATEGORIES } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import { useToast } from '../../components/Toast/ToastContext';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import ErrorModal from '../../components/ErrorModal/ErrorModal';
-
-const getDifficultyColor = (difficulty) => {
-  switch (difficulty) {
-    case BOX_DIFFICULTIES.EASY: return '#00ff41';
-    case BOX_DIFFICULTIES.MEDIUM: return '#ff8000';
-    case BOX_DIFFICULTIES.HARD: return '#ff003c';
-    case BOX_DIFFICULTIES.INSANE: return '#b026ff';
-    default: return '#00d4ff';
-  }
-};
+import { getDifficultyColor } from '../../utils/helpers';
 
 const DifficultyBar = ({ difficulty }) => {
   const [width, setWidth] = useState('0%');
@@ -69,13 +60,17 @@ const Boxes = () => {
     ipAddress: '',
     platform: BOX_PLATFORMS.HTB,
     difficulty: BOX_DIFFICULTIES.EASY,
+    category: BOX_CATEGORIES.RED,
+    os: TARGET_OS.LINUX,
     status: BOX_STATUSES.TODO
   });
 
   // États pour la recherche et les filtres
   const [searchTerm, setSearchTerm] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState("All");
+  const [categoryFilter, setCategoryFilter] = useState("All");
   const [platformFilter, setPlatformFilter] = useState("All");
+  const [osFilter, setOsFilter] = useState("All");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -85,13 +80,13 @@ const Boxes = () => {
       fetchBoxes();
     }, 300);
     return () => clearTimeout(timer);
-  }, [page, searchTerm, difficultyFilter, platformFilter]);
+  }, [page, searchTerm, difficultyFilter, platformFilter, categoryFilter, osFilter]);
 
     const fetchBoxes = async () => {
       setLoading(true);
       try {
         const res = await api.get('/boxes', {
-          params: { page, limit: 12, search: searchTerm, difficulty: difficultyFilter, platform: platformFilter }
+          params: { page, limit: 12, search: searchTerm, difficulty: difficultyFilter, platform: platformFilter, category: categoryFilter, os: osFilter }
         });
         setBoxes(res.data.data.boxes);
         setTotalPages(res.data.totalPages);
@@ -111,10 +106,31 @@ const Boxes = () => {
       const res = await api.post('/boxes', newBox);
       setBoxes([...boxes, res.data.data]); // Ajoute la nouvelle box à la liste locale
       setShowModal(false);
-      setNewBox({ name: '', ipAddress: '', platform: BOX_PLATFORMS.HTB, difficulty: BOX_DIFFICULTIES.EASY, status: BOX_STATUSES.TODO });
+      setNewBox({ name: '', ipAddress: '', platform: BOX_PLATFORMS.HTB, difficulty: BOX_DIFFICULTIES.EASY, category: BOX_CATEGORIES.RED, os: TARGET_OS.LINUX, status: BOX_STATUSES.TODO });
       success("NOUVELLE CIBLE INITIALISÉE");
     } catch (err) {
       setError("ERREUR D'AJOUT : " + (err.response?.data?.message || err.message));
+    }
+  };
+
+  const getCategoryColor = (category) => {
+    switch (category) {
+      case BOX_CATEGORIES.RED: return '#ff003c';
+      case BOX_CATEGORIES.BLUE: return '#00d4ff';
+      case BOX_CATEGORIES.PURPLE: return '#bf00ff';
+      default: return '#fff';
+    }
+  };
+
+  const getOsIcon = (os) => {
+    const color = '#fff'; // Icône blanche pour les boxes
+    switch (os) {
+      case TARGET_OS.WINDOWS: return <Monitor size={48} color={color} strokeWidth={1.5} />;
+      case TARGET_OS.LINUX: return <Terminal size={48} color={color} strokeWidth={1.5} />;
+      case TARGET_OS.MACOS: return <Command size={48} color={color} strokeWidth={1.5} />;
+      case TARGET_OS.ANDROID: return <Smartphone size={48} color={color} strokeWidth={1.5} />;
+      case TARGET_OS.IOS: return <Smartphone size={48} color={color} strokeWidth={1.5} />;
+      default: return <HelpCircle size={48} color={color} strokeWidth={1.5} />;
     }
   };
 
@@ -131,17 +147,6 @@ const Boxes = () => {
       setError("IMPOSSIBLE DE SUPPRIMER LA MACHINE.");
     }
     setBoxToDelete(null);
-  };
-
-  const handleStatusChange = async (id, newStatus) => {
-    try {
-      // Mise à jour optimiste de l'UI
-      setBoxes(boxes.map(b => b._id === id ? { ...b, status: newStatus } : b));
-      await api.patch(`/boxes/${id}`, { status: newStatus });
-      success("STATUT MIS À JOUR");
-    } catch (err) {
-      setError("ERREUR DE SYNCHRONISATION DU STATUT.");
-    }
   };
 
   return (
@@ -184,13 +189,36 @@ const Boxes = () => {
           </select>
 
           <select 
+            value={categoryFilter} 
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="boxes-filter-select"
+          >
+            <option value="All">TYPE (TOUS)</option>
+            <option value={BOX_CATEGORIES.RED}>RED (OFFENSIVE)</option>
+            <option value={BOX_CATEGORIES.BLUE}>BLUE (DEFENSIVE)</option>
+            <option value={BOX_CATEGORIES.PURPLE}>PURPLE (MIXED)</option>
+          </select>
+
+          <select 
+            value={osFilter} 
+            onChange={(e) => setOsFilter(e.target.value)}
+            className="boxes-filter-select"
+          >
+            <option value="All">OS (TOUS)</option>
+            {Object.values(TARGET_OS).map(os => (
+              <option key={os} value={os}>{os}</option>
+            ))}
+          </select>
+
+          <select 
             value={platformFilter} 
             onChange={(e) => setPlatformFilter(e.target.value)}
             className="boxes-filter-select"
           >
-            <option value="All">OS (TOUS)</option>
-            <option value={TARGET_OS.LINUX}>LINUX</option>
-            <option value={TARGET_OS.WINDOWS}>WINDOWS</option>
+            <option value="All">PROVIDER (TOUS)</option>
+            {Object.values(BOX_PLATFORMS).map(p => (
+              <option key={p} value={p}>{p}</option>
+            ))}
           </select>
         </div>
       </div>
@@ -219,32 +247,41 @@ const Boxes = () => {
             onClick={() => navigate(`/boxes/${box._id}`)}
             style={{ cursor: 'pointer' }}
           >
-            {/* Mapping de tes difficultés réelles */}
-            <div className="box-difficulty" style={{ color: getDifficultyColor(box.difficulty), borderColor: getDifficultyColor(box.difficulty) }}>
-              {box.difficulty?.toUpperCase()}
+            <div className="box-badges">
+              <div className="box-difficulty" style={{ color: getDifficultyColor(box.difficulty), borderColor: getDifficultyColor(box.difficulty) }}>
+                {box.difficulty?.toUpperCase()}
+              </div>
+              <div className="box-category-badge" style={{ color: getCategoryColor(box.category), borderColor: getCategoryColor(box.category) }}>
+                {box.category?.toUpperCase()}
+              </div>
             </div>
             
-            <Monitor size={32} color="#00d4ff" />
-            <h3>{box.name}</h3>
-            <p>{box.ipAddress} @ {box.platform}</p>
+            <div className="box-visual">
+              {getOsIcon(box.os)}
+            </div>
+            
+            <div className="box-content">
+              <h3>{box.name}</h3>
+              <div className="box-meta">
+                <span className="meta-tag ip">{box.ipAddress}</span>
+                <span className="meta-tag platform">{box.platform}</span>
+              </div>
+            </div>
 
             <DifficultyBar difficulty={box.difficulty} />
 
-            <div className="box-info">
-              <div className="status-control">
-                <select 
-                  value={box.status} 
-                  onClick={(e) => e.stopPropagation()}
-                  onChange={(e) => handleStatusChange(box._id, e.target.value)}
-                  className="status-select"
-                  style={{ color: box.status === BOX_STATUSES.ROOT_FLAG ? '#ff003c' : '#00d4ff' }}
-                  disabled={!(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN)}
-                >
-                  <option value={BOX_STATUSES.TODO}>TODO</option>
-                  <option value={BOX_STATUSES.IN_PROGRESS}>IN PROGRESS</option>
-                  <option value={BOX_STATUSES.USER_FLAG}>USER OWNED</option>
-                  <option value={BOX_STATUSES.ROOT_FLAG}>ROOT OWNED</option>
-                </select>
+            <div className="box-footer">
+              <div className="status-display">
+                <span style={{ 
+                  color: box.status === BOX_STATUSES.ROOT_FLAG ? '#ff003c' : 
+                         box.status === BOX_STATUSES.USER_FLAG ? '#bf00ff' :
+                         box.status === BOX_STATUSES.IN_PROGRESS ? '#ffa500' : '#00d4ff',
+                  fontWeight: 'bold',
+                  fontSize: '0.75rem',
+                  letterSpacing: '1px'
+                }}>
+                  {box.status.toUpperCase()}
+                </span>
               </div>
               
               {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
@@ -258,7 +295,10 @@ const Boxes = () => {
             </div>
           </div>
         )) : (
-          <div className="empty-state-msg">AUCUNE MACHINE DÉTECTÉE AVEC CES PARAMÈTRES.</div>
+          <div className="empty-state-msg">
+            <Monitor size={48} style={{ opacity: 0.3, marginBottom: '1rem' }} />
+            <span>AUCUNE MACHINE DÉTECTÉE AVEC CES PARAMÈTRES.</span>
+          </div>
         )}
       </div>
 
@@ -297,6 +337,19 @@ const Boxes = () => {
                 <option value={BOX_DIFFICULTIES.MEDIUM}>Medium</option>
                 <option value={BOX_DIFFICULTIES.HARD}>Hard</option>
                 <option value={BOX_DIFFICULTIES.INSANE}>Insane</option>
+              </select>
+
+              <select value={newBox.os} onChange={e => setNewBox({...newBox, os: e.target.value})} className="modal-select">
+                <option value={TARGET_OS.LINUX}>Linux</option>
+                <option value={TARGET_OS.WINDOWS}>Windows</option>
+                <option value={TARGET_OS.MACOS}>MacOS</option>
+                <option value={TARGET_OS.ANDROID}>Android</option>
+              </select>
+
+              <select value={newBox.category} onChange={e => setNewBox({...newBox, category: e.target.value})} className="modal-select">
+                <option value={BOX_CATEGORIES.RED}>Red Team (Offensive)</option>
+                <option value={BOX_CATEGORIES.BLUE}>Blue Team (Defensive)</option>
+                <option value={BOX_CATEGORIES.PURPLE}>Purple Team (Mixed)</option>
               </select>
 
               <button type="submit" className="modal-submit-btn">LANCER L'INSTANCE</button>

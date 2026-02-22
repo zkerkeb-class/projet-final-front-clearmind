@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
-import { Server, ShieldCheck, Activity, Loader, Plus, Trash2, X, Pencil, Box, ChevronLeft, ChevronRight, Search, Edit } from 'lucide-react';
+import { Server, ShieldCheck, Activity, Loader, Plus, Trash2, X, Pencil, Box, ChevronLeft, ChevronRight, Search, Edit, Monitor, Smartphone, Terminal, Command, HelpCircle } from 'lucide-react';
 import { getUserRole } from '../../utils/auth';
 import './Targets.css';
-import { ROLES, TARGET_STATUSES, TARGET_OS } from '../../utils/constants';
+import { ROLES, TARGET_STATUSES, TARGET_OS, OS_COLORS } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import { useToast } from '../../components/Toast/ToastContext';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
@@ -25,6 +25,8 @@ const Targets = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { success, info } = useToast();
   const [targetToDelete, setTargetToDelete] = useState(null);
+  const [osFilter, setOsFilter] = useState("All");
+  const [statusFilter, setStatusFilter] = useState("All");
 
   const [newTarget, setNewTarget] = useState({
     name: '',
@@ -39,13 +41,13 @@ const Targets = () => {
   useEffect(() => {
     const timer = setTimeout(() => fetchData(), 300);
     return () => clearTimeout(timer);
-  }, [page, searchTerm]);
+  }, [page, searchTerm, osFilter, statusFilter]);
 
     const fetchData = async () => {
       setLoading(true);
       try {
         const [targetsRes, boxesRes] = await Promise.all([
-          api.get('/targets', { params: { page, limit: 10, search: searchTerm } }),
+          api.get('/targets', { params: { page, limit: 10, search: searchTerm, os: osFilter, status: statusFilter } }),
           api.get('/boxes')
         ]);
         setTargets(targetsRes.data.data.targets);
@@ -142,30 +144,66 @@ const Targets = () => {
     setNewTarget({ ...newTarget, ports: newPorts });
   };
 
+  const getOsIcon = (os) => {
+    const color = OS_COLORS[os] || '#555';
+    switch (os) {
+      case TARGET_OS.WINDOWS: return <Monitor size={14} color={color} />;
+      case TARGET_OS.LINUX: return <Terminal size={14} color={color} />;
+      case TARGET_OS.MACOS: return <Command size={14} color={color} />;
+      case TARGET_OS.ANDROID: return <Smartphone size={14} color={color} />;
+      case TARGET_OS.IOS: return <Smartphone size={14} color={color} />;
+      default: return <HelpCircle size={14} color={color} />;
+    }
+  };
+
   return (
     <div className="targets-container">
       <header className="page-header">
         <h2 className="page-title">SYSTEM_<span>TARGETS</span></h2>
         
-        <div className="header-actions">
-          <div className="targets-search-container">
-            <Search className="targets-search-icon" size={20} />
-            <input 
-              type="text" 
-              placeholder="FILTRER..." 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="targets-search-input"
-            />
-          </div>
-
         {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
           <button className="add-target-btn" onClick={openAddModal}>
             <Plus size={18} /> AJOUTER SCOPE
           </button>
         )}
-        </div>
       </header>
+
+      <div className="controls-bar">
+        <div className="targets-search-container">
+          <Search className="targets-search-icon" size={20} />
+          <input 
+            type="text" 
+            placeholder="FILTRER..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="targets-search-input"
+          />
+        </div>
+
+        <div className="filters-wrapper">
+          <select 
+            value={osFilter} 
+            onChange={(e) => setOsFilter(e.target.value)}
+            className="targets-filter-select"
+          >
+            <option value="All">OS (TOUS)</option>
+            {Object.values(TARGET_OS).map(os => (
+              <option key={os} value={os}>{os}</option>
+            ))}
+          </select>
+
+          <select 
+            value={statusFilter} 
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="targets-filter-select"
+          >
+            <option value="All">STATUT (TOUS)</option>
+            {Object.values(TARGET_STATUSES).map(status => (
+              <option key={status} value={status}>{status}</option>
+            ))}
+          </select>
+        </div>
+      </div>
 
       <table className="targets-table">
         <thead>
@@ -200,7 +238,10 @@ const Targets = () => {
                 </div>
               </td>
               <td data-label="OS">
-                {t.os}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  {getOsIcon(t.os)}
+                  <span>{t.os}</span>
+                </div>
                 {/* Indicateur de lien vers une Box */}
                 {t.linkedBox && (
                   <div 
@@ -221,7 +262,7 @@ const Targets = () => {
                   : "N/A"}
               </td>
               <td data-label="STATUT">
-                <span className={`status-badge ${t.status === TARGET_STATUSES.COMPROMISED ? 'compromised' : 'active'}`}>
+                <span className={`status-badge ${t.status.toLowerCase()}`}>
                   {t.status.toUpperCase()}
                 </span>
               </td>
@@ -267,8 +308,29 @@ const Targets = () => {
             
             <form onSubmit={handleSaveTarget} className="modal-form">
               <input type="text" placeholder="Nom de la cible (ex: SRV-AD-01)" required value={newTarget.name} onChange={e => setNewTarget({...newTarget, name: e.target.value})} className="modal-input" />
+              
+              <select value={newTarget.os} onChange={e => setNewTarget({...newTarget, os: e.target.value})} className="modal-select">
+                <option value={TARGET_OS.UNKNOWN}>OS Inconnu</option>
+                <option value={TARGET_OS.WINDOWS}>Windows</option>
+                <option value={TARGET_OS.LINUX}>Linux</option>
+                <option value={TARGET_OS.MACOS}>MacOS</option>
+                <option value={TARGET_OS.ANDROID}>Android</option>
+                <option value={TARGET_OS.IOS}>iOS</option>
+              </select>
+
               <input type="text" placeholder="Adresse IP (ex: 192.168.1.10)" required value={newTarget.ip} onChange={e => setNewTarget({...newTarget, ip: e.target.value})} className="modal-input" />
-              <input type="text" placeholder="Domaine (ex: corp.local)" value={newTarget.domain} onChange={e => setNewTarget({...newTarget, domain: e.target.value})} className="modal-input" />
+              
+              <input 
+                type="text" 
+                placeholder={
+                  newTarget.os === TARGET_OS.WINDOWS ? "Domaine AD (ex: CORP.LOCAL)" :
+                  (newTarget.os === TARGET_OS.ANDROID || newTarget.os === TARGET_OS.IOS) ? "Hostname / Device ID" :
+                  "Domaine / FQDN"
+                }
+                value={newTarget.domain} 
+                onChange={e => setNewTarget({...newTarget, domain: e.target.value})} 
+                className="modal-input" 
+              />
               
               <select value={newTarget.linkedBox} onChange={e => setNewTarget({...newTarget, linkedBox: e.target.value})} className="modal-select">
                 <option value="">-- Lier à une Box (Optionnel) --</option>
@@ -277,18 +339,12 @@ const Targets = () => {
                 ))}
               </select>
 
-              <select value={newTarget.os} onChange={e => setNewTarget({...newTarget, os: e.target.value})} className="modal-select">
-                <option value={TARGET_OS.UNKNOWN}>OS Inconnu</option>
-                <option value={TARGET_OS.WINDOWS}>Windows</option>
-                <option value={TARGET_OS.LINUX}>Linux</option>
-                <option value={TARGET_OS.MACOS}>MacOS</option>
-              </select>
-
               <select value={newTarget.status} onChange={e => setNewTarget({...newTarget, status: e.target.value})} className="modal-select">
                 <option value={TARGET_STATUSES.DISCOVERY}>Discovery (Découverte)</option>
                 <option value={TARGET_STATUSES.SCANNING}>Scanning (En cours)</option>
                 <option value={TARGET_STATUSES.VULNERABLE}>Vulnerable (Faille trouvée)</option>
                 <option value={TARGET_STATUSES.COMPROMISED}>Compromised (Pwned)</option>
+                <option value={TARGET_STATUSES.PATCHED}>Patched (Corrigé)</option>
               </select>
 
               {/* Gestion des Ports en Tableau (Déplacé en bas pour la grille) */}

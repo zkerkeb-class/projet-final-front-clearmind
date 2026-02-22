@@ -4,8 +4,9 @@ import './Dashboard.css';
 import { Terminal, Target, Box, Zap, Globe, ShieldAlert, BarChart2, Monitor } from 'lucide-react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { getUserRole } from '../../utils/auth';
-import { ROLES } from '../../utils/constants';
+import { ROLES, CHART_COLORS, OS_COLORS } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
+import { getCriticality } from '../../utils/helpers';
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -23,15 +24,6 @@ const Dashboard = () => {
   const [loadingStats, setLoadingStats] = useState(true);
   const [loadingNews, setLoadingNews] = useState(true);
   const userRole = getUserRole();
-
-  // Réutilisation de la logique de criticité
-  const getCriticality = (title) => {
-    const t = title.toLowerCase();
-    if (t.includes('critical') || t.includes('rce') || t.includes('zero-day') || t.includes('0-day') || t.includes('pre-auth')) return 'critical';
-    if (t.includes('high') || t.includes('exploit') || t.includes('vulnerability') || t.includes('bypass') || t.includes('cve')) return 'high';
-    if (t.includes('malware') || t.includes('ransomware') || t.includes('backdoor') || t.includes('trojan') || t.includes('campaign') || t.includes('attack') || t.includes('breach') || t.includes('hack')) return 'medium';
-    return 'low';
-  };
 
   useEffect(() => {
     // 1. Chargement des statistiques internes (Rapide)
@@ -134,11 +126,6 @@ const Dashboard = () => {
     fetchNewsData();
   }, [userRole]);
 
-  // Couleurs pour les sources (Palette Cyberpunk)
-  const COLORS = ['#00d4ff', '#bf00ff', '#ff003c', '#ffd700', '#00ff41', '#ff8c00'];
-  // Couleurs pour les OS
-  const OS_COLORS = { Windows: '#00a4ef', Linux: '#f0c674', MacOS: '#999999', Android: '#3ddc84', Unknown: '#555' };
-
   return (
     <div className="dashboard-container">
       <header className="page-header">
@@ -193,7 +180,7 @@ const Dashboard = () => {
                         dataKey="value"
                     >
                         {chartsData.sourcesData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} stroke="none" />
+                            <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} stroke="none" />
                         ))}
                     </Pie>
                     <Tooltip contentStyle={{ backgroundColor: '#0a0a0a', borderColor: '#333', color: '#fff' }} itemStyle={{ color: '#fff' }} />
@@ -271,7 +258,7 @@ const Dashboard = () => {
               <PieChart>
                 <Pie data={chartsData.targetOsData} cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
                   {chartsData.targetOsData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={OS_COLORS[entry.name] || COLORS[index % COLORS.length]} stroke="none" />
+                    <Cell key={`cell-${index}`} fill={OS_COLORS[entry.name] || CHART_COLORS[index % CHART_COLORS.length]} stroke="none" />
                   ))}
                 </Pie>
                 <Tooltip contentStyle={{ backgroundColor: '#0a0a0a', borderColor: '#333', color: '#fff' }} itemStyle={{ color: '#fff' }} />

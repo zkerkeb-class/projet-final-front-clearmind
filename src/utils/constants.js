@@ -18,6 +18,12 @@ export const BOX_DIFFICULTIES = {
   INSANE: 'Insane'
 };
 
+export const BOX_CATEGORIES = {
+  RED: 'Red',
+  BLUE: 'Blue',
+  PURPLE: 'Purple'
+};
+
 export const BOX_PLATFORMS = {
   HTB: 'HackTheBox',
   THM: 'TryHackMe',
@@ -108,3 +114,19 @@ export const CODE_LANGUAGES = [
   { value: 'xml', label: 'XML' },
   { value: 'markdown', label: 'MARKDOWN' }
 ];
+
+// Regex
+export const IPV4_REGEX = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+export const CVE_REGEX = /CVE-\d{4}-\d{4,}/;
+
+// Palettes de couleurs (Charts & UI)
+export const CHART_COLORS = ['#00d4ff', '#bf00ff', '#ff003c', '#ffd700', '#00ff41', '#ff8c00'];
+
+export const OS_COLORS = {
+  [TARGET_OS.WINDOWS]: '#00a4ef',
+  [TARGET_OS.LINUX]: '#f0c674',
+  [TARGET_OS.MACOS]: '#999999',
+  [TARGET_OS.ANDROID]: '#3ddc84',
+  [TARGET_OS.IOS]: '#5856d6',
+  [TARGET_OS.UNKNOWN]: '#555'
+};

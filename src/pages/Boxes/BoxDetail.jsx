@@ -4,13 +4,14 @@ import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import api from '../../api/axios';
-import { ChevronLeft, Save, Monitor, Hash, Activity, Eye, Edit, Copy, Check, Settings, X, Target, Code, Trash2 } from 'lucide-react';
+import { ChevronLeft, Save, Monitor, Hash, Activity, Eye, Edit, Copy, Check, Settings, X, Target, Code, Trash2, Terminal, Command, Smartphone, HelpCircle } from 'lucide-react';
 import { getUserRole } from '../../utils/auth';
 import './BoxDetail.css';
-import { ROLES, BOX_DIFFICULTIES, BOX_PLATFORMS, CODE_LANGUAGES } from '../../utils/constants';
+import { ROLES, BOX_DIFFICULTIES, BOX_PLATFORMS, CODE_LANGUAGES, IPV4_REGEX, BOX_CATEGORIES, TARGET_OS, BOX_STATUSES } from '../../utils/constants';
 import { useToast } from '../../components/Toast/ToastContext';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import ErrorModal from '../../components/ErrorModal/ErrorModal';
+import { getDifficultyColor } from '../../utils/helpers';
 
 const CodeBlock = ({ inline, className, children, ...props }) => {
   const [isCopied, setIsCopied] = useState(false);
@@ -86,16 +87,6 @@ const BoxDetail = () => {
   const { success, info } = useToast();
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
-  const getDifficultyColor = (difficulty) => {
-    switch (difficulty) {
-      case BOX_DIFFICULTIES.EASY: return '#00ff41';
-      case BOX_DIFFICULTIES.MEDIUM: return '#ff8000';
-      case BOX_DIFFICULTIES.HARD: return '#ff003c';
-      case BOX_DIFFICULTIES.INSANE: return '#b026ff';
-      default: return '#00d4ff';
-    }
-  };
-
   // Charger la box
   useEffect(() => {
     const fetchBox = async () => {
@@ -139,6 +130,16 @@ const BoxDetail = () => {
     setShowClearConfirm(false);
   };
 
+  const handleStatusChange = async (newStatus) => {
+    try {
+      setBox(prev => ({ ...prev, status: newStatus }));
+      await api.patch(`/boxes/${id}`, { status: newStatus });
+      success("STATUT MIS À JOUR");
+    } catch (err) {
+      setError("ERREUR DE MISE À JOUR DU STATUT");
+    }
+  };
+
   // Ouvrir la modale avec les données actuelles
   const handleEditClick = () => {
     setEditData({
@@ -146,7 +147,9 @@ const BoxDetail = () => {
       ipAddress: box.ipAddress,
       platform: box.platform,
       difficulty: box.difficulty,
-      status: box.status
+      os: box.os || TARGET_OS.LINUX,
+      status: box.status,
+      category: box.category || BOX_CATEGORIES.RED
     });
     setShowEditModal(true);
   };
@@ -161,8 +164,7 @@ const BoxDetail = () => {
     e.preventDefault();
 
     // Validation IPv4 stricte
-    const ipv4Regex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    if (!ipv4Regex.test(editData.ipAddress)) {
+    if (!IPV4_REGEX.test(editData.ipAddress)) {
       setError("FORMAT IP INVALIDE. VEUILLEZ ENTRER UNE ADRESSE IPV4 VALIDE (EX: 10.10.10.10).");
       return;
     }
@@ -177,103 +179,163 @@ const BoxDetail = () => {
     }
   };
 
+  const getCategoryColor = (category) => {
+    switch (category) {
+      case BOX_CATEGORIES.RED: return '#ff003c';
+      case BOX_CATEGORIES.BLUE: return '#00d4ff';
+      case BOX_CATEGORIES.PURPLE: return '#bf00ff';
+      default: return '#fff';
+    }
+  };
+
+  const getOsIcon = (os) => {
+    const color = '#fff';
+    switch (os) {
+      case TARGET_OS.WINDOWS: return <Monitor size={14} color={color} />;
+      case TARGET_OS.LINUX: return <Terminal size={14} color={color} />;
+      case TARGET_OS.MACOS: return <Command size={14} color={color} />;
+      case TARGET_OS.ANDROID: return <Smartphone size={14} color={color} />;
+      case TARGET_OS.IOS: return <Smartphone size={14} color={color} />;
+      default: return <HelpCircle size={14} color={color} />;
+    }
+  };
+
   if (!box) return <div className="loading-text">CHARGEMENT DU DOSSIER...</div>;
 
   return (
     <div className="box-detail-container">
-      <button onClick={() => navigate('/boxes')} className="back-btn">
-        <ChevronLeft size={16} /> RETOUR_LISTE
-      </button>
-
-      <header className="box-header-detail">
-        <div className="box-title">
-          <h1>{box.name.toUpperCase()}</h1>
-          <div className="box-meta">
-            <span><Hash size={14} /> {box.ipAddress}</span>
-            
-            {/* Bouton d'édition pour l'auteur/admin */}
-            {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
-              <button onClick={handleEditClick} className="preview-toggle-btn" title="Modifier les infos">
-                <Settings size={14} /> CONFIG
-              </button>
-            )}
-            <span style={{ color: getDifficultyColor(box.difficulty) }}>
-              <Activity size={14} /> {box.difficulty}
-            </span>
-            <span><Monitor size={14} /> {box.platform}</span>
-          </div>
-        </div>
-
+      {/* HEADER NAVIGATION */}
+      <div className="box-nav-header">
+        <button onClick={() => navigate('/boxes')} className="back-btn">
+          <ChevronLeft size={16} /> RETOUR_LISTE
+        </button>
         <div className="save-status">
           {lastSaved ? `DERNIÈRE MODIF : ${lastSaved.toLocaleTimeString()}` : 'PRÊT'}
           <Save size={16} style={{ opacity: 0.5 }} />
         </div>
-      </header>
+      </div>
 
-      {/* SECTION SCOPE / CIBLES LIÉES */}
-      {box.linkedTargets && box.linkedTargets.length > 0 && (
-        <div className="linked-targets-container">
-          <div className="linked-targets-title">
-            <Target size={16} /> SCOPE_ASSOCIÉ ({box.linkedTargets.length})
-          </div>
-          <div className="targets-list">
-            {box.linkedTargets.map(t => (
-              <div key={t._id} className="target-chip">
-                <div className="target-chip-header">
-                  <span className="target-name">{t.name}</span>
-                  <span className="target-ip">{t.ip}</span>
-                </div>
-                {t.ports && t.ports.length > 0 && (
-                  <table className="mini-ports-table">
-                    <tbody>
-                      {t.ports.map((p, i) => (
-                        <tr key={i}>
-                          <td className="port-num">{p.port}</td>
-                          <td className="port-svc">{p.service}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                )}
+      <div className="box-layout">
+        {/* SIDEBAR : INFOS & TARGETS */}
+        <aside className="box-sidebar">
+          {/* CARTE IDENTITÉ */}
+          <div className="info-card">
+            <div className="info-header">
+              {getOsIcon(box.os)}
+              <h2>{box.name}</h2>
+            </div>
+            
+            <div className="info-grid">
+              <div className="info-item">
+                <label>ADRESSE IP</label>
+                <span>{box.ipAddress}</span>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+              <div className="info-item">
+                <label>PLATEFORME</label>
+                <span>{box.platform}</span>
+              </div>
+              <div className="info-item">
+                <label>DIFFICULTÉ</label>
+                <span style={{ color: getDifficultyColor(box.difficulty) }}>{box.difficulty}</span>
+              </div>
+              <div className="info-item">
+                <label>CATÉGORIE</label>
+                <span style={{ color: getCategoryColor(box.category) }}>{box.category}</span>
+              </div>
+              <div className="info-item">
+                <label>STATUT</label>
+                <select 
+                  value={box.status} 
+                  onChange={(e) => handleStatusChange(e.target.value)}
+                  className="status-select-detail"
+                  style={{ 
+                    color: box.status === BOX_STATUSES.ROOT_FLAG ? '#ff003c' : box.status === BOX_STATUSES.USER_FLAG ? '#bf00ff' : box.status === BOX_STATUSES.IN_PROGRESS ? '#ffa500' : '#00d4ff',
+                    borderColor: box.status === BOX_STATUSES.ROOT_FLAG ? '#ff003c' : 'rgba(255, 255, 255, 0.1)'
+                  }}
+                  disabled={!(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN)}
+                >
+                  <option value={BOX_STATUSES.TODO}>TODO</option>
+                  <option value={BOX_STATUSES.IN_PROGRESS}>IN PROGRESS</option>
+                  <option value={BOX_STATUSES.USER_FLAG}>USER OWNED</option>
+                  <option value={BOX_STATUSES.ROOT_FLAG}>ROOT OWNED</option>
+                </select>
+              </div>
+            </div>
 
-      <div className="editor-wrapper">
-        <div className="editor-toolbar">
-          <span style={{ fontSize: '0.9rem', color: '#fff', fontFamily: 'Orbitron' }}>NOTES_DE_MISSION.md</span>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <button onClick={() => setIsMainPreview(!isMainPreview)} className="preview-toggle-btn source-btn">
-              {isMainPreview ? <><Code size={14}/><span className="btn-text">SOURCE</span></> : <><Eye size={14}/> <span className="btn-text">APERÇU</span></>}
-            </button>
             {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
-              <>
-                <button onClick={openNotesModal} className="preview-toggle-btn edit-btn">
-                  <Edit size={14}/><span className="btn-text">ÉDITER</span>
-                </button>
-                <button onClick={() => setShowClearConfirm(true)} className="preview-toggle-btn delete-btn">
-                  <Trash2 size={14}/><span className="btn-text">SUPPRIMER</span>
-                </button>
-              </>
+              <button onClick={handleEditClick} className="config-btn">
+                <Settings size={14} /> CONFIGURATION
+              </button>
             )}
           </div>
-        </div>
-        {isMainPreview ? (
-          <div className="markdown-preview main-view">
-            <ReactMarkdown 
-              components={{
-                code: CodeBlock,
-                pre: ({children}) => <>{children}</>
-              }}
-            >
-              {notes || "*Aucune note pour le moment. Cliquez sur ÉDITER pour commencer.*"}
-            </ReactMarkdown>
+
+          {/* CARTE CIBLES */}
+          <div className="targets-card">
+            <div className="card-title">
+              <Target size={16} /> SCOPE ({box.linkedTargets?.length || 0})
+            </div>
+            <div className="targets-list-vertical">
+              {box.linkedTargets && box.linkedTargets.length > 0 ? (
+                box.linkedTargets.map(t => (
+                  <div key={t._id} className="target-item-row">
+                    <div className="target-row-header">
+                      <span className="t-name">{t.name}</span>
+                      <span className="t-ip">{t.ip}</span>
+                    </div>
+                    <div className="t-ports">
+                      {t.ports.map(p => p.port).join(', ')}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="empty-targets">Aucune cible liée</div>
+              )}
+            </div>
           </div>
-        ) : (
-          <pre className="wiki-raw-source">{notes}</pre>
-        )}
+        </aside>
+
+        {/* MAIN : NOTES */}
+        <main className="box-main-content">
+          <div className="notes-wrapper">
+            <div className="notes-toolbar">
+              <div className="tab-label">
+                <Hash size={14} /> MISSION_NOTES.md
+              </div>
+              <div className="notes-actions">
+                <button onClick={() => setIsMainPreview(!isMainPreview)} className="icon-action source-btn" title={isMainPreview ? "Voir Source" : "Voir Aperçu"}>
+                  {isMainPreview ? <Code size={16}/> : <Eye size={16}/>}
+                </button>
+                {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
+                  <>
+                    <button onClick={openNotesModal} className="icon-action edit-btn" title="Éditer">
+                      <Edit size={16}/>
+                    </button>
+                    <button onClick={() => setShowClearConfirm(true)} className="icon-action delete-btn" title="Effacer">
+                      <Trash2 size={16}/>
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+            
+            <div className="notes-viewer">
+              {isMainPreview ? (
+                <div className="markdown-preview main-view">
+                  <ReactMarkdown 
+                    components={{
+                      code: CodeBlock,
+                      pre: ({children}) => <>{children}</>
+                    }}
+                  >
+                    {notes || "*Aucune note pour le moment. Cliquez sur ÉDITER pour commencer.*"}
+                  </ReactMarkdown>
+                </div>
+              ) : (
+                <pre className="wiki-raw-source">{notes}</pre>
+              )}
+            </div>
+          </div>
+        </main>
       </div>
 
       {/* MODALE D'ÉDITION */}
@@ -302,6 +364,19 @@ const BoxDetail = () => {
                 <option value={BOX_DIFFICULTIES.MEDIUM}>Medium</option>
                 <option value={BOX_DIFFICULTIES.HARD}>Hard</option>
                 <option value={BOX_DIFFICULTIES.INSANE}>Insane</option>
+              </select>
+
+              <select className="edit-select" value={editData.os} onChange={e => setEditData({...editData, os: e.target.value})}>
+                <option value={TARGET_OS.LINUX}>Linux</option>
+                <option value={TARGET_OS.WINDOWS}>Windows</option>
+                <option value={TARGET_OS.MACOS}>MacOS</option>
+                <option value={TARGET_OS.ANDROID}>Android</option>
+              </select>
+
+              <select className="edit-select" value={editData.category} onChange={e => setEditData({...editData, category: e.target.value})}>
+                <option value={BOX_CATEGORIES.RED}>Red Team</option>
+                <option value={BOX_CATEGORIES.BLUE}>Blue Team</option>
+                <option value={BOX_CATEGORIES.PURPLE}>Purple Team</option>
               </select>
 
               <button type="submit" className="save-btn">

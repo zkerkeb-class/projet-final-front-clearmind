@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
-import { Copy, Search, Plus, Pencil, Trash2, Check, Edit } from 'lucide-react';
+import { Copy, Search, Plus, Pencil, Trash2, Check, Edit, Database } from 'lucide-react';
 import './Payloads.css';
-import { PAYLOAD_SEVERITIES, ROLES } from '../../utils/constants';
+import { PAYLOAD_SEVERITIES, ROLES, PAYLOAD_CATEGORIES } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import { getUserRole } from '../../utils/auth';
 import { useToast } from '../../components/Toast/ToastContext';
@@ -14,6 +14,8 @@ const Payloads = () => {
   const navigate = useNavigate();
   const [payloads, setPayloads] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // État pour la recherche
+  const [severityFilter, setSeverityFilter] = useState("All");
+  const [categoryFilter, setCategoryFilter] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [payloadToDelete, setPayloadToDelete] = useState(null);
@@ -48,14 +50,21 @@ const Payloads = () => {
     fetchPayloads();
   }, []);
 
+  // Aplatir les catégories pour le filtre
+  const allCategories = Object.values(PAYLOAD_CATEGORIES).flat().sort();
+
   // Logique de filtrage en temps réel
   const filteredPayloads = payloads.filter((p) => {
     const search = searchTerm.toLowerCase();
-    return (
+    const matchesSearch = (
       p.title.toLowerCase().includes(search) || 
       p.category.toLowerCase().includes(search) ||
       p.code.toLowerCase().includes(search)
     );
+    const matchesSeverity = severityFilter === "All" || (p.severity && p.severity.toLowerCase() === severityFilter.toLowerCase());
+    const matchesCategory = categoryFilter === "All" || (p.category && p.category === categoryFilter);
+
+    return matchesSearch && matchesSeverity && matchesCategory;
   });
 
   const copyToClipboard = (text, id) => {
@@ -94,25 +103,37 @@ const Payloads = () => {
       <header className="page-header">
         <h2 className="page-title">DB_<span>PAYLOADS</span></h2>
         
-        <div className="header-actions">
-          <div className="payload-search-container">
-            <Search className="payload-search-icon" size={20} />
-            <input 
-              type="text" 
-              placeholder="RECHERCHER UN VECTEUR D'ATTAQUE..." 
-              className="payload-search-input"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)} 
-            />
-          </div>
-
-          {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
-            <button className="add-btn" onClick={() => navigate('/payloads/add')}>
-              <Plus size={18} /> Nouveau Payload
-            </button>
-          )}
-        </div>
+        {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
+          <button className="add-btn" onClick={() => navigate('/payloads/add')}>
+            <Plus size={18} /> Nouveau Payload
+          </button>
+        )}
       </header>
+
+      <div className="controls-bar">
+        <div className="payload-search-container">
+          <Search className="payload-search-icon" size={20} />
+          <input 
+            type="text" 
+            placeholder="RECHERCHER UN VECTEUR D'ATTAQUE..." 
+            className="payload-search-input"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)} 
+          />
+        </div>
+
+        <div className="filters-wrapper">
+          <select value={severityFilter} onChange={(e) => setSeverityFilter(e.target.value)} className="payloads-filter-select">
+            <option value="All">SÉVÉRITÉ (TOUTES)</option>
+            {Object.values(PAYLOAD_SEVERITIES).map(sev => <option key={sev} value={sev}>{sev}</option>)}
+          </select>
+
+          <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} className="payloads-filter-select">
+            <option value="All">CATÉGORIE (TOUTES)</option>
+            {allCategories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+          </select>
+        </div>
+      </div>
 
       <div className="payload-grid">
         {loading ? (
@@ -157,7 +178,10 @@ const Payloads = () => {
             </div>
           ))
         ) : (
-          <p className="loading-text empty-msg">AUCUN RÉSULTAT CORRESPONDANT DANS LA BASE.</p>
+          <div className="empty-msg">
+            <Database size={48} style={{ opacity: 0.3, marginBottom: '1rem' }} />
+            <span>AUCUN RÉSULTAT CORRESPONDANT DANS LA BASE.</span>
+          </div>
         )}
       </div>
 

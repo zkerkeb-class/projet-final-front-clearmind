@@ -11,10 +11,12 @@ import {
   AlertCircle, 
   UserPlus, 
   X,
-  Pencil,
+  Edit,
+  Search,
+  Database
 } from 'lucide-react';
 import './AdminPanel.css';
-import { ROLES } from '../../utils/constants';
+import { ROLES, TOOL_CATEGORIES } from '../../utils/constants';
 import { useToast } from '../../components/Toast/ToastContext';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import ErrorModal from '../../components/ErrorModal/ErrorModal';
@@ -26,6 +28,9 @@ const AdminPanel = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("All");
+  const [roleFilter, setRoleFilter] = useState("All");
   const { success, info } = useToast();
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
@@ -44,6 +49,9 @@ const AdminPanel = () => {
   });
 
   useEffect(() => {
+    setSearchTerm("");
+    setCategoryFilter("All");
+    setRoleFilter("All");
     if (activeTab === 'arsenal') fetchTools();
     if (activeTab === 'users') fetchUsers();
   }, [activeTab]);
@@ -137,6 +145,19 @@ const AdminPanel = () => {
     }
   };
 
+  // --- FILTRAGE ---
+  const filteredTools = tools.filter(t => {
+    const matchesSearch = t.name.toLowerCase().includes(searchTerm.toLowerCase()) || t.category.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = categoryFilter === 'All' || t.category === categoryFilter;
+    return matchesSearch && matchesCategory;
+  });
+
+  const filteredUsers = users.filter(u => {
+    const matchesSearch = u.username.toLowerCase().includes(searchTerm.toLowerCase()) || u.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRole = roleFilter === 'All' || u.role === roleFilter;
+    return matchesSearch && matchesRole;
+  });
+
   return (
     <div className="admin-container">
       <header className="page-header">
@@ -164,11 +185,29 @@ const AdminPanel = () => {
 
         {!loading && !error && activeTab === 'arsenal' && (
           <div className="arsenal-mgmt">
-            <div className="toolbar">
+            <div className="controls-bar">
+              <div className="admin-search-container">
+                <Search size={20} className="admin-search-icon" />
+                <input 
+                  type="text" 
+                  placeholder="RECHERCHER UN OUTIL..." 
+                  className="admin-search-input"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              <div className="filters-wrapper">
+                <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} className="admin-filter-select">
+                  <option value="All">CATÉGORIE (TOUTES)</option>
+                  {TOOL_CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                </select>
               <button className="add-tool-btn" onClick={() => navigate('/tools/add')}>
-                <Plus size={16} /> ENREGISTRER_NOUVEL_OUTIL
+                  <Plus size={16} /> AJOUTER
               </button>
+              </div>
             </div>
+            
+            {filteredTools.length > 0 ? (
             <table className="admin-data-table">
               <thead>
                 <tr>
@@ -178,34 +217,58 @@ const AdminPanel = () => {
                 </tr>
               </thead>
               <tbody>
-                {tools.map((tool) => (
+                {filteredTools.map((tool) => (
                   <tr key={tool._id}>
                     <td className="tool-name">{tool.name.toUpperCase()}</td>
                     <td><span className="cat-tag">{tool.category}</span></td>
                     <td className="actions-cell">
-                      <button onClick={() => navigate(`/tools/${tool.name.toLowerCase()}`)} title="Voir">
-                        <ExternalLink size={16} color="#00d4ff" />
+                      <button onClick={() => navigate(`/tools/${tool.name.toLowerCase()}`)} title="Voir" className="action-btn view-btn">
+                        <ExternalLink size={16} />
                       </button>
-                      <button onClick={() => navigate(`/tools/edit/${tool.name}`)} title="Modifier">
-                        <Pencil size={16} color="#ffa500" />
+                      <button onClick={() => navigate(`/tools/edit/${tool.name}`)} title="Modifier" className="action-btn edit-btn">
+                        <Edit size={16} />
                       </button>
-                      <button onClick={() => confirmDeleteTool(tool.name)} title="Supprimer">
-                        <Trash2 size={16} color="#ff003c" />
+                      <button onClick={() => confirmDeleteTool(tool.name)} title="Supprimer" className="action-btn delete-btn">
+                        <Trash2 size={16} />
                       </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+            ) : (
+              <div className="empty-state">
+                <Database size={48} style={{ opacity: 0.3, marginBottom: '1rem' }} />
+                <span>AUCUN OUTIL CORRESPONDANT</span>
+              </div>
+            )}
           </div>
         )}
 
         {!loading && !error && activeTab === 'users' && (
           <div className="users-mgmt">
-            <div className="toolbar">
+            <div className="controls-bar">
+              <div className="admin-search-container">
+                <Search size={20} className="admin-search-icon" />
+                <input 
+                  type="text" 
+                  placeholder="RECHERCHER UN OPÉRATEUR..." 
+                  className="admin-search-input"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+              <div className="filters-wrapper">
+                <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)} className="admin-filter-select">
+                  <option value="All">RÔLE (TOUS)</option>
+                  <option value={ROLES.GUEST}>GUEST</option>
+                  <option value={ROLES.PENTESTER}>PENTESTER</option>
+                  <option value={ROLES.ADMIN}>ADMIN</option>
+                </select>
               <button className="add-tool-btn" onClick={() => setShowAddUser(true)}>
-                <UserPlus size={16} /> CRÉER_UTILISATEUR
+                  <UserPlus size={16} /> CRÉER
               </button>
+            </div>
             </div>
 
             {showAddUser && (
@@ -245,6 +308,7 @@ const AdminPanel = () => {
               </div>
             )}
 
+            {filteredUsers.length > 0 ? (
             <table className="admin-data-table">
               <thead>
                 <tr>
@@ -255,7 +319,7 @@ const AdminPanel = () => {
                 </tr>
               </thead>
               <tbody>
-                {users.map((user) => (
+                {filteredUsers.map((user) => (
                   <tr key={user._id}>
                     <td>{user.username}</td>
                     <td>{user.email}</td>
@@ -271,14 +335,20 @@ const AdminPanel = () => {
                       </select>
                     </td>
                     <td className="actions-cell">
-                      <button onClick={() => confirmDeleteUser(user._id, user.username)} title="Supprimer">
-                        <Trash2 size={16} color="#ff003c" />
+                      <button onClick={() => confirmDeleteUser(user._id, user.username)} title="Supprimer" className="action-btn delete-btn">
+                        <Trash2 size={16} />
                       </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+            ) : (
+              <div className="empty-state">
+                <Users size={48} style={{ opacity: 0.3, marginBottom: '1rem' }} />
+                <span>AUCUN UTILISATEUR TROUVÉ</span>
+              </div>
+            )}
           </div>
         )}
       </main>

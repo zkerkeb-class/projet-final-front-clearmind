@@ -127,26 +127,35 @@
   align-items: flex-start;
 }
 
-.edit-tool-container .add-row-btn {
+.edit-tool-container .add-line-btn {
   background: transparent;
-  color: #00ff41;
-  border: 1px solid #00ff41;
-  padding: 6px 12px;
+  border: 1px dashed rgba(0, 212, 255, 0.3);
+  color: #00d4ff;
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 0.75rem;
-  font-family: 'Orbitron', sans-serif;
-  transition: all 0.2s;
-  text-transform: uppercase;
-  border-radius: 4px;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-weight: bold;
+  justify-content: center;
+  gap: 10px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 1rem;
 }
 
-.edit-tool-container .add-row-btn:hover {
-  background: rgba(0, 255, 65, 0.1);
-  box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
+.edit-tool-container .add-line-btn:hover {
+  background: rgba(0, 212, 255, 0.05);
+  border-color: #00d4ff;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.edit-tool-container .add-line-btn:active {
+  transform: translateY(0);
 }
 
 .edit-tool-container .remove-btn {
@@ -232,7 +241,7 @@
     gap: 1rem;
   }
 
-  .edit-tool-container .add-row-btn {
+  .edit-tool-container .add-line-btn {
     justify-content: center;
   }
   

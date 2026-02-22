@@ -105,8 +105,8 @@ const EditTool = () => {
         <div className="form-section">
           <div className="section-header">
             <h3>COMMAND_CHEATSHEET</h3>
-            <button type="button" onClick={addCommandRow} className="add-row-btn">
-              <Plus size={14} /> AJOUTER_LIGNE
+            <button type="button" onClick={addCommandRow} className="add-line-btn">
+              <Plus size={16} /> AJOUTER_LIGNE
             </button>
           </div>
           

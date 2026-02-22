@@ -15,7 +15,17 @@ import {
   Search,
   Database,
   FileText,
-  Download
+  Download,
+  Filter,
+  RotateCcw,
+  ChevronLeft,
+  ChevronRight,
+  ArrowUpDown,
+  Calendar,
+  Trash,
+  Clock,
+  Copy,
+  Check
 } from 'lucide-react';
 import './AdminPanel.css';
 import { ROLES, TOOL_CATEGORIES } from '../../utils/constants';
@@ -34,7 +44,17 @@ const AdminPanel = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [roleFilter, setRoleFilter] = useState("All");
-  const [logLevelFilter, setLogLevelFilter] = useState("All");
+  const [activeLogLevels, setActiveLogLevels] = useState(['info', 'success', 'warning', 'error']);
+  const [selectedActor, setSelectedActor] = useState("All");
+  const [selectedAction, setSelectedAction] = useState("All");
+  const [dateStart, setDateStart] = useState("");
+  const [dateEnd, setDateEnd] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [autoRefresh, setAutoRefresh] = useState(false);
+  const [selectedLog, setSelectedLog] = useState(null);
+  const [jsonCopied, setJsonCopied] = useState(false);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+  const itemsPerPage = 25;
   const { success, info } = useToast();
   const userRole = getUserRole();
   const [confirmModal, setConfirmModal] = useState({
@@ -44,6 +64,13 @@ const AdminPanel = () => {
     onConfirm: null
   });
   
+  const levelColors = {
+    info: '#00d4ff',
+    success: '#00ff41',
+    warning: '#ffa500',
+    error: '#ff003c'
+  };
+
   // États pour le modal de création d'utilisateur
   const [showAddUser, setShowAddUser] = useState(false);
   const [newUser, setNewUser] = useState({ 
@@ -57,6 +84,16 @@ const AdminPanel = () => {
   const hasLoggedAccess = useRef(false);
 
   useEffect(() => {
+    // Chargement initial de TOUTES les données pour les compteurs (Badges)
+    if (userRole === ROLES.ADMIN) {
+      fetchTools();
+      fetchUsers();
+      fetchLogs();
+    }
+  }, [userRole]);
+
+  useEffect(() => {
+    // Sécurité & Reset Filtres
     if (userRole !== ROLES.ADMIN) {
       // "Honeypot" : On envoie une seule fois la requête pour logger le 403
       if (!hasLoggedAccess.current) {
@@ -70,30 +107,65 @@ const AdminPanel = () => {
     setSearchTerm("");
     setCategoryFilter("All");
     setRoleFilter("All");
-    setLogLevelFilter("All");
-    
-    // On ne lance les fetch que si on est admin (pour éviter les requêtes inutiles avant la redirection)
-    if (userRole === ROLES.ADMIN) {
-      if (activeTab === 'arsenal') fetchTools();
-      if (activeTab === 'users') fetchUsers();
-      if (activeTab === 'logs') fetchLogs();
-    }
+    setActiveLogLevels(['info', 'success', 'warning', 'error']);
+    setSelectedActor("All");
+    setSelectedAction("All");
+    setDateStart("");
+    setDateEnd("");
   }, [activeTab, userRole, navigate]);
+
+  // Reset de l'état de copie quand on change de log ou qu'on ferme la modale
+  useEffect(() => {
+    if (!selectedLog) setJsonCopied(false);
+  }, [selectedLog]);
+
+  // Reset de la pagination quand on change les filtres
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, activeLogLevels, selectedActor, selectedAction, dateStart, dateEnd]);
 
   // Protection visuelle : Si pas admin, on n'affiche rien le temps que la redirection se fasse
   if (userRole !== ROLES.ADMIN) return null;
 
+  // --- AUTO REFRESH LOGIC ---
+  useEffect(() => {
+    let interval;
+    if (autoRefresh && activeTab === 'logs') {
+      interval = setInterval(() => fetchLogs(true), 5000); // Refresh toutes les 5s
+    }
+    return () => clearInterval(interval);
+  }, [autoRefresh, activeTab]);
+
   // --- LOGIQUE LOGS ---
-  const fetchLogs = async () => {
-    setLoading(true);
+  const fetchLogs = async (isBackground = false) => {
+    if (!isBackground) setLoading(true);
     try {
       const res = await api.get('/logs');
       setSystemLogs(res.data.data.logs || []);
       setError(null);
     } catch (err) {
-      setError("Impossible de récupérer les logs système.");
+      if (!isBackground) setError("Impossible de récupérer les logs système.");
     } finally {
-      setLoading(false);
+      if (!isBackground) setLoading(false);
+    }
+  };
+
+  const confirmPurgeLogs = () => {
+    setConfirmModal({
+      isOpen: true,
+      title: "PURGE_SYSTÈME",
+      message: "ATTENTION : Vous allez supprimer l'intégralité des logs système. Cette action est irréversible. Continuer ?",
+      onConfirm: executePurgeLogs
+    });
+  };
+
+  const executePurgeLogs = async () => {
+    try {
+      await api.delete('/logs');
+      setSystemLogs([]);
+      success("BASE DE LOGS PURGÉE AVEC SUCCÈS");
+    } catch (err) {
+      setError("ÉCHEC DE LA PURGE DES LOGS");
     }
   };
 
@@ -128,6 +200,19 @@ const AdminPanel = () => {
     } catch (err) {
       setError("ERREUR LORS DE LA SUPPRESSION DE L'OUTIL.");
     }
+  };
+
+  const handleExportTools = () => {
+    const dataStr = JSON.stringify(tools, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `arsenal_backup_${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    success("SAUVEGARDE ARSENAL GÉNÉRÉE");
   };
 
   // --- LOGIQUE UTILISATEURS ---
@@ -199,11 +284,96 @@ const AdminPanel = () => {
     return matchesSearch && matchesRole;
   });
 
+  const toggleLogLevel = (level) => {
+    setActiveLogLevels(prev => 
+      prev.includes(level) ? prev.filter(l => l !== level) : [...prev, level]
+    );
+  };
+
+  const resetLogFilters = () => {
+    setSearchTerm("");
+    setActiveLogLevels(['info', 'success', 'warning', 'error']);
+    setSelectedActor("All");
+    setSelectedAction("All");
+    setDateStart("");
+    setDateEnd("");
+  };
+
   const filteredLogs = systemLogs.filter(l => {
     const matchesSearch = l.action.toLowerCase().includes(searchTerm.toLowerCase()) || l.details.toLowerCase().includes(searchTerm.toLowerCase()) || l.actor.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesLevel = logLevelFilter === 'All' || l.level === logLevelFilter;
-    return matchesSearch && matchesLevel;
+    const matchesLevel = activeLogLevels.includes(l.level);
+    const matchesActor = selectedActor === 'All' || l.actor === selectedActor;
+    const matchesAction = selectedAction === 'All' || l.action === selectedAction;
+    
+    let matchesDate = true;
+    if (dateStart) {
+      matchesDate = matchesDate && new Date(l.timestamp) >= new Date(dateStart);
+    }
+    if (dateEnd) {
+      matchesDate = matchesDate && new Date(l.timestamp) <= new Date(dateEnd);
+    }
+
+    return matchesSearch && matchesLevel && matchesActor && matchesAction && matchesDate;
   });
+
+  // --- FILTRES RAPIDES ---
+  const handleQuickTimeFilter = (hours) => {
+    const end = new Date();
+    const start = new Date(end.getTime() - (hours * 60 * 60 * 1000));
+    
+    const toLocalISO = (date) => {
+      const offset = date.getTimezoneOffset() * 60000;
+      return new Date(date.getTime() - offset).toISOString().slice(0, 16);
+    };
+
+    setDateStart(toLocalISO(start));
+    setDateEnd(toLocalISO(end));
+  };
+
+  // --- LOGIQUE DE TRI ---
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortData = (data) => {
+    if (!sortConfig.key) return data;
+    
+    return [...data].sort((a, b) => {
+      let aValue = a[sortConfig.key];
+      let bValue = b[sortConfig.key];
+
+      if (typeof aValue === 'string') aValue = aValue.toLowerCase();
+      if (typeof bValue === 'string') bValue = bValue.toLowerCase();
+
+      if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+  };
+
+  // --- PAGINATION LOGIC ---
+  const sortedLogs = sortData(filteredLogs);
+  const indexOfLastLog = currentPage * itemsPerPage;
+  const indexOfFirstLog = indexOfLastLog - itemsPerPage;
+  const currentLogs = sortedLogs.slice(indexOfFirstLog, indexOfLastLog);
+  const totalPages = Math.ceil(sortedLogs.length / itemsPerPage);
+
+  // Extraction des valeurs uniques pour les filtres dynamiques
+  const uniqueActors = [...new Set(systemLogs.map(log => log.actor))].sort();
+  const uniqueActions = [...new Set(systemLogs.map(log => log.action))].sort();
+
+  // Stats pour la barre de distribution
+  const totalLogsCount = systemLogs.length || 1;
+  const logStats = {
+    info: (systemLogs.filter(l => l.level === 'info').length / totalLogsCount) * 100,
+    success: (systemLogs.filter(l => l.level === 'success').length / totalLogsCount) * 100,
+    warning: (systemLogs.filter(l => l.level === 'warning').length / totalLogsCount) * 100,
+    error: (systemLogs.filter(l => l.level === 'error').length / totalLogsCount) * 100,
+  };
 
   const handleExportLogs = () => {
     if (filteredLogs.length === 0) {
@@ -237,6 +407,14 @@ const AdminPanel = () => {
     success("EXPORT CSV GÉNÉRÉ");
   };
 
+  const handleCopyLogJSON = () => {
+    if (!selectedLog) return;
+    navigator.clipboard.writeText(JSON.stringify(selectedLog, null, 2));
+    setJsonCopied(true);
+    success("JSON COPIÉ DANS LE PRESSE-PAPIER");
+    setTimeout(() => setJsonCopied(false), 2000);
+  };
+
   return (
     <div className="admin-container">
       <header className="page-header">
@@ -249,19 +427,19 @@ const AdminPanel = () => {
           className={activeTab === 'arsenal' ? 'tab active' : 'tab'} 
           onClick={() => setActiveTab('arsenal')}
         >
-          <Wrench size={18} /> GESTION_ARSENAL
+          <Wrench size={18} /> GESTION_ARSENAL <span className="tab-badge">{tools.length}</span>
         </button>
         <button 
           className={activeTab === 'users' ? 'tab active' : 'tab'} 
           onClick={() => setActiveTab('users')}
         >
-          <Users size={18} /> UTILISATEURS
+          <Users size={18} /> UTILISATEURS <span className="tab-badge">{users.length}</span>
         </button>
         <button 
           className={activeTab === 'logs' ? 'tab active' : 'tab'} 
           onClick={() => setActiveTab('logs')}
         >
-          <FileText size={18} /> LOGS_SYSTÈME
+          <FileText size={18} /> LOGS_SYSTÈME <span className="tab-badge">{systemLogs.length}</span>
         </button>
       </nav>
 
@@ -286,6 +464,9 @@ const AdminPanel = () => {
                   <option value="All">CATÉGORIE (TOUTES)</option>
                   {TOOL_CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
                 </select>
+              <button className="add-tool-btn" onClick={handleExportTools} style={{background: 'rgba(0, 212, 255, 0.1)', border: '1px solid rgba(0, 212, 255, 0.3)', color: '#00d4ff'}}>
+                  <Download size={16} /> BACKUP_JSON
+              </button>
               <button className="add-tool-btn" onClick={() => navigate('/tools/add')}>
                   <Plus size={16} /> AJOUTER
               </button>
@@ -296,13 +477,13 @@ const AdminPanel = () => {
             <table className="admin-data-table">
               <thead>
                 <tr>
-                  <th>NOM_TECHNIQUE</th>
-                  <th>CATÉGORIE</th>
+                  <th onClick={() => handleSort('name')}>NOM_TECHNIQUE <ArrowUpDown size={12} /></th>
+                  <th onClick={() => handleSort('category')}>CATÉGORIE <ArrowUpDown size={12} /></th>
                   <th>ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredTools.map((tool) => (
+                {sortData(filteredTools).map((tool) => (
                   <tr key={tool._id}>
                     <td className="tool-name">{tool.name.toUpperCase()}</td>
                     <td><span className="cat-tag">{tool.category}</span></td>
@@ -397,14 +578,14 @@ const AdminPanel = () => {
             <table className="admin-data-table">
               <thead>
                 <tr>
-                  <th>USERNAME</th>
-                  <th>EMAIL</th>
-                  <th>RÔLE_ACCÈS</th>
+                  <th onClick={() => handleSort('username')}>USERNAME <ArrowUpDown size={12} /></th>
+                  <th onClick={() => handleSort('email')}>EMAIL <ArrowUpDown size={12} /></th>
+                  <th onClick={() => handleSort('role')}>RÔLE_ACCÈS <ArrowUpDown size={12} /></th>
                   <th>ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredUsers.map((user) => (
+                {sortData(filteredUsers).map((user) => (
                   <tr key={user._id}>
                     <td>{user.username}</td>
                     <td>{user.email}</td>
@@ -451,41 +632,172 @@ const AdminPanel = () => {
                 />
               </div>
               <div className="filters-wrapper">
-                <select value={logLevelFilter} onChange={(e) => setLogLevelFilter(e.target.value)} className="admin-filter-select">
-                  <option value="All">NIVEAU (TOUS)</option>
-                  <option value="info">INFO</option>
-                  <option value="success">SUCCESS</option>
-                  <option value="warning">WARNING</option>
-                  <option value="error">ERROR</option>
+                <select 
+                  value={selectedActor} 
+                  onChange={(e) => setSelectedActor(e.target.value)} 
+                  className="admin-filter-select"
+                >
+                  <option value="All">ACTEUR (TOUS)</option>
+                  {uniqueActors.map(actor => <option key={actor} value={actor}>{actor}</option>)}
                 </select>
+                <select 
+                  value={selectedAction} 
+                  onChange={(e) => setSelectedAction(e.target.value)} 
+                  className="admin-filter-select"
+                >
+                  <option value="All">ACTION (TOUTES)</option>
+                  {uniqueActions.map(action => <option key={action} value={action}>{action}</option>)}
+                </select>
+                
+                <div className="date-filter-group">
+                  <div className="quick-filters">
+                    <button onClick={() => handleQuickTimeFilter(1)} title="Dernière heure">1H</button>
+                    <button onClick={() => handleQuickTimeFilter(24)} title="Dernières 24h">24H</button>
+                    <button onClick={() => handleQuickTimeFilter(168)} title="7 Jours">7J</button>
+                  </div>
+                  <input 
+                    type="datetime-local" 
+                    value={dateStart} 
+                    onChange={(e) => setDateStart(e.target.value)}
+                    className="date-input"
+                  />
+                  <span className="date-separator">-</span>
+                  <input 
+                    type="datetime-local" 
+                    value={dateEnd} 
+                    onChange={(e) => setDateEnd(e.target.value)}
+                    className="date-input"
+                  />
+                </div>
+
+                <button className={`add-tool-btn ${autoRefresh ? 'active-refresh' : ''}`} onClick={() => setAutoRefresh(!autoRefresh)} title="Actualisation auto (5s)">
+                    <Clock size={16} className={autoRefresh ? 'spin' : ''} /> 
+                    {autoRefresh ? 'LIVE' : 'AUTO'}
+                </button>
+
+                <button className="add-tool-btn" onClick={confirmPurgeLogs} style={{background: 'rgba(255, 0, 60, 0.1)', color: '#ff003c', border: '1px solid rgba(255, 0, 60, 0.3)'}}>
+                    <Trash size={16} /> PURGER
+                </button>
                 <button className="add-tool-btn" onClick={handleExportLogs}>
                     <Download size={16} /> EXPORT_CSV
                 </button>
               </div>
             </div>
 
+            {/* BARRE DE DISTRIBUTION DES LOGS */}
+            <div className="log-distribution-bar">
+              <div className="dist-segment info" style={{width: `${logStats.info}%`}} title={`INFO: ${Math.round(logStats.info)}%`}></div>
+              <div className="dist-segment success" style={{width: `${logStats.success}%`}} title={`SUCCESS: ${Math.round(logStats.success)}%`}></div>
+              <div className="dist-segment warning" style={{width: `${logStats.warning}%`}} title={`WARNING: ${Math.round(logStats.warning)}%`}></div>
+              <div className="dist-segment error" style={{width: `${logStats.error}%`}} title={`ERROR: ${Math.round(logStats.error)}%`}></div>
+            </div>
+
+            {/* BARRE DE FILTRES UI/UX DRIVEN */}
+            <div className="log-filters-bar">
+              <span className="filter-label"><Filter size={14} /> FILTRER PAR NIVEAU :</span>
+              {['info', 'success', 'warning', 'error'].map(level => (
+                <button
+                  key={level}
+                  className={`log-filter-chip ${activeLogLevels.includes(level) ? 'active ' + level : ''}`}
+                  onClick={() => toggleLogLevel(level)}
+                >
+                  <span className="chip-dot"></span>
+                  {level.toUpperCase()}
+                </button>
+              ))}
+              
+              <button className="reset-filters-btn" onClick={resetLogFilters}>
+                <RotateCcw size={14} /> RESET
+              </button>
+            </div>
+
             <table className="admin-data-table">
               <thead>
                 <tr>
-                  <th>TIMESTAMP</th>
-                  <th>NIVEAU</th>
-                  <th>ACTEUR</th>
-                  <th>ACTION</th>
-                  <th>DÉTAILS</th>
+                  <th onClick={() => handleSort('timestamp')}>TIMESTAMP <ArrowUpDown size={12} /></th>
+                  <th onClick={() => handleSort('level')}>NIVEAU <ArrowUpDown size={12} /></th>
+                  <th onClick={() => handleSort('actor')}>ACTEUR <ArrowUpDown size={12} /></th>
+                  <th onClick={() => handleSort('action')}>ACTION <ArrowUpDown size={12} /></th>
+                  <th onClick={() => handleSort('details')}>DÉTAILS <ArrowUpDown size={12} /></th>
                 </tr>
               </thead>
               <tbody>
-                {filteredLogs.map((log) => (
-                  <tr key={log._id}>
-                    <td style={{color: '#666', fontSize: '0.8rem'}}>{new Date(log.timestamp).toLocaleString()}</td>
+                {currentLogs.map((log) => (
+                  <tr key={log._id} onClick={() => setSelectedLog(log)} className="log-row-interactive" title="Cliquez pour voir les détails">
+                    <td style={{color: '#666', fontSize: '0.8rem'}}>
+                      {new Date(log.timestamp).toLocaleString()}
+                      <span style={{opacity: 0.5, fontSize: '0.7rem'}}>.{new Date(log.timestamp).getMilliseconds().toString().padStart(3, '0')}</span>
+                    </td>
                     <td><span className={`log-badge ${log.level}`}>{log.level.toUpperCase()}</span></td>
                     <td style={{fontWeight: 'bold', color: '#fff'}}>{log.actor}</td>
-                    <td style={{color: '#00d4ff'}}>{log.action}</td>
+                    <td style={{color: levelColors[log.level] || '#00d4ff'}}>{log.action}</td>
                     <td style={{color: '#aaa', fontSize: '0.85rem'}}>{log.details}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
+
+            {/* PAGINATION CONTROLS */}
+            {filteredLogs.length > 0 && totalPages > 1 && (
+              <div className="pagination-controls">
+                <button 
+                  disabled={currentPage === 1} 
+                  onClick={() => setCurrentPage(p => p - 1)} 
+                  className="pagination-btn"
+                ><ChevronLeft size={16} /></button>
+                <span className="pagination-info">PAGE {currentPage} / {totalPages}</span>
+                <button 
+                  disabled={currentPage === totalPages} 
+                  onClick={() => setCurrentPage(p => p + 1)} 
+                  className="pagination-btn"
+                ><ChevronRight size={16} /></button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* MODALE DÉTAILS LOG */}
+        {selectedLog && (
+          <div className="admin-modal-overlay" onClick={() => setSelectedLog(null)}>
+            <div className="admin-modal log-detail-modal" onClick={e => e.stopPropagation()}>
+              <div className="modal-header">
+                <h3>DÉTAILS_LOG</h3>
+                <div className="modal-actions">
+                  <button onClick={handleCopyLogJSON} className={`icon-action ${jsonCopied ? 'copied' : ''}`} title="Copier JSON brut">
+                      {jsonCopied ? <Check size={18} /> : <Copy size={18} />}
+                  </button>
+                  <X className="close-icon" onClick={() => setSelectedLog(null)} />
+                </div>
+              </div>
+              <div className="log-detail-content">
+                <div className="detail-row">
+                  <span className="label">ID ÉVÉNEMENT:</span>
+                  <span className="value">{selectedLog._id}</span>
+                </div>
+                <div className="detail-row">
+                  <span className="label">TIMESTAMP:</span>
+                  <span className="value">{new Date(selectedLog.timestamp).toLocaleString()}</span>
+                </div>
+                <div className="detail-row">
+                  <span className="label">NIVEAU:</span>
+                  <span className={`log-badge ${selectedLog.level}`}>{selectedLog.level.toUpperCase()}</span>
+                </div>
+                <div className="detail-row">
+                  <span className="label">ACTEUR:</span>
+                  <span className="value" style={{color: '#fff', fontWeight: 'bold'}}>{selectedLog.actor}</span>
+                </div>
+                <div className="detail-row">
+                  <span className="label">ACTION:</span>
+                  <span className="value" style={{color: levelColors[selectedLog.level] || '#00d4ff'}}>{selectedLog.action}</span>
+                </div>
+                <div className="detail-group">
+                  <span className="label">DÉTAILS COMPLETS:</span>
+                  <div className="detail-box">
+                    {selectedLog.details}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </main>

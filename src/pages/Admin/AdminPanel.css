@@ -114,6 +114,25 @@
   background: linear-gradient(to top, rgba(0, 212, 255, 0.1), transparent);
 }
 
+.admin-container .tab-badge {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  margin-left: 8px;
+  color: #aaa;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.admin-container .tab.active .tab-badge {
+  background: #00d4ff;
+  color: #000;
+  border-color: #00d4ff;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+}
+
 /* --- TABLEAU DE DONNÉES --- */
 .admin-container .admin-data-table {
   width: 100%;
@@ -130,6 +149,22 @@
   letter-spacing: 1px;
   font-weight: 600;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.admin-container .admin-data-table th {
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s;
+}
+
+.admin-container .admin-data-table th:hover {
+  color: #00d4ff;
+}
+
+.admin-container .admin-data-table th svg {
+  vertical-align: middle;
+  margin-left: 5px;
+  opacity: 0.5;
 }
 
 .admin-container .admin-data-table td {
@@ -221,6 +256,69 @@
   background: rgba(0, 212, 255, 0.05);
 }
 
+/* --- BARRE DE FILTRES LOGS (UI/UX DRIVEN) --- */
+.admin-container .log-filters-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 10px 15px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  flex-wrap: wrap;
+  animation: admin-fadeIn 0.3s ease-out;
+}
+
+.admin-container .filter-label {
+  color: #888;
+  font-size: 0.75rem;
+  font-family: 'Orbitron', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 5px;
+}
+
+.admin-container .log-filter-chip {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #666;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.admin-container .log-filter-chip:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #aaa;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.admin-container .log-filter-chip.active {
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.admin-container .log-filter-chip.active.info { border-color: #00d4ff; color: #00d4ff; background: rgba(0, 212, 255, 0.1); }
+.admin-container .log-filter-chip.active.success { border-color: #00ff41; color: #00ff41; background: rgba(0, 255, 65, 0.1); }
+.admin-container .log-filter-chip.active.warning { border-color: #ffa500; color: #ffa500; background: rgba(255, 165, 0, 0.1); }
+.admin-container .log-filter-chip.active.error { border-color: #ff003c; color: #ff003c; background: rgba(255, 0, 60, 0.1); }
+
+.admin-container .chip-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background-color: currentColor;
+  box-shadow: 0 0 5px currentColor;
+}
+
 /* --- CONTROLS BAR (Harmonisation) --- */
 .admin-container .controls-bar {
   display: flex;
@@ -281,7 +379,27 @@
 
 .admin-container .filters-wrapper {
   display: flex;
+  align-items: center;
   gap: 1rem;
+}
+
+.admin-container .reset-filters-btn {
+  background: transparent;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.7rem;
+  font-family: 'Orbitron', sans-serif;
+  transition: 0.2s;
+  padding: 5px 10px;
+}
+
+.admin-container .reset-filters-btn:hover {
+  color: #fff;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
 }
 
 .admin-container .admin-filter-select {
@@ -337,6 +455,13 @@
   box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
   background: #fff;
   transform: translateY(-2px);
+}
+
+.admin-container .add-tool-btn.active-refresh {
+  background: rgba(0, 212, 255, 0.2);
+  border-color: #00d4ff;
+  color: #00d4ff;
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
 }
 
 .admin-container .actions-cell { display: flex; gap: 12px; }
@@ -411,6 +536,24 @@
   letter-spacing: 1px;
 }
 
+.admin-container .modal-header .modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.admin-container .modal-header .icon-action {
+  background: transparent;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s;
+  display: flex;
+}
+
+.admin-container .modal-header .icon-action:hover { color: #00d4ff; }
+.admin-container .modal-header .icon-action.copied { color: #00ff41; }
+
 .admin-container .admin-modal .close-icon {
   cursor: pointer;
   transition: 0.2s;
@@ -457,6 +600,156 @@
   background: rgba(0, 212, 255, 0.02);
 }
 
+/* --- DATE INPUT ICON FIX --- */
+.admin-container input[type="date"]::-webkit-calendar-picker-indicator,
+.admin-container input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(1); /* Inverse le noir en blanc */
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.admin-container input[type="date"]::-webkit-calendar-picker-indicator:hover,
+.admin-container input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+  filter: invert(1) drop-shadow(0 0 2px #00d4ff);
+}
+
+/* --- QUICK TIME FILTERS --- */
+.admin-container .quick-filters {
+  display: flex;
+  gap: 2px;
+  margin-right: 10px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  padding-right: 10px;
+}
+
+.admin-container .quick-filters button {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #888;
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  transition: 0.2s;
+}
+
+.admin-container .quick-filters button:hover {
+  color: #00d4ff;
+  border-color: #00d4ff;
+  background: rgba(0, 212, 255, 0.1);
+}
+
+/* --- DATE FILTERS GROUP --- */
+.admin-container .date-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 5px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-container .date-input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.admin-container .date-separator {
+  color: #666;
+}
+
+/* --- LOG DISTRIBUTION BAR --- */
+.admin-container .log-distribution-bar {
+  height: 4px;
+  width: 100%;
+  display: flex;
+  margin-bottom: 15px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.admin-container .dist-segment { height: 100%; transition: width 0.5s ease; }
+.admin-container .dist-segment.info { background: #00d4ff; box-shadow: 0 0 10px #00d4ff; }
+.admin-container .dist-segment.success { background: #00ff41; box-shadow: 0 0 10px #00ff41; }
+.admin-container .dist-segment.warning { background: #ffa500; box-shadow: 0 0 10px #ffa500; }
+.admin-container .dist-segment.error { background: #ff003c; box-shadow: 0 0 10px #ff003c; }
+
+/* --- LOG INTERACTIVITY --- */
+.admin-container .log-row-interactive {
+  cursor: pointer;
+}
+
+.admin-container .log-row-interactive:hover td {
+  background: rgba(0, 212, 255, 0.08) !important;
+}
+
+.admin-container .spin {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* --- LOG DETAIL MODAL --- */
+.admin-container .log-detail-modal {
+  border-top-color: #ffa500; /* Couleur distincte pour les logs */
+}
+
+.admin-container .log-detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.admin-container .detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 8px;
+}
+
+.admin-container .detail-row .label {
+  color: #888;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem;
+}
+
+.admin-container .detail-row .value {
+  font-family: 'JetBrains Mono', monospace;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.admin-container .detail-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.admin-container .detail-box {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 15px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: 'JetBrains Mono', monospace;
+  color: #e0e0e0;
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  max-height: 300px;
+  overflow-y: auto;
+  line-height: 1.5;
+}
+
 .admin-container .save-btn {
   background: #00d4ff;
   color: #000;
@@ -477,6 +770,48 @@
   box-shadow: 0 0 25px rgba(0, 212, 255, 0.4);
   background: #fff;
   transform: translateY(-1px);
+}
+
+/* --- PAGINATION --- */
+.admin-container .pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.admin-container .pagination-btn {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-container .pagination-btn:hover:not(:disabled) {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: #00d4ff;
+  color: #00d4ff;
+}
+
+.admin-container .pagination-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.admin-container .pagination-info {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  color: #888;
 }
 
 @media (max-width: 600px) {
@@ -524,6 +859,75 @@
   
   .admin-container .filters-wrapper {
     flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  /* Responsive Log Filters */
+  .admin-container .log-filters-bar {
+    padding: 15px 10px;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .admin-container .filter-label {
+    width: 100%;
+    justify-content: center;
+    margin-right: 0;
+    margin-bottom: 5px;
+    font-size: 0.8rem;
+  }
+
+  .admin-container .log-filter-chip {
+    flex: 1 0 40%; /* S'adapte pour faire 2 colonnes sur mobile */
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .admin-container .reset-filters-btn {
+    width: 100%;
+    justify-content: center;
+    margin-top: 5px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 4px;
+  }
+
+  /* Responsive Date Filters */
+  .admin-container .date-filter-group {
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .admin-container .quick-filters {
+    width: 100%;
+    justify-content: space-between;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-right: 0;
+    padding-bottom: 10px;
+    margin-right: 0;
+  }
+
+  .admin-container .quick-filters button {
+    flex: 1;
+    padding: 8px;
+    text-align: center;
+  }
+
+  .admin-container .date-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+  }
+
+  .admin-container .date-separator {
+    display: none; /* On cache le tiret sur mobile car les inputs sont l'un sous l'autre */
   }
 
   /* Transformation Table -> Cards pour Mobile */

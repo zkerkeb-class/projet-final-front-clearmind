@@ -238,6 +238,7 @@ const Boxes = () => {
                   onChange={(e) => handleStatusChange(box._id, e.target.value)}
                   className="status-select"
                   style={{ color: box.status === BOX_STATUSES.ROOT_FLAG ? '#ff003c' : '#00d4ff' }}
+                  disabled={!(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN)}
                 >
                   <option value={BOX_STATUSES.TODO}>TODO</option>
                   <option value={BOX_STATUSES.IN_PROGRESS}>IN PROGRESS</option>

@@ -248,12 +248,16 @@ const BoxDetail = () => {
             <button onClick={() => setIsMainPreview(!isMainPreview)} className="preview-toggle-btn source-btn">
               {isMainPreview ? <><Code size={14}/><span className="btn-text">SOURCE</span></> : <><Eye size={14}/> <span className="btn-text">APERÇU</span></>}
             </button>
-            <button onClick={openNotesModal} className="preview-toggle-btn edit-btn">
-              <Edit size={14}/><span className="btn-text">ÉDITER</span>
-            </button>
-            <button onClick={() => setShowClearConfirm(true)} className="preview-toggle-btn delete-btn">
-              <Trash2 size={14}/><span className="btn-text">SUPPRIMER</span>
-            </button>
+            {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
+              <>
+                <button onClick={openNotesModal} className="preview-toggle-btn edit-btn">
+                  <Edit size={14}/><span className="btn-text">ÉDITER</span>
+                </button>
+                <button onClick={() => setShowClearConfirm(true)} className="preview-toggle-btn delete-btn">
+                  <Trash2 size={14}/><span className="btn-text">SUPPRIMER</span>
+                </button>
+              </>
+            )}
           </div>
         </div>
         {isMainPreview ? (

@@ -213,6 +213,13 @@ const AdminPanel = () => {
     link.click();
     document.body.removeChild(link);
     success("SAUVEGARDE ARSENAL GÉNÉRÉE");
+
+    // Log de l'action
+    api.post('/logs', {
+      action: 'DATA_EXPORT',
+      details: `Backup JSON de l'arsenal (${tools.length} outils)`,
+      level: 'info'
+    }).catch(console.error);
   };
 
   // --- LOGIQUE UTILISATEURS ---
@@ -405,6 +412,13 @@ const AdminPanel = () => {
     link.click();
     document.body.removeChild(link);
     success("EXPORT CSV GÉNÉRÉ");
+
+    // Log de l'action (Warning car export de données sensibles)
+    api.post('/logs', {
+      action: 'DATA_EXPORT',
+      details: `Export CSV des logs (${filteredLogs.length} entrées)`,
+      level: 'warning'
+    }).catch(console.error);
   };
 
   const handleCopyLogJSON = () => {

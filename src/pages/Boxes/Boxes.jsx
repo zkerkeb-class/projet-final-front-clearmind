@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { getUserRole } from '../../utils/auth';
@@ -73,14 +73,25 @@ const Boxes = () => {
   const [osFilter, setOsFilter] = useState("All");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const hasLoggedAccess = useRef(false);
 
   useEffect(() => {
+    // Sécurité : Si Guest, on tente l'accès (pour le log backend) puis on redirige
+    if (userRole === ROLES.GUEST) {
+      if (!hasLoggedAccess.current) {
+        api.get('/boxes?resource=/boxes').catch(() => {}); // Le backend renverra 403 + Log ACCESS_DENIED
+        hasLoggedAccess.current = true;
+      }
+      navigate('/dashboard');
+      return;
+    }
+
     // Debounce pour la recherche
     const timer = setTimeout(() => {
       fetchBoxes();
     }, 300);
     return () => clearTimeout(timer);
-  }, [page, searchTerm, difficultyFilter, platformFilter, categoryFilter, osFilter]);
+  }, [page, searchTerm, difficultyFilter, platformFilter, categoryFilter, osFilter, userRole, navigate]);
 
     const fetchBoxes = async () => {
       setLoading(true);
@@ -148,6 +159,9 @@ const Boxes = () => {
     }
     setBoxToDelete(null);
   };
+
+  // Si Guest, on n'affiche rien le temps de la redirection
+  if (userRole === ROLES.GUEST) return null;
 
   return (
     <div className="boxes-container">

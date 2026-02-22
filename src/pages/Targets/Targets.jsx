@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
-import { Server, ShieldCheck, Activity, Loader, Plus, Trash2, X, Pencil, Box, ChevronLeft, ChevronRight, Search, Edit, Monitor, Smartphone, Terminal, Command, HelpCircle } from 'lucide-react';
+import { Server, ShieldCheck, Activity, Loader, Plus, Trash2, X, Pencil, Box, ChevronLeft, ChevronRight, Search, Edit, Monitor, Smartphone, Terminal, Command, HelpCircle, Download } from 'lucide-react';
 import { getUserRole } from '../../utils/auth';
 import './Targets.css';
 import { ROLES, TARGET_STATUSES, TARGET_OS, OS_COLORS } from '../../utils/constants';
@@ -27,6 +27,7 @@ const Targets = () => {
   const [targetToDelete, setTargetToDelete] = useState(null);
   const [osFilter, setOsFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
+  const hasLoggedAccess = useRef(false);
 
   const [newTarget, setNewTarget] = useState({
     name: '',
@@ -39,9 +40,19 @@ const Targets = () => {
   });
 
   useEffect(() => {
+    // Sécurité : Si Guest, on tente l'accès (pour le log backend) puis on redirige
+    if (userRole === ROLES.GUEST) {
+      if (!hasLoggedAccess.current) {
+        api.get('/targets?resource=/targets').catch(() => {}); // Le backend renverra 403 + Log ACCESS_DENIED
+        hasLoggedAccess.current = true;
+      }
+      navigate('/dashboard');
+      return;
+    }
+
     const timer = setTimeout(() => fetchData(), 300);
     return () => clearTimeout(timer);
-  }, [page, searchTerm, osFilter, statusFilter]);
+  }, [page, searchTerm, osFilter, statusFilter, userRole, navigate]);
 
     const fetchData = async () => {
       setLoading(true);
@@ -104,6 +115,41 @@ const Targets = () => {
     setTargetToDelete(null);
   };
 
+  const handleExportScope = () => {
+    if (targets.length === 0) {
+      info("AUCUNE DONNÉE À EXPORTER");
+      return;
+    }
+
+    const headers = ["HOST", "IP", "DOMAINE", "OS", "PORTS", "STATUT", "BOX_LIÉE"];
+    const csvRows = [headers.join(',')];
+
+    targets.forEach(t => {
+      const portsStr = t.ports ? t.ports.map(p => `${p.port}/${p.service}`).join(';') : '';
+      const row = [
+        `"${t.name}"`, `"${t.ip}"`, `"${t.domain || ''}"`, `"${t.os}"`, `"${portsStr}"`, `"${t.status}"`, `"${t.linkedBox?.name || ''}"`
+      ];
+      csvRows.push(row.join(','));
+    });
+
+    const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `scope_export_${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    success("SCOPE EXPORTÉ EN CSV");
+
+    // Log de l'action
+    api.post('/logs', {
+      action: 'DATA_EXPORT',
+      details: `Export CSV du scope (${targets.length} cibles)`,
+      level: 'info'
+    }).catch(console.error);
+  };
+
   const openAddModal = () => {
     resetForm();
     setShowModal(true);
@@ -156,6 +202,9 @@ const Targets = () => {
     }
   };
 
+  // Si Guest, on n'affiche rien le temps de la redirection
+  if (userRole === ROLES.GUEST) return null;
+
   return (
     <div className="targets-container">
       <header className="page-header">
@@ -202,6 +251,12 @@ const Targets = () => {
               <option key={status} value={status}>{status}</option>
             ))}
           </select>
+
+          {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
+            <button className="add-target-btn" onClick={handleExportScope} style={{background: 'rgba(0, 212, 255, 0.1)', border: '1px solid rgba(0, 212, 255, 0.3)', color: '#00d4ff', fontSize: '0.8rem', padding: '10px 15px'}}>
+              <Download size={16} /> CSV
+            </button>
+          )}
         </div>
       </div>
 

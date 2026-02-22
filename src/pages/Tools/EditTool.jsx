@@ -66,8 +66,17 @@ const EditTool = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Nettoyage : On retire les lignes sans commande
+    const cleanedCheatsheet = formData.cheatsheet.filter(item => item.command.trim() !== '');
+
+    if (cleanedCheatsheet.length === 0) {
+      setError("La fiche doit contenir au moins une commande valide.");
+      return;
+    }
+
     try {
-      await api.patch(`/tools/${name}`, formData);
+      await api.patch(`/tools/${name}`, { ...formData, cheatsheet: cleanedCheatsheet });
       success("FICHE TECHNIQUE MISE À JOUR");
       navigate(`/tools/${formData.name.toLowerCase()}`);
     } catch (err) {
@@ -105,9 +114,6 @@ const EditTool = () => {
         <div className="form-section">
           <div className="section-header">
             <h3>COMMAND_CHEATSHEET</h3>
-            <button type="button" onClick={addCommandRow} className="add-line-btn">
-              <Plus size={16} /> AJOUTER_LIGNE
-            </button>
           </div>
           
           {formData.cheatsheet.map((item, index) => (
@@ -131,6 +137,10 @@ const EditTool = () => {
               )}
             </div>
           ))}
+
+          <button type="button" onClick={addCommandRow} className="add-line-btn">
+            <Plus size={16} /> AJOUTER_LIGNE
+          </button>
         </div>
 
         <button type="submit" className="save-btn">

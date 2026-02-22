@@ -58,13 +58,13 @@ function App() {
           } />
 
           <Route path="/targets" element={
-            <ProtectedRoute allowedRoles={[ROLES.PENTESTER, ROLES.ADMIN]}><Targets /></ProtectedRoute>
+            <ProtectedRoute allowedRoles={[ROLES.PENTESTER, ROLES.ADMIN, ROLES.GUEST]}><Targets /></ProtectedRoute>
           } />
           <Route path="/boxes" element={
-            <ProtectedRoute allowedRoles={[ROLES.PENTESTER, ROLES.ADMIN]}><Boxes /></ProtectedRoute>
+            <ProtectedRoute allowedRoles={[ROLES.PENTESTER, ROLES.ADMIN, ROLES.GUEST]}><Boxes /></ProtectedRoute>
           } />
           <Route path="/boxes/:id" element={
-            <ProtectedRoute allowedRoles={[ROLES.PENTESTER, ROLES.ADMIN]}><BoxDetail /></ProtectedRoute>
+            <ProtectedRoute allowedRoles={[ROLES.PENTESTER, ROLES.ADMIN, ROLES.GUEST]}><BoxDetail /></ProtectedRoute>
           } />
           <Route path="/news" element={<News />} />
           <Route path="/wiki" element={<Wiki />} />

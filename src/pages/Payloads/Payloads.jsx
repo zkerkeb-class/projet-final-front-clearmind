@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
-import { Copy, Search, Plus, Pencil, Trash2, Check, Edit, Database } from 'lucide-react';
+import { Copy, Search, Plus, Pencil, Trash2, Check, Edit, Database, Download } from 'lucide-react';
 import './Payloads.css';
 import { PAYLOAD_SEVERITIES, ROLES, PAYLOAD_CATEGORIES } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
@@ -93,6 +93,26 @@ const Payloads = () => {
     setPayloadToDelete(null);
   };
 
+  const handleExportPayloads = () => {
+    const dataStr = JSON.stringify(payloads, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `payloads_backup_${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    success("BASE PAYLOADS EXPORTÉE");
+
+    // Log de l'action
+    api.post('/logs', {
+      action: 'DATA_EXPORT',
+      details: `Backup JSON des payloads (${payloads.length} items)`,
+      level: 'info'
+    }).catch(console.error);
+  };
+
   const isOwner = (payload) => {
     if (userRole === ROLES.ADMIN) return true;
     return payload.author === userId || (payload.author && payload.author._id === userId);
@@ -132,6 +152,12 @@ const Payloads = () => {
             <option value="All">CATÉGORIE (TOUTES)</option>
             {allCategories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
           </select>
+
+          {(userRole === ROLES.PENTESTER || userRole === ROLES.ADMIN) && (
+            <button className="add-btn" onClick={handleExportPayloads} style={{background: 'rgba(0, 212, 255, 0.1)', border: '1px solid rgba(0, 212, 255, 0.3)', color: '#00d4ff', fontSize: '0.8rem', padding: '10px 15px'}}>
+              <Download size={16} /> JSON
+            </button>
+          )}
         </div>
       </div>
 

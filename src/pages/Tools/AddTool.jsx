@@ -47,8 +47,17 @@ const AddTool = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Nettoyage : On retire les lignes sans commande
+    const cleanedCheatsheet = formData.cheatsheet.filter(item => item.command.trim() !== '');
+
+    if (cleanedCheatsheet.length === 0) {
+      setError("Veuillez ajouter au moins une commande valide dans la cheatsheet.");
+      return;
+    }
+
     try {
-      await api.post('/tools', formData);
+      await api.post('/tools', { ...formData, cheatsheet: cleanedCheatsheet });
       success("OUTIL AJOUTÉ À L'ARSENAL");
       navigate(`/tools/${formData.name.toLowerCase()}`);
     } catch (err) {
@@ -86,9 +95,6 @@ const AddTool = () => {
         <div className="form-section">
           <div className="section-header">
             <h3>COMMAND_CHEATSHEET</h3>
-            <button type="button" onClick={addCommandRow} className="add-row-btn">
-              <Plus size={14} /> AJOUTER_LIGNE
-            </button>
           </div>
           
           {formData.cheatsheet.map((item, index) => (
@@ -112,6 +118,10 @@ const AddTool = () => {
               )}
             </div>
           ))}
+
+          <button type="button" onClick={addCommandRow} className="add-line-btn">
+            <Plus size={16} /> AJOUTER_LIGNE
+          </button>
         </div>
 
         <button type="submit" className="save-btn">

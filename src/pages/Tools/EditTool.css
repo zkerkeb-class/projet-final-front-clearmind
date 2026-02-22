@@ -158,6 +158,14 @@
   transform: translateY(0);
 }
 
+.edit-tool-container .add-line-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.edit-tool-container .add-line-btn:hover svg {
+  transform: rotate(90deg);
+}
+
 .edit-tool-container .remove-btn {
   background: transparent;
   border: 1px solid rgba(255, 0, 60, 0.3);

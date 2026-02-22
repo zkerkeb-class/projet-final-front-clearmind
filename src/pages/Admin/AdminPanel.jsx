@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { 
@@ -54,9 +54,15 @@ const AdminPanel = () => {
   });
 
   const [systemLogs, setSystemLogs] = useState([]);
+  const hasLoggedAccess = useRef(false);
 
   useEffect(() => {
     if (userRole !== ROLES.ADMIN) {
+      // "Honeypot" : On envoie une seule fois la requête pour logger le 403
+      if (!hasLoggedAccess.current) {
+        api.get('/logs?resource=/admin').catch(() => {}); 
+        hasLoggedAccess.current = true;
+      }
       navigate('/dashboard');
       return;
     }
@@ -73,6 +79,9 @@ const AdminPanel = () => {
       if (activeTab === 'logs') fetchLogs();
     }
   }, [activeTab, userRole, navigate]);
+
+  // Protection visuelle : Si pas admin, on n'affiche rien le temps que la redirection se fasse
+  if (userRole !== ROLES.ADMIN) return null;
 
   // --- LOGIQUE LOGS ---
   const fetchLogs = async () => {

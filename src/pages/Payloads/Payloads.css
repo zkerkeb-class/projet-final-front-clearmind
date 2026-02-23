@@ -504,4 +504,14 @@
     padding: 12px;
     border-radius: 4px;
   }
+
+  .payloads-container .empty-msg {
+    padding: 2rem 1rem;
+    text-align: center;
+  }
+
+  .payloads-container .empty-msg span {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
 }

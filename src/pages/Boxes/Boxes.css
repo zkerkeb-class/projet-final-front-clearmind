@@ -402,6 +402,20 @@
   .boxes-container .boxes-search-container, .boxes-container .filters-wrapper {
     width: 100%;
   }
+
+  .boxes-container .boxes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .boxes-container .empty-state-msg {
+    padding: 2rem 1rem;
+    text-align: center;
+  }
+
+  .boxes-container .empty-state-msg span {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
 }
 
 /* --- STYLES AJOUTÉS POUR NETTOYAGE JSX --- */

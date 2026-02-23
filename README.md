@@ -2,7 +2,7 @@
 
 ## 📋 Présentation
 
-**RedSheet** est l'interface utilisateur (SPA) de la plateforme d'opérations de Red Teaming. Développée en React, elle offre une expérience fluide et réactive pour gérer les campagnes de tests d'intrusion, visualiser les données en temps réel et collaborer sur les cibles.
+**RedSheet** est l'interface utilisateur (SPA) de la plateforme d'opérations de Red Teaming. Développée en React, elle offre une expérience fluide et réactive pour gérer les campagnes de tests d'intrusion, visualiser les données en temps réel et créer ses propres cibles.
 
 Elle communique avec l'API Backend via des requêtes sécurisées (JWT) et implémente une gestion stricte des rôles côté client.
 

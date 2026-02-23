@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import './Dashboard.css';
 import { Terminal, Target, Box, Zap, Globe, ShieldAlert, BarChart2, Monitor } from 'lucide-react';
@@ -26,7 +26,7 @@ const Dashboard = () => {
   const userRole = getUserRole();
 
   useEffect(() => {
-    // 1. Chargement des statistiques internes (Rapide)
+    // 1. Chargement des statistiques internes
     const fetchStats = async () => {
       try {
         const promises = [api.get('/payloads')];
@@ -51,8 +51,6 @@ const Dashboard = () => {
           inProgress: boxes.filter(b => b.status === 'In-Progress').length
         });
 
-        // --- CALCUL DES DONNÉES POUR LES NOUVEAUX GRAPHIQUES ---
-        
         // 1. Difficulté des Boxes
         const difficulties = { Easy: 0, Medium: 0, Hard: 0, Insane: 0 };
         boxes.forEach(b => {
@@ -80,7 +78,7 @@ const Dashboard = () => {
       }
     };
 
-    // 2. Chargement des News pour les graphiques (Lent - API Externe)
+    // 2. Chargement des News pour les graphiques
     const fetchNewsData = async () => {
       try {
         const newsRes = await api.get('/news');
@@ -221,7 +219,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* NOUVELLE LIGNE DE GRAPHIQUES (Interne) */}
+      {/* NOUVELLE LIGNE DE GRAPHIQUES */}
       {!loadingStats && userRole !== ROLES.GUEST && (
         <div className="charts-grid">
           <div className="chart-card">

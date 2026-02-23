@@ -61,7 +61,7 @@
   background: #1a1a1a;
 }
 
-/* --- RESPONSIVE --- */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .cyberchef-wrapper {
     padding: 10px;

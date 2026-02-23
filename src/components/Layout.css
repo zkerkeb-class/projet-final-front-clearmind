@@ -29,13 +29,13 @@
   backdrop-filter: blur(5px);
 }
 
-/* --- RESPONSIVE MOBILE & TABLETTE --- */
+/* RESPONSIVE MOBILE & TABLETTE */
 @media (max-width: 992px) {
   .app-layout .main-content {
     margin-left: 0;
     width: 100%;
     padding: 1.5rem;
-    padding-top: 4rem; /* Espace pour le header mobile éventuel */
+    padding-top: 4rem;
   }
 
   .app-layout .mobile-menu-btn {

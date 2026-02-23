@@ -1,7 +1,5 @@
-import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { getUserRole, getPayloadFromToken } from '../utils/auth';
-import { ROLES } from '../utils/constants';
 
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   const token = localStorage.getItem('token');

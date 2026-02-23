@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Terminal, ChevronUp, ChevronDown, Trash2, Activity } from 'lucide-react';
 import { useToast } from '../Toast/ToastContext';
 import './TerminalLogs.css';

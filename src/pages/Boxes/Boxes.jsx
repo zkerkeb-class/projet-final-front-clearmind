@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { getUserRole } from '../../utils/auth';
@@ -104,8 +104,7 @@ const Boxes = () => {
       }
     };
 
-  // --- ACTIONS ---
-
+  // ACTIONS
   const handleAddBox = async (e) => {
     e.preventDefault();
 

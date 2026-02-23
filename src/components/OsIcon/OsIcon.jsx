@@ -1,4 +1,3 @@
-import React from 'react';
 import { Monitor, Terminal, Command, Smartphone, HelpCircle } from 'lucide-react';
 import { TARGET_OS, OS_COLORS } from '../../utils/constants';
 

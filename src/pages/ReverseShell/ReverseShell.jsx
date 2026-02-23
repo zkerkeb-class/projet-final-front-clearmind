@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Copy, Check, Terminal, Settings, Cpu, Wifi, ChevronRight, Plus, Edit, Trash2, Save, X, Database, AlertTriangle, Search } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Copy, Check, Terminal, Settings, Wifi, ChevronRight, Plus, Edit, Trash2, Save, X, Database, AlertTriangle, Search } from 'lucide-react';
 import './ReverseShell.css';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -20,7 +20,7 @@ const STANDARD_CATEGORIES = [
 const ReverseShell = () => {
   const [ip, setIp] = useState('10.10.14.x');
   const [port, setPort] = useState('4444');
-  const { success, error: toastError } = useToast(); // Keep success for other actions
+  const { success, error: toastError } = useToast();
   const { copiedId, copyToClipboard } = useClipboard();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [categorySearch, setCategorySearch] = useState('');
@@ -86,11 +86,11 @@ const ReverseShell = () => {
     return 'bash'; // Fallback par défaut
   };
 
-  // --- ADMIN ACTIONS ---
+  // ADMIN ACTIONS
   const handleSave = async (e) => {
     e.preventDefault();
 
-    // SÉCURITÉ : Vérification côté client que la catégorie n'a pas été falsifiée dans le HTML
+    // Vérification côté client que la catégorie n'a pas été falsifiée dans le HTML
     if (!availableCategories.includes(formData.category)) {
       toastError("CATÉGORIE NON AUTORISÉE (Validation échouée)");
       return;

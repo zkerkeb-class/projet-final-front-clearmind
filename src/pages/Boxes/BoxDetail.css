@@ -47,7 +47,7 @@
   gap: 5px;
 }
 
-/* --- NEW LAYOUT GRID --- */
+/* NEW LAYOUT GRID */
 .box-detail-container .box-layout {
   display: grid;
   grid-template-columns: 300px 1fr;
@@ -55,7 +55,7 @@
   align-items: start;
 }
 
-/* --- SIDEBAR --- */
+/* SIDEBAR */
 .box-detail-container .box-sidebar {
   display: flex;
   flex-direction: column;
@@ -156,7 +156,7 @@
   box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
 }
 
-/* --- TARGETS LIST --- */
+/* TARGETS LIST */
 .box-detail-container .card-title {
   display: flex;
   align-items: center;
@@ -195,7 +195,7 @@
 .box-detail-container .t-ports { font-size: 0.75rem; color: #ffa500; }
 .box-detail-container .empty-targets { color: #666; font-size: 0.8rem; font-style: italic; text-align: center; padding: 10px; }
 
-/* --- MAIN CONTENT (NOTES) --- */
+/* MAIN CONTENT (NOTES) */
 .box-detail-container .box-main-content {
   flex: 1;
   min-width: 0;
@@ -428,7 +428,7 @@
   border: none !important;
 }
 
-/* --- MODALE D'ÉDITION --- */
+/* MODALE D'ÉDITION */
 .box-detail-container .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -527,7 +527,7 @@
   background: rgba(0, 212, 255, 0.02);
 }
 
-/* --- STYLES MODALE NOTES (Inspiré du Wiki) --- */
+/* STYLES MODALE NOTES */
 .box-detail-container .wiki-modal-toolbar {
   display: flex;
   justify-content: space-between;
@@ -628,7 +628,7 @@
   transform: translateY(-1px);
 }
 
-/* --- RESPONSIVE --- */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .box-detail-container .box-layout {
     grid-template-columns: 1fr;

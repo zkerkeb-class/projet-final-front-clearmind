@@ -1,4 +1,3 @@
-import React from 'react';
 import './Skeleton.css';
 
 const Skeleton = ({ width, height, style, className }) => {

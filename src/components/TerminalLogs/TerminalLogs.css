@@ -1,7 +1,7 @@
 .terminal-logs {
   position: fixed;
   bottom: 0;
-  left: 260px; /* Largeur sidebar */
+  left: 260px;
   right: 0;
   background: #050505;
   border-top: 1px solid #333;

@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  pointer-events: none; /* Permet de cliquer au travers du conteneur */
+  pointer-events: none;
 }
 
 .toast {
@@ -25,7 +25,7 @@
   justify-content: space-between;
   animation: toast-slideIn 0.3s ease-out forwards;
   backdrop-filter: blur(5px);
-  pointer-events: auto; /* Réactive les clics sur les toasts eux-mêmes */
+  pointer-events: auto;
 }
 
 .toast.success { border-left-color: #00ff41; }

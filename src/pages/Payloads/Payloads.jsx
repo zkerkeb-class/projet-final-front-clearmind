@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
-import { Copy, Search, Plus, Pencil, Trash2, Check, Edit, Database, Download, Filter, RotateCcw } from 'lucide-react';
+import { Copy, Search, Plus, Trash2, Check, Edit, Database, Download, Filter, RotateCcw } from 'lucide-react';
 import './Payloads.css';
 import { PAYLOAD_SEVERITIES, ROLES, PAYLOAD_CATEGORIES } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';

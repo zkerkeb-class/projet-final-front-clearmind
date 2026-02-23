@@ -1,18 +1,18 @@
 .sidebar {
   width: 260px;
   height: 100vh;
-  background-color: rgba(5, 5, 10, 0.95); /* Plus profond, légèrement transparent */
-  backdrop-filter: blur(12px); /* Effet verre dépoli */
-  border-right: 1px solid rgba(0, 212, 255, 0.15); /* Bordure plus fine et subtile */
+  background-color: rgba(5, 5, 10, 0.95);
+  backdrop-filter: blur(12px);
+  border-right: 1px solid rgba(0, 212, 255, 0.15);
   display: flex;
   flex-direction: column;
   padding: 1.5rem;
   position: fixed;
   left: 0;
   top: 0;
-  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5); /* Ombre plus marquée pour la profondeur */
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
   z-index: 1500;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Animation plus fluide */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar .sidebar-header {
@@ -38,28 +38,28 @@
 
 .sidebar .sidebar-title {
   font-size: 1.4rem;
-  font-family: 'Orbitron', sans-serif; /* Assure la police titre */
+  font-family: 'Orbitron', sans-serif;
   font-weight: 900;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: white;
-  margin: 0; /* Reset margin */
+  margin: 0;
 }
 
 .sidebar .sidebar-title span {
-  color: #ff003c; /* Rose Néon */
+  color: #ff003c;
   text-shadow: 0 0 15px rgba(255, 0, 60, 0.6);
 }
 
 .sidebar .nav-links {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem; /* Espacement un peu plus serré pour l'élégance */
+  gap: 0.5rem;
   flex-grow: 1;
-  overflow-y: auto; /* Active le scroll vertical si le contenu dépasse */
-  min-height: 0; /* Indispensable pour que le scroll fonctionne dans un flex container */
-  padding-right: 5px; /* Espace pour éviter que la scrollbar ne colle au texte */
-  margin-bottom: 1rem; /* Espace de sécurité avant le bouton logout */
+  overflow-y: auto;
+  min-height: 0;
+  padding-right: 5px;
+  margin-bottom: 1rem;
 }
 
 /* Scrollbar fine et discrète pour le menu */
@@ -82,7 +82,7 @@
   align-items: center;
   gap: 14px;
   padding: 0.9rem 1.2rem;
-  color: #888; /* Couleur par défaut plus discrète */
+  color: #888;
   text-decoration: none;
   border-radius: 6px;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -90,7 +90,7 @@
   text-transform: uppercase;
   font-size: 0.8rem;
   letter-spacing: 1px;
-  border-left: 3px solid transparent; /* Indicateur invisible par défaut */
+  border-left: 3px solid transparent;
   position: relative;
   overflow: hidden;
 }
@@ -99,7 +99,7 @@
 .sidebar .nav-item:hover {
   background-color: rgba(255, 255, 255, 0.03);
   color: #fff;
-  padding-left: 1.5rem; /* Petit décalage vers la droite */
+  padding-left: 1.5rem;
   border-left-color: rgba(0, 212, 255, 0.5);
 }
 
@@ -108,13 +108,13 @@
   background: linear-gradient(90deg, rgba(0, 212, 255, 0.1) 0%, transparent 100%);
   color: #fff;
   border-left-color: #00d4ff;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Ombre portée douce */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar .nav-item.active svg {
   color: #00d4ff;
   filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.6));
-  transform: scale(1.1); /* Légère mise en avant de l'icône */
+  transform: scale(1.1);
   transition: transform 0.3s ease;
 }
 
@@ -147,7 +147,7 @@
 
 /* Admin Item Specifics */
 .sidebar .nav-item.admin-item {
-  margin-top: 1rem; /* Séparation visuelle */
+  margin-top: 1rem;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   padding-top: 1.2rem;
 }
@@ -194,7 +194,7 @@
 }
 
 .sidebar .profile-img-container {
-  width: 40px; /* Un peu plus grand */
+  width: 40px;
   height: 40px;
   border-radius: 50%;
   border: 2px solid rgba(0, 212, 255, 0.5);

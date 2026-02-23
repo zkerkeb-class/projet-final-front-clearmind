@@ -6,7 +6,6 @@ import './ToolDetail.css';
 import { ROLES } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import { getUserRole } from '../../utils/auth';
-import { useToast } from '../../components/Toast/ToastContext';
 import { useClipboard } from '../../hooks/useClipboard';
 
 const ToolDetail = () => {

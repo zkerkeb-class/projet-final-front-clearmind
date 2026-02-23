@@ -117,7 +117,7 @@
 }
 
 .edit-tool-container .section-header h3 {
-  margin-bottom: 0; /* Override previous margin */
+  margin-bottom: 0;
 }
 
 .edit-tool-container .command-input-row {
@@ -229,7 +229,7 @@
 
 .edit-tool-container .back-btn:hover { color: #fff; }
 
-/* --- RESPONSIVE --- */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .edit-tool-container {
     padding: 20px 10px;

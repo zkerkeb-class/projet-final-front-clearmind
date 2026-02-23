@@ -188,7 +188,7 @@
   line-height: 1.5;
 }
 
-/* --- ERROR STATE --- */
+/* ERROR STATE */
 .tool-detail-container .tool-error-container {
   height: 60vh;
   display: flex;
@@ -241,7 +241,7 @@
   left: 0;
 }
 
-/* --- EDIT BUTTON --- */
+/* EDIT BUTTON */
 .tool-detail-container .edit-tool-btn {
   display: flex;
   align-items: center;
@@ -267,11 +267,11 @@
   color: #fff;
 }
 
-/* --- UTILS --- */
+/* UTILS */
 .tool-detail-container .mb-20 { margin-bottom: 20px; }
 .tool-detail-container .skeleton-card { height: 120px; }
 
-/* --- RESPONSIVE --- */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .tool-detail-container {
     padding: 20px;

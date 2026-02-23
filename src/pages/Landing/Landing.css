@@ -326,7 +326,7 @@
 
 .landing-container .copyright { margin-top: 0.5rem; }
 
-/* --- TABLET RESPONSIVE --- */
+/* TABLET RESPONSIVE */
 @media (max-width: 992px) {
   .landing-container .landing-hero { flex-direction: column; text-align: center; padding: 2rem; }
   .landing-container .hero-actions { justify-content: center; }
@@ -335,7 +335,7 @@
   .landing-container .features-grid { padding: 2rem; }
 }
 
-/* --- MOBILE RESPONSIVE FIXES --- */
+/* MOBILE RESPONSIVE FIXES */
 @media (max-width: 600px) {
   .landing-container .landing-nav {
     flex-direction: column;
@@ -378,6 +378,6 @@
   }
   
   .landing-container .stat-item {
-    width: 200px; /* Alignement propre sur mobile */
+    width: 200px;
   }
 }

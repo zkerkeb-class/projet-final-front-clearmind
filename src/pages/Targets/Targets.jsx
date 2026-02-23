@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { Server, Plus, Trash2, X, Box, ChevronLeft, ChevronRight, Search, Edit, Download } from 'lucide-react';
@@ -377,7 +377,7 @@ const Targets = () => {
                 <option value={TARGET_STATUSES.PATCHED}>Patched (Corrigé)</option>
               </select>
 
-              {/* Gestion des Ports en Tableau (Déplacé en bas pour la grille) */}
+              {/* Gestion des Ports en Tableau */}
               <div className="ports-manager">
                 <div className="ports-header">
                   <label>PORTS & SERVICES</label>

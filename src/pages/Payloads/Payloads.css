@@ -119,7 +119,7 @@
   letter-spacing: 1px;
 }
 
-/* --- FILTERS --- */
+/* FILTERS */
 .payloads-container .filters-wrapper {
   display: flex;
   gap: 1rem;
@@ -164,7 +164,7 @@
   box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
 }
 
-/* --- FILTERS BAR (UI/UX DRIVEN) --- */
+/* FILTERS BAR */
 .payloads-container .payload-filters-bar {
   display: flex;
   align-items: center;
@@ -420,7 +420,7 @@
   letter-spacing: 1px;
 }
 
-/* --- SKELETONS --- */
+/* SKELETONS */
 .payloads-container .skeleton-card {
   pointer-events: none;
 }
@@ -444,7 +444,7 @@
   margin-top: auto;
 }
 
-/* --- RESPONSIVE --- */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .payloads-container .page-header {
     flex-direction: column;

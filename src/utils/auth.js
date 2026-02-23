@@ -1,5 +1,5 @@
 /**
- * Décoder le payload du JWT sans librairie externe lourde.
+ * Décoder le payload du JWT
  * Cela permet de lire le rôle "gravé" dans le token par le backend.
  */
 export const getPayloadFromToken = (token) => {

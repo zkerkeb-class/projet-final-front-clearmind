@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Terminal, Shield, Database, Target, BookOpen, Cpu, ChevronRight, Activity, Users, Globe, MessageSquare, Star } from 'lucide-react';
 import './Landing.css';

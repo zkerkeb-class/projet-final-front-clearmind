@@ -10,7 +10,6 @@
   font-family: 'JetBrains Mono', monospace;
   position: relative;
   overflow: hidden;
-  /* Petit effet de grille en fond pour rappeler le dashboard */
   background-image: 
     linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
@@ -89,7 +88,7 @@
   text-shadow: 0 0 5px #00d4ff;
 }
 
-/* --- RESPONSIVE --- */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .not-found-container .not-found-content {
     width: 90%;

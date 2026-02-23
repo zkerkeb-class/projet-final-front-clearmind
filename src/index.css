@@ -17,7 +17,6 @@ body {
   overflow-x: hidden;
 }
 
-/* Scrollbar Style Cyberpunk */
 ::-webkit-scrollbar {
   width: 6px;
 }

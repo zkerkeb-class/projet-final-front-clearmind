@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../../api/axios';
-import { Save, X, AlertTriangle } from 'lucide-react';
+import { Save, AlertTriangle } from 'lucide-react';
 import { PAYLOAD_SEVERITIES, PAYLOAD_CATEGORIES } from '../../utils/constants';
 import { useToast } from '../../components/Toast/ToastContext';
 import './EditPayloads.css';
@@ -26,7 +26,6 @@ const EditPayloads = () => {
       const fetchPayload = async () => {
         try {
           const res = await api.get(`/payloads/${encodeURIComponent(id)}`);
-          // Adapter selon la structure de retour de l'API (res.data.data.payload ou res.data.data)
           const payload = res.data.data.payload || res.data.data;
           setFormData({
             title: payload.title,

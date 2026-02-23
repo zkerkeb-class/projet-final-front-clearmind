@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Terminal, Users, Code, Shield, ChevronLeft, Github, Linkedin, Database, Server, Cpu, Globe } from 'lucide-react';
 import './About.css';

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import api from '../../api/axios';
 import { X } from 'lucide-react';
 import './PayloadModal.css';
@@ -104,7 +104,7 @@ const PayloadModal = ({ isOpen, onClose, onPayloadAdded }) => {
         </form>
       </div>
 
-      {/* MODALE D'ERREUR (NESTED) */}
+      {/* MODALE D'ERREUR */}
       <ErrorModal 
         isOpen={!!error} 
         onClose={() => setError(null)} 

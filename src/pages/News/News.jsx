@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import { Radio, ExternalLink, Clock, Search, ShieldAlert, Filter, ArrowUpDown, Calendar, RefreshCw, RotateCcw, CheckSquare, Square } from 'lucide-react';
 import './News.css';
@@ -39,7 +39,7 @@ const News = () => {
     fetchNews(true);
   }, []);
 
-  // --- LOGIQUE DE SURLIGNAGE DES CVE ---
+  // LOGIQUE DE SURLIGNAGE DES CVE
   const highlightContent = (text) => {
     if (!text) return "";
     // Regex pour détecter les formats CVE-XXXX-XXXXX
@@ -50,7 +50,7 @@ const News = () => {
     );
   };
 
-  // --- GESTION DES FILTRES ---
+  // GESTION DES FILTRES
   const toggleLevel = (level) => {
     setActiveLevels(prev => 
       prev.includes(level) ? prev.filter(l => l !== level) : [...prev, level]
@@ -73,7 +73,7 @@ const News = () => {
     setSortDesc(true);
   };
 
-  // --- LOGIQUE DE FILTRAGE COMBINÉE ---
+  // LOGIQUE DE FILTRAGE COMBINÉE
   const filteredArticles = articles
     .filter(article => {
       const matchesSearch = 

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../api/axios';
-import * as LucideIcons from 'lucide-react'; // Importe TOUTES les icônes
+import * as LucideIcons from 'lucide-react';
 import './KillChain.css';
 import Skeleton from '../../components/Skeleton/Skeleton';
 
@@ -52,7 +52,7 @@ const KillChain = () => {
             </div>
           ))
         ) : stages.map((stage) => {
-          // Astuce : Récupère l'icône dynamiquement par son nom
+          // Récupère l'icône dynamiquement par son nom
           const IconComponent = LucideIcons[stage.iconName] || LucideIcons.Shield;
 
           return (

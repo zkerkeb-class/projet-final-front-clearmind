@@ -75,7 +75,7 @@
   background: rgba(0, 212, 255, 0.05);
 }
 
-/* --- RECHERCHE & HEADER --- */
+/* RECHERCHE & HEADER */
 .news-container .controls-bar {
   display: flex;
   justify-content: space-between;
@@ -168,7 +168,7 @@
   letter-spacing: 1px;
 }
 
-/* --- FEED & CARDS (DESIGN AVANCÉ) --- */
+/* FEED & CARDS */
 .news-container .news-feed {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
@@ -197,7 +197,7 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
-/* Coin stylisé "Cyber" au survol */
+/* Coin stylisé au survol */
 .news-container .news-card::before {
   content: "";
   position: absolute;
@@ -217,7 +217,7 @@
   height: 25px;
 }
 
-/* --- TYPOGRAPHIE --- */
+/* TYPOGRAPHIE */
 .news-container .news-item-title {
   color: #fff;
   font-size: 1.2rem;
@@ -252,7 +252,7 @@
   color: #ff003c;
 }
 
-/* --- BADGES & SURLIGNAGE --- */
+/* BADGES & SURLIGNAGE */
 .news-container .source-tag {
   font-size: 0.6rem;
   padding: 3px 10px;
@@ -262,7 +262,7 @@
   font-weight: bold;
 }
 
-/* Nouveau : Surlignage CVE */
+/* Surlignage CVE */
 .news-container .cve-highlight {
   background: rgba(0, 212, 255, 0.15);
   color: #00d4ff;
@@ -274,7 +274,7 @@
   text-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
 }
 
-/* --- CRITICITÉ & ALERTES --- */
+/* CRITICITÉ & ALERTES */
 .news-container .alert-critical {
   border-left: 4px solid #ff003c !important;
   background: linear-gradient(90deg, rgba(255, 0, 60, 0.1) 0%, rgba(0,0,0,0) 100%);
@@ -324,7 +324,7 @@
   100% { box-shadow: inset 5px 0 10px -5px rgba(255, 0, 60, 0.5); }
 }
 
-/* --- BOUTON ACTION --- */
+/* BOUTON ACTION */
 .news-container .analyze-btn {
   display: inline-flex;
   align-items: center;
@@ -350,7 +350,7 @@
   box-shadow: 0 0 15px rgba(255, 0, 60, 0.4);
 }
 
-/* --- LÉGENDE & FILTRES --- */
+/* LÉGENDE & FILTRES */
 .news-container .threat-legend.interactive {
   display: flex;
   align-items: center;
@@ -398,7 +398,7 @@
 .news-container .legend-dot.medium { background-color: #ffd700; color: #ffd700; }
 .news-container .legend-dot.low { background-color: #00ff41; color: #00ff41; }
 
-/* --- NOUVEAUX STYLES DE FILTRES --- */
+/* NOUVEAUX STYLES DE FILTRES */
 .news-container .filters-section {
   display: flex;
   flex-direction: column;
@@ -568,7 +568,7 @@
   justify-content: space-between;
 }
 
-/* --- RESPONSIVE --- */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .news-container .news-feed {
     grid-template-columns: 1fr;

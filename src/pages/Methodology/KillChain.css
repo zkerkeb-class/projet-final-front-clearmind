@@ -62,7 +62,7 @@
   position: absolute;
   top: 20px;
   bottom: 20px;
-  left: 19px; /* Centré par rapport à step-aside width 40px */
+  left: 19px;
   width: 2px;
   background: linear-gradient(to bottom, #00d4ff, #ff003c);
   opacity: 0.2;
@@ -102,7 +102,7 @@
 }
 
 .killchain-container .connector-line {
-  display: none; /* Remplacé par la ligne globale */
+  display: none;
 }
 
 /* Cartes des étapes */
@@ -213,7 +213,7 @@
   transform: translateY(-2px);
 }
 
-/* --- SKELETONS --- */
+/* SKELETONS */
 .killchain-container .skeleton-step-card {
   width: 100%;
   border: 1px solid #333;
@@ -233,7 +233,7 @@
   gap: 10px;
 }
 
-/* --- RESPONSIVE --- */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .killchain-container {
     padding: 20px;

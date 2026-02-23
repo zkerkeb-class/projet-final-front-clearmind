@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { Menu, X } from 'lucide-react';
@@ -28,8 +28,7 @@ const Layout = ({ children }) => {
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
       
       <main className="main-content">
-        {/* CyberChef est toujours monté mais caché si on n'est pas sur la route */}
-        {/* On utilise position absolute + left négatif au lieu de display: none pour que l'iframe s'initialise correctement */}
+        {/* CyberChef est toujours chargé mais caché si on n'est pas sur la route */}
         <div style={{ 
           height: '100%',
           width: '100%',
@@ -46,7 +45,7 @@ const Layout = ({ children }) => {
         </div>
       </main>
 
-      {/* Terminal de Logs Système (Footer) */}
+      {/* Terminal de Logs Système */}
       <TerminalLogs />
     </div>
   );

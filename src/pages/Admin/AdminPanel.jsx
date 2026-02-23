@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { 
@@ -19,7 +19,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ArrowUpDown,
-  Trash,
   Clock,
   Copy,
   Check
@@ -113,7 +112,7 @@ const AdminPanel = () => {
   // Protection visuelle : Si pas admin, on n'affiche rien le temps que la redirection se fasse
   if (isRestricted) return null;
 
-  // --- AUTO REFRESH LOGIC ---
+  // AUTO REFRESH LOGIC
   useEffect(() => {
     let interval;
     if (autoRefresh && activeTab === 'logs') {
@@ -122,7 +121,7 @@ const AdminPanel = () => {
     return () => clearInterval(interval);
   }, [autoRefresh, activeTab]);
 
-  // --- LOGIQUE LOGS ---
+  // LOGIQUE LOGS
   const fetchLogs = async (isBackground = false) => {
     if (!isBackground) setLoading(true);
     try {
@@ -154,7 +153,7 @@ const AdminPanel = () => {
     }
   };
 
-  // --- LOGIQUE ARSENAL ---
+  // LOGIQUE ARSENAL
   const fetchTools = async () => {
     setLoading(true);
     try {
@@ -187,7 +186,7 @@ const AdminPanel = () => {
   };
 
   const handleExportTools = () => {
-    // On retire les champs techniques pour un export propre (seed-like)
+    // On retire les champs techniques pour un export propre
     const cleanTools = tools.map(({ _id, __v, createdAt, updatedAt, ...rest }) => rest);
     const dataStr = JSON.stringify(cleanTools, null, 2);
     downloadBlob(dataStr, `arsenal_backup_${new Date().toISOString().slice(0, 10)}.json`, 'application/json');
@@ -195,7 +194,7 @@ const AdminPanel = () => {
     logExport(`Backup JSON de l'arsenal (${tools.length} outils)`);
   };
 
-  // --- LOGIQUE UTILISATEURS ---
+  // LOGIQUE UTILISATEURS
   const fetchUsers = async () => {
     setLoading(true);
     try {
@@ -250,7 +249,7 @@ const AdminPanel = () => {
     }
   };
 
-  // --- FILTRAGE ---
+  // FILTRAGE
   const filteredTools = tools.filter(t => {
     const matchesSearch = t.name.toLowerCase().includes(searchTerm.toLowerCase()) || t.category.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = categoryFilter === 'All' || t.category === categoryFilter;
@@ -295,7 +294,7 @@ const AdminPanel = () => {
     return matchesSearch && matchesLevel && matchesActor && matchesAction && matchesDate;
   });
 
-  // --- FILTRES RAPIDES ---
+  // FILTRES RAPIDES
   const handleQuickTimeFilter = (hours) => {
     const end = new Date();
     const start = new Date(end.getTime() - (hours * 60 * 60 * 1000));
@@ -309,7 +308,7 @@ const AdminPanel = () => {
     setDateEnd(toLocalISO(end));
   };
 
-  // --- LOGIQUE DE TRI ---
+  // LOGIQUE DE TRI
   const handleSort = (key) => {
     let direction = 'asc';
     if (sortConfig.key === key && sortConfig.direction === 'asc') {
@@ -334,7 +333,7 @@ const AdminPanel = () => {
     });
   };
 
-  // --- PAGINATION LOGIC ---
+  // PAGINATION LOGIC
   const sortedLogs = sortData(filteredLogs);
   const indexOfLastLog = currentPage * itemsPerPage;
   const indexOfFirstLog = indexOfLastLog - itemsPerPage;
@@ -648,7 +647,7 @@ const AdminPanel = () => {
                 </button>
 
                 <button className="add-tool-btn" onClick={confirmPurgeLogs} style={{background: 'rgba(255, 0, 60, 0.1)', color: '#ff003c', border: '1px solid rgba(255, 0, 60, 0.3)'}}>
-                    <Trash size={16} /> PURGER
+                    <Trash2 size={16} /> PURGER
                 </button>
                 <button className="add-tool-btn" onClick={handleExportLogs}>
                     <Download size={16} /> EXPORT_CSV
@@ -696,7 +695,7 @@ const AdminPanel = () => {
               <div className="dist-segment error" style={{width: `${logStats.error}%`}} title={`ERROR: ${Math.round(logStats.error)}%`}></div>
             </div>
 
-            {/* BARRE DE FILTRES UI/UX DRIVEN */}
+            {/* BARRE DE FILTRES */}
             <div className="log-filters-bar">
               <span className="filter-label"><Filter size={14} /> FILTRER PAR NIVEAU :</span>
               {['info', 'success', 'warning', 'error'].map(level => (

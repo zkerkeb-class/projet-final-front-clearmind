@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, useNavigate, Link } from 'react-router-dom';
 import api from '../../api/axios';
 import { 
@@ -11,9 +11,9 @@ import {
   Radio,
   Layers,
   BookOpen,
-  ShieldCheck, // Ajout de l'icône Admin
-  Binary, // Pour CyberChef
-  Cpu, // Pour RevShell
+  ShieldCheck,
+  Binary,
+  Cpu,
   User
 } from 'lucide-react';
 import './Sidebar.css';
@@ -35,7 +35,6 @@ const Sidebar = ({ isOpen, onClose }) => {
           setImgError(false); // Réinitialiser l'erreur si une nouvelle image est chargée
         }
       } catch (e) {
-        // Ignorer les erreurs silencieusement pour la sidebar
       }
     };
     fetchUser();

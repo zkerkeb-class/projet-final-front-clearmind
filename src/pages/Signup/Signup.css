@@ -86,7 +86,7 @@
 
 .signup-card .form-group {
   position: relative;
-  margin-bottom: 0; /* Géré par le gap de la grille */
+  margin-bottom: 0;
 }
 
 .signup-form-grid {
@@ -278,7 +278,7 @@
   text-shadow: 0 0 5px #00d4ff;
 }
 
-/* --- ANIMATIONS --- */
+/* ANIMATIONS */
 @keyframes signup-slideUpFade {
   to { transform: translateY(0); opacity: 1; }
 }

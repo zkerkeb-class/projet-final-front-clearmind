@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../../api/axios';
-import { User, Mail, Lock, Save, Camera, Shield, AlertTriangle, CheckCircle, Trash2 } from 'lucide-react';
+import { User, Mail, Lock, Save, Camera, Shield, CheckCircle, Trash2 } from 'lucide-react';
 import { useToast } from '../../components/Toast/ToastContext';
 import './Profile.css';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';

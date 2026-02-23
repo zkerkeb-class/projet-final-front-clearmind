@@ -193,24 +193,6 @@
   40%, 60% { transform: translate3d(4px, 0, 0); }
 }
 
-@media (max-width: 480px) {
-  .login-container {
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .login-container .home-link {
-    position: static;
-    align-self: flex-start;
-    margin: 0 0 1.5rem 1rem;
-  }
-
-  .login-card { 
-    width: 90% !important; 
-    padding: 1.5rem !important; 
-  }
-}
-
 .login-card .auth-footer {
   text-align: center;
   margin-top: 1.5rem;
@@ -248,4 +230,22 @@
 .login-container .home-link:hover {
   color: #00d4ff;
   text-shadow: 0 0 5px #00d4ff;
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .login-container .home-link {
+    position: static;
+    align-self: flex-start;
+    margin: 0 0 1.5rem 1rem;
+  }
+
+  .login-card { 
+    width: 90% !important; 
+    padding: 1.5rem !important; 
+  }
 }

@@ -49,12 +49,16 @@ L'application sera accessible sur `http://localhost:5173` (par défaut).
 
 | Module | Description |
 |--------|-------------|
+| **Search** | Recherche globale instantanée sur toute la plateforme. (Ctrl + K) |
+| **Profile** | Gestion du compte opérateur (Avatar, Infos). |
 | **Dashboard** | Vue d'ensemble des opérations et statistiques. |
 | **Payloads** | Base de données de vecteurs d'attaque (XSS, SQLi, RCE...). |
 | **Targets** | Gestion du scope (Cibles, IP, Ports, Statut). |
 | **Boxes** | Suivi des machines compromises (Lien avec les cibles). |
+| **Veille Cyber** | Fil d'actualités cybersécurité et veille technologique. |
+| **Kill Chain** | Guides étape par étape et checklists de pentest. |
 | **Wiki** | Base de connaissances méthodologiques (Markdown). |
-| **Arsenal** | Documentation des outils (Nmap, Burp, etc.) et Cheatsheets. |
+| **CyberChef** | Suite d'outils pour l'analyse et la transformation de données (Encodage, Hash). |
 | **RevShell Gen** | Générateur automatique de Reverse Shells. |
 | **Admin Panel** | Gestion des utilisateurs et Audit Logs (Graphiques). |
 

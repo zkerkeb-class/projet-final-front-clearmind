@@ -1,8 +1,8 @@
-# RedSheet Dashboard - Frontend Interface
+# RedSheet - Frontend Interface
 
 ## 📋 Présentation
 
-**RedSheet Dashboard** est l'interface utilisateur (SPA) de la plateforme d'opérations de Red Teaming. Développée en React, elle offre une expérience fluide et réactive pour gérer les campagnes de tests d'intrusion, visualiser les données en temps réel et collaborer sur les cibles.
+**RedSheet** est l'interface utilisateur (SPA) de la plateforme d'opérations de Red Teaming. Développée en React, elle offre une expérience fluide et réactive pour gérer les campagnes de tests d'intrusion, visualiser les données en temps réel et collaborer sur les cibles.
 
 Elle communique avec l'API Backend via des requêtes sécurisées (JWT) et implémente une gestion stricte des rôles côté client.
 
@@ -26,17 +26,8 @@ Elle communique avec l'API Backend via des requêtes sécurisées (JWT) et impl�
 npm install
 ```
 
-### 3. Configuration des Variables d'Environnement
-Créez un fichier `.env` à la racine du projet pour configurer le point d'entrée de l'API.
-
-```env
-# URL de l'API Backend
-VITE_API_URL=http://localhost:5000/api/v1
-```
-
-### 4. Démarrage
+### 3. Démarrage
 ```bash
-# Mode Développement
 npm run dev
 ```
 
@@ -79,5 +70,5 @@ Nous avons opté pour une authentification basée sur les JSON Web Tokens (JWT) 
 
 ---
 
-**RedSheet Security** - *Centralized Pentest Operations*
-© 2024 - Tous droits réservés.
+**RedSheet** - *Centralized Pentest Operations*
+© 2026 - Tous droits réservés.

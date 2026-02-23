@@ -109,7 +109,10 @@
 /* SIDEBAR */
 .revshell-container .revshell-sidebar {
   width: 240px;
-  height: 100vh;
+  max-height: 85vh;
+  position: sticky;
+  top: 20px;
+  align-self: flex-start;
   flex-shrink: 0;
   background: rgba(15, 15, 20, 0.6);
   backdrop-filter: blur(10px);
@@ -559,6 +562,7 @@
   .revshell-container .revshell-sidebar {
     width: 100%;
     height: auto;
+    position: static;
     border-right: none;
     border: 1px solid rgba(255, 255, 255, 0.05);
     padding: 1rem;

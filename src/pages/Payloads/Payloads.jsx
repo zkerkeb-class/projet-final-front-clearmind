@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
-import { Copy, Search, Plus, Pencil, Trash2, Check, Edit, Database, Download } from 'lucide-react';
+import { Copy, Search, Plus, Pencil, Trash2, Check, Edit, Database, Download, Filter, RotateCcw } from 'lucide-react';
 import './Payloads.css';
 import { PAYLOAD_SEVERITIES, ROLES, PAYLOAD_CATEGORIES } from '../../utils/constants';
 import Skeleton from '../../components/Skeleton/Skeleton';
@@ -18,7 +18,7 @@ const Payloads = () => {
   const navigate = useNavigate();
   const [payloads, setPayloads] = useState([]);
   const [searchTerm, setSearchTerm] = useState(""); // État pour la recherche
-  const [severityFilter, setSeverityFilter] = useState("All");
+  const [activeSeverities, setActiveSeverities] = useState(Object.values(PAYLOAD_SEVERITIES));
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [loading, setLoading] = useState(true);
   const userRole = getUserRole();
@@ -57,6 +57,18 @@ const Payloads = () => {
   // Aplatir les catégories pour le filtre
   const allCategories = Object.values(PAYLOAD_CATEGORIES).flat().sort();
 
+  const toggleSeverity = (severity) => {
+    setActiveSeverities(prev => 
+      prev.includes(severity) ? prev.filter(s => s !== severity) : [...prev, severity]
+    );
+  };
+
+  const resetFilters = () => {
+    setSearchTerm("");
+    setActiveSeverities(Object.values(PAYLOAD_SEVERITIES));
+    setCategoryFilter("All");
+  };
+
   // Logique de filtrage en temps réel
   const filteredPayloads = payloads.filter((p) => {
     const search = searchTerm.toLowerCase();
@@ -65,7 +77,7 @@ const Payloads = () => {
       p.category.toLowerCase().includes(search) ||
       p.code.toLowerCase().includes(search)
     );
-    const matchesSeverity = severityFilter === "All" || (p.severity && p.severity.toLowerCase() === severityFilter.toLowerCase());
+    const matchesSeverity = activeSeverities.some(s => s.toLowerCase() === (p.severity || '').toLowerCase());
     const matchesCategory = categoryFilter === "All" || (p.category && p.category === categoryFilter);
 
     return matchesSearch && matchesSeverity && matchesCategory;
@@ -94,7 +106,9 @@ const Payloads = () => {
   };
 
   const handleExportPayloads = () => {
-    const dataStr = JSON.stringify(payloads, null, 2);
+    // On retire les champs techniques (_id, __v, dates, auteur) pour un export propre et réutilisable
+    const cleanPayloads = payloads.map(({ _id, __v, author, createdAt, updatedAt, ...rest }) => rest);
+    const dataStr = JSON.stringify(cleanPayloads, null, 2);
     downloadBlob(dataStr, `payloads_backup_${new Date().toISOString().slice(0, 10)}.json`, 'application/json');
     success("BASE PAYLOADS EXPORTÉE");
     logExport(`Backup JSON des payloads (${payloads.length} items)`);
@@ -130,11 +144,6 @@ const Payloads = () => {
         </div>
 
         <div className="filters-wrapper">
-          <select value={severityFilter} onChange={(e) => setSeverityFilter(e.target.value)} className="payloads-filter-select">
-            <option value="All">SÉVÉRITÉ (TOUTES)</option>
-            {Object.values(PAYLOAD_SEVERITIES).map(sev => <option key={sev} value={sev}>{sev}</option>)}
-          </select>
-
           <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} className="payloads-filter-select">
             <option value="All">CATÉGORIE (TOUTES)</option>
             {allCategories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
@@ -146,6 +155,25 @@ const Payloads = () => {
             </button>
           )}
         </div>
+      </div>
+
+      {/* BARRE DE FILTRES SÉVÉRITÉ (STYLE ADMIN) */}
+      <div className="payload-filters-bar">
+        <span className="filter-label"><Filter size={14} /> SÉVÉRITÉ :</span>
+        {Object.values(PAYLOAD_SEVERITIES).map(sev => (
+          <button
+            key={sev}
+            className={`filter-chip ${activeSeverities.includes(sev) ? 'active ' + sev.toLowerCase() : ''}`}
+            onClick={() => toggleSeverity(sev)}
+          >
+            <span className="chip-dot"></span>
+            {sev.toUpperCase()}
+          </button>
+        ))}
+        
+        <button className="reset-filters-btn" onClick={resetFilters}>
+          <RotateCcw size={14} /> RESET
+        </button>
       </div>
 
       <div className="payload-grid">

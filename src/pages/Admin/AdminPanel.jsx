@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import { 
-  ShieldCheck, 
   Wrench, 
   Users, 
   Plus, 
   Trash2, 
   ExternalLink, 
-  AlertCircle, 
   UserPlus, 
   X,
   Edit,
@@ -21,13 +19,13 @@ import {
   ChevronLeft,
   ChevronRight,
   ArrowUpDown,
-  Calendar,
   Trash,
   Clock,
   Copy,
   Check
 } from 'lucide-react';
 import './AdminPanel.css';
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { ROLES, TOOL_CATEGORIES } from '../../utils/constants';
 import { useToast } from '../../components/Toast/ToastContext';
 import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
@@ -189,7 +187,9 @@ const AdminPanel = () => {
   };
 
   const handleExportTools = () => {
-    const dataStr = JSON.stringify(tools, null, 2);
+    // On retire les champs techniques pour un export propre (seed-like)
+    const cleanTools = tools.map(({ _id, __v, createdAt, updatedAt, ...rest }) => rest);
+    const dataStr = JSON.stringify(cleanTools, null, 2);
     downloadBlob(dataStr, `arsenal_backup_${new Date().toISOString().slice(0, 10)}.json`, 'application/json');
     success("SAUVEGARDE ARSENAL GÉNÉRÉE");
     logExport(`Backup JSON de l'arsenal (${tools.length} outils)`);
@@ -353,6 +353,14 @@ const AdminPanel = () => {
     warning: (systemLogs.filter(l => l.level === 'warning').length / totalLogsCount) * 100,
     error: (systemLogs.filter(l => l.level === 'error').length / totalLogsCount) * 100,
   };
+
+  // Données pour le PieChart
+  const pieData = [
+    { name: 'INFO', value: systemLogs.filter(l => l.level === 'info').length, color: '#00d4ff' },
+    { name: 'SUCCESS', value: systemLogs.filter(l => l.level === 'success').length, color: '#00ff41' },
+    { name: 'WARNING', value: systemLogs.filter(l => l.level === 'warning').length, color: '#ffa500' },
+    { name: 'ERROR', value: systemLogs.filter(l => l.level === 'error').length, color: '#ff003c' },
+  ].filter(d => d.value > 0);
 
   const handleExportLogs = () => {
     if (filteredLogs.length === 0) {
@@ -647,6 +655,38 @@ const AdminPanel = () => {
                 </button>
               </div>
             </div>
+
+            {/* GRAPHIQUE DE RÉPARTITION */}
+            {systemLogs.length > 0 && (
+              <div className="logs-chart-section" style={{ height: '300px', width: '100%', marginBottom: '2rem', background: 'rgba(255,255,255,0.02)', borderRadius: '8px', padding: '1rem', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <h3 style={{ margin: '0 0 1rem 0', fontSize: '0.9rem', color: '#888', textTransform: 'uppercase', letterSpacing: '1px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <Database size={14} /> Répartition des Événements
+                </h3>
+                <ResponsiveContainer width="100%" height="90%">
+                  <PieChart>
+                    <Pie
+                      data={pieData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={90}
+                      paddingAngle={5}
+                      dataKey="value"
+                      stroke="none"
+                    >
+                      {pieData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: '#0a0a0a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '4px', color: '#fff' }}
+                      itemStyle={{ color: '#fff' }}
+                    />
+                    <Legend verticalAlign="bottom" height={36} iconType="circle" />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            )}
 
             {/* BARRE DE DISTRIBUTION DES LOGS */}
             <div className="log-distribution-bar">

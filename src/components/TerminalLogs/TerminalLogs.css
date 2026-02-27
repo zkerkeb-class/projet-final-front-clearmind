@@ -1,0 +1,117 @@
+.terminal-logs {
+  position: fixed;
+  bottom: 0;
+  left: 260px;
+  right: 0;
+  background: #050505;
+  border-top: 1px solid #333;
+  z-index: 1000;
+  font-family: 'JetBrains Mono', monospace;
+  transition: all 0.3s ease;
+  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Ajustement mobile */
+@media (max-width: 992px) {
+  .terminal-logs {
+    left: 0;
+  }
+}
+
+.terminal-logs.closed {
+  height: 35px;
+}
+
+.terminal-logs.open {
+  height: 250px;
+  border-top: 1px solid #00d4ff;
+}
+
+.terminal-logs .terminal-header {
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  background: #0a0a0a;
+  cursor: pointer;
+  user-select: none;
+}
+
+.terminal-logs .terminal-header:hover {
+  background: #111;
+}
+
+.terminal-logs .terminal-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #00d4ff;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.terminal-logs .log-count {
+  color: #666;
+  font-size: 0.7rem;
+}
+
+.terminal-logs .terminal-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #666;
+}
+
+.terminal-logs .clear-btn {
+  background: transparent;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.terminal-logs .clear-btn:hover {
+  color: #ff003c;
+  background: rgba(255, 0, 60, 0.1);
+}
+
+.terminal-logs .terminal-content {
+  height: calc(250px - 35px);
+  overflow-y: auto;
+  padding: 10px 15px;
+  background: rgba(0, 0, 0, 0.95);
+  font-size: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.terminal-logs .log-entry {
+  display: flex;
+  gap: 10px;
+  line-height: 1.4;
+}
+
+.terminal-logs .log-time { color: #555; }
+.terminal-logs .log-type { font-weight: bold; min-width: 60px; }
+.terminal-logs .log-message { color: #ccc; flex: 1; word-break: break-all; }
+
+/* Couleurs par type */
+.terminal-logs .log-entry.success .log-type { color: #00ff41; }
+.terminal-logs .log-entry.error .log-type { color: #ff003c; }
+.terminal-logs .log-entry.warning .log-type { color: #ff8000; }
+.terminal-logs .log-entry.info .log-type { color: #00d4ff; }
+
+.terminal-logs .empty-logs {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  gap: 10px;
+}

@@ -1,0 +1,58 @@
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+  background-color: #050505;
+}
+
+.app-layout .main-content {
+  margin-left: 260px;
+  padding: 2.5rem;
+  width: calc(100% - 260px);
+  min-height: 100vh;
+  position: relative;
+  transition: margin-left 0.3s ease, width 0.3s ease, padding 0.3s ease;
+}
+
+.app-layout .mobile-menu-btn {
+  display: none;
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 2000;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid #00d4ff;
+  color: #00d4ff;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+}
+
+/* RESPONSIVE MOBILE & TABLETTE */
+@media (max-width: 992px) {
+  .app-layout .main-content {
+    margin-left: 0;
+    width: 100%;
+    padding: 1.5rem;
+    padding-top: 4rem;
+  }
+
+  .app-layout .mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Overlay sombre quand le menu est ouvert */
+  .app-layout .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1400;
+    backdrop-filter: blur(3px);
+  }
+}

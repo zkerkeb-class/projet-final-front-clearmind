@@ -1,0 +1,42 @@
+.code-block-wrapper {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1a1a1a;
+  padding: 5px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.code-lang-select {
+  background: transparent;
+  border: none;
+  color: #888;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  cursor: pointer;
+  outline: none;
+  text-transform: lowercase;
+}
+
+.code-lang-select option {
+  background: #111;
+  color: #fff;
+}
+
+.copy-code-btn {
+  background: transparent;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.copy-code-btn:hover { color: #fff; }
